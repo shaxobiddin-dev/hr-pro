@@ -1,0 +1,8 @@
+# HR-Pro Production Requirements
+# Only production dependencies (no dev tools)
+
+-r base.txt
+
+# Production optimizations
+# No additional packages needed for now
+# Add production-specific packages here if needed

@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Kirish - HR-Pro{% endblock %}
+
+{% block body %}
+<div class="min-h-screen flex">
+    <!-- Left side - Form -->
+    <div class="flex-1 flex items-center justify-center p-8">
+        <div class="w-full max-w-md">
+            <!-- Logo -->
+            <div class="text-center mb-8">
+                <a href="{% url 'core:home' %}" class="inline-block">
+                    <span class="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                        HR-Pro
+                    </span>
+                </a>
+                <h1 class="mt-4 text-2xl font-bold text-gray-900">Tizimga Kirish</h1>
+                <p class="mt-2 text-gray-600">Hisobingizga kiring</p>
+            </div>
+
+            <!-- Messages -->
+            {% if messages %}
+            <div class="mb-6">
+                {% for message in messages %}
+                <div class="p-4 rounded-lg {% if message.tags == 'error' %}bg-red-50 text-red-700{% else %}bg-blue-50 text-blue-700{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Form -->
+            <form method="post" action="{% url 'account_login' %}" class="space-y-6">
+                {% csrf_token %}
+
+                <div>
+                    <label for="id_login" class="block text-sm font-medium text-gray-700 mb-2">
+                        Email
+                    </label>
+                    <input type="email" name="login" id="id_login" required
+                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                           placeholder="email@example.com"
+                           {% if form.login.value %}value="{{ form.login.value }}"{% endif %}>
+                    {% if form.login.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.login.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <label for="id_password" class="block text-sm font-medium text-gray-700">
+                            Parol
+                        </label>
+                        <a href="{% url 'account_reset_password' %}" class="text-sm text-indigo-600 hover:text-indigo-800">
+                            Parolni unutdingizmi?
+                        </a>
+                    </div>
+                    <input type="password" name="password" id="id_password" required
+                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                           placeholder="••••••••">
+                    {% if form.password.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.password.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="flex items-center">
+                    <input type="checkbox" name="remember" id="id_remember"
+                           class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                    <label for="id_remember" class="ml-2 block text-sm text-gray-700">
+                        Meni eslab qol
+                    </label>
+                </div>
+
+                {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+                {% endif %}
+
+                <button type="submit"
+                        class="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                    Kirish
+                </button>
+            </form>
+
+            <!-- Back to home -->
+            <div class="mt-8 text-center">
+                <a href="{% url 'core:home' %}" class="text-sm text-gray-500 hover:text-gray-700">
+                    ← Bosh sahifaga qaytish
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right side - Decoration -->
+    <div class="hidden lg:flex lg:flex-1 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 items-center justify-center p-12">
+        <div class="max-w-lg text-white">
+            <h2 class="text-4xl font-bold mb-6">
+                HR-Pro bilan kadrlar ishini zamonaviy boshqaring
+            </h2>
+            <ul class="space-y-4">
+                <li class="flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span>O'zbekiston Mehnat Kodeksiga mos</span>
+                </li>
+                <li class="flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span>MHTM asosida avtomatik hisoblash</span>
+                </li>
+                <li class="flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span>10-darajali professional tizim</span>
+                </li>
+                <li class="flex items-center">
+                    <svg class="w-6 h-6 mr-3 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span>JSHDT, INPS, ijtimoiy soliq</span>
+                </li>
+            </ul>
+
+            <div class="mt-12 p-6 bg-white/10 backdrop-blur rounded-xl">
+                <div class="flex items-center space-x-4">
+                    <div class="h-12 w-12 rounded-full bg-white/20 flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-semibold">Xavfsiz kirish</div>
+                        <div class="text-sm text-indigo-200">SSL shifrlangan ulanish</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

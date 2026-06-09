@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Davrni Tasdiqlash - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto">
+    <div class="bg-white rounded-xl shadow-sm p-8 text-center">
+        <div class="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+        </div>
+
+        <h1 class="text-xl font-bold text-gray-900 mb-2">Davrni Tasdiqlash</h1>
+        <p class="text-gray-600 mb-6">{{ period.name }}</p>
+
+        <div class="bg-blue-50 rounded-lg p-4 mb-6 text-left text-sm text-blue-800">
+            <strong>Diqqat:</strong> Davr tasdiqlangandan keyin:
+            <ul class="list-disc ml-5 mt-2 space-y-1">
+                <li>Ish haqlarini o'zgartirish mumkin bo'lmaydi</li>
+                <li>Yangi ish haqi qo'shib bo'lmaydi</li>
+                <li>Faqat to'lov holati o'zgartirilishi mumkin</li>
+            </ul>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="flex space-x-4">
+                <a href="{% url 'payroll:period_detail' period.pk %}"
+                   class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors">
+                    Bekor qilish
+                </a>
+                <button type="submit"
+                        class="flex-1 px-4 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                    Tasdiqlash
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

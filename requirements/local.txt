@@ -1,0 +1,29 @@
+# HR-Pro Local Requirements (minimal - Docker'siz)
+
+# Django
+Django>=5.0,<6.0
+djangorestframework>=3.15,<4.0
+
+# Authentication
+django-allauth>=0.60,<1.0
+djangorestframework-simplejwt>=5.3,<6.0
+
+# API
+django-filter>=24.0,<25.0
+drf-spectacular>=0.27,<1.0
+django-cors-headers>=4.3,<5.0
+
+# Utilities
+python-dotenv>=1.0,<2.0
+Pillow>=10.0,<11.0
+python-dateutil>=2.8,<3.0
+
+# Development
+django-debug-toolbar>=4.3,<5.0
+pytest>=8.0,<9.0
+pytest-django>=4.8,<5.0
+ruff>=0.3,<1.0
+
+# Note: SQLite ishlatiladi, PostgreSQL kerak emas
+# Note: Redis kerak emas, local memory cache ishlatiladi
+# Note: Celery eager mode'da ishlaydi

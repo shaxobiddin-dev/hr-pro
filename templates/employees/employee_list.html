@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Xodimlar - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Xodimlar</h1>
+            <p class="mt-1 text-sm text-gray-500">Jami: {{ total_count }} ta xodim</p>
+        </div>
+        <div class="mt-4 sm:mt-0">
+            <a href="{% url 'employees:employee_create' %}"
+               class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                </svg>
+                Yangi Xodim
+            </a>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow p-4">
+        <form hx-get="{% url 'employees:employee_list' %}"
+              hx-target="#employee-table"
+              hx-trigger="change, keyup delay:300ms from:#search"
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Qidiruv</label>
+                <input type="text" name="search" id="search"
+                       value="{{ request.GET.search }}"
+                       placeholder="Ism, kod, email..."
+                       class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Bo'lim</label>
+                <select name="department" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    <option value="">Barchasi</option>
+                    {% for dept in departments %}
+                    <option value="{{ dept.id }}" {% if request.GET.department == dept.id|stringformat:"i" %}selected{% endif %}>
+                        {{ dept.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Daraja</label>
+                <select name="level" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    <option value="">Barchasi</option>
+                    {% for lvl in levels %}
+                    <option value="{{ lvl.id }}" {% if request.GET.level == lvl.id|stringformat:"i" %}selected{% endif %}>
+                        Level {{ lvl.level }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Holat</label>
+                <select name="status" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    <option value="">Barchasi</option>
+                    {% for value, label in statuses %}
+                    <option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+    </div>
+
+    <!-- Table -->
+    <div id="employee-table">
+        {% include "employees/partials/employee_table.html" %}
+    </div>
+</div>
+{% endblock %}

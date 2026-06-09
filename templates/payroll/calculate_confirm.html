@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Ish Haqlarini Hisoblash - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto">
+    <div class="bg-white rounded-xl shadow-sm p-8 text-center">
+        <div class="w-16 h-16 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+            </svg>
+        </div>
+
+        <h1 class="text-xl font-bold text-gray-900 mb-2">Barcha Ish Haqlarini Hisoblash</h1>
+        <p class="text-gray-600 mb-6">{{ period.name }} davri uchun</p>
+
+        <div class="bg-indigo-50 rounded-lg p-4 mb-6">
+            <div class="text-3xl font-bold text-indigo-600">{{ payroll_count }}</div>
+            <div class="text-sm text-indigo-700">xodim ish haqi hisoblanadi</div>
+        </div>
+
+        <div class="bg-amber-50 rounded-lg p-4 mb-6 text-left text-sm text-amber-800">
+            <strong>Eslatma:</strong> Ish haqi quyidagilar asosida hisoblanadi:
+            <ul class="list-disc ml-5 mt-2 space-y-1">
+                <li>MHTM (Minimal ish haqi)</li>
+                <li>Lavozim koeffitsiyenti</li>
+                <li>Daraja koeffitsiyenti</li>
+                <li>Staj koeffitsiyenti</li>
+                <li>Ishlangan kunlar</li>
+            </ul>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="flex space-x-4">
+                <a href="{% url 'payroll:period_detail' period.pk %}"
+                   class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors">
+                    Bekor qilish
+                </a>
+                <button type="submit"
+                        class="flex-1 px-4 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors">
+                    Hisoblash
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

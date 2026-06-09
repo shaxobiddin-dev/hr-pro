@@ -1,0 +1,68 @@
+# HR-Pro Production Dockerfile
+# Multi-stage build for smaller image size
+
+# Stage 1: Builder
+FROM python:3.12-slim as builder
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements/base.txt requirements/base.txt
+COPY requirements/prod.txt requirements/prod.txt
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements/prod.txt
+
+
+# Stage 2: Production
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    DJANGO_SETTINGS_MODULE=config.settings.prod \
+    PORT=8000
+
+# Create non-root user
+RUN groupadd -r hrpro && useradd -r -g hrpro hrpro
+
+WORKDIR /app
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq5 \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy wheels and install
+COPY --from=builder /app/wheels /wheels
+RUN pip install --no-cache /wheels/*
+
+# Copy project
+COPY --chown=hrpro:hrpro . .
+
+# Create directories
+RUN mkdir -p /app/staticfiles /app/mediafiles /app/logs \
+    && chown -R hrpro:hrpro /app
+
+# Collect static files
+RUN python manage.py collectstatic --noinput --settings=config.settings.prod || true
+
+# Switch to non-root user
+USER hrpro
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:${PORT}/health/ || exit 1
+
+# Expose port
+EXPOSE ${PORT}
+
+# Run gunicorn
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3", "--threads", "2", "--worker-class", "gthread", "--access-logfile", "-", "--error-logfile", "-"]

@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Darajalar - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900">Professional Darajalar</h1>
+        <p class="mt-1 text-sm text-gray-500">10-darajali professional rivojlanish tizimi</p>
+    </div>
+
+    <!-- Info Card -->
+    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-6 text-white">
+        <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold">Ish Haqi Formulasi</h3>
+                <p class="mt-1 text-indigo-100">
+                    Xodim ish haqi = MHTM × Lavozim koef. × <strong>Daraja koef.</strong> × Staj koef.
+                </p>
+                <p class="mt-2 text-sm text-indigo-200">
+                    Daraja koeffitsiyenti 1.0 dan 2.2 gacha, professional rivojlanishga qarab oshadi.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Levels Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        {% for level in levels %}
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-3">
+                <div class="h-10 w-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold shadow">
+                    {{ level.level }}
+                </div>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                    ×{{ level.coefficient }}
+                </span>
+            </div>
+            <h3 class="font-semibold text-gray-900 text-sm">Level {{ level.level }}</h3>
+            <p class="text-xs text-gray-500 mt-1">{{ level.name }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Level Description Table -->
+    <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900">Daraja Tafsilotlari</h3>
+        </div>
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Daraja</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nomi</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Koeffitsiyent</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tavsif</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for level in levels %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center justify-center h-8 w-8 rounded-lg bg-indigo-100 text-indigo-700 font-bold text-sm">
+                            {{ level.level }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm font-medium text-gray-900">{{ level.name }}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                            ×{{ level.coefficient }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-500">
+                        {% if level.level == 1 %}
+                        Yangi mutaxassis, tajriba to'plash bosqichi
+                        {% elif level.level == 2 %}
+                        Asosiy ko'nikmalarni egallagan
+                        {% elif level.level == 3 %}
+                        Mustaqil ishlash qobiliyati
+                        {% elif level.level == 4 %}
+                        Murakkab vazifalarni hal qilish
+                        {% elif level.level == 5 %}
+                        Tajribali mutaxassis, boshqalarni o'qitish
+                        {% elif level.level == 6 %}
+                        Yuqori malakali, loyihalarni boshqarish
+                        {% elif level.level == 7 %}
+                        Katta mutaxassis, strategik qarorlar
+                        {% elif level.level == 8 %}
+                        Jamoa rahbari, texnik yo'nalish
+                        {% elif level.level == 9 %}
+                        Arxitektor darajasida, kompleks tizimlar
+                        {% elif level.level == 10 %}
+                        Bosh mutaxassis, kompaniya darajasida ta'sir
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

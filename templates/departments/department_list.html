@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Bo'limlar - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Bo'limlar</h1>
+            <p class="mt-1 text-sm text-gray-500">Jami: {{ total_count }} ta bo'lim</p>
+        </div>
+        <div class="mt-4 sm:mt-0">
+            <a href="{% url 'departments:department_create' %}"
+               class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                </svg>
+                Yangi Bo'lim
+            </a>
+        </div>
+    </div>
+
+    <!-- Department Tree -->
+    <div id="department-tree">
+        {% include "departments/partials/department_tree.html" %}
+    </div>
+</div>
+{% endblock %}

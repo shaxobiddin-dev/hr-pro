@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Elementni O'chirish - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto">
+    <div class="bg-white rounded-xl shadow-sm p-8 text-center">
+        <div class="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+        </div>
+
+        <h1 class="text-xl font-bold text-gray-900 mb-2">Elementni O'chirish</h1>
+        <p class="text-gray-600 mb-6">
+            <strong>{{ item.component.name }}</strong> elementini o'chirmoqchimisiz?
+        </p>
+
+        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+            <div class="text-2xl font-bold text-gray-900">{{ item.amount|floatformat:0 }} so'm</div>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="flex space-x-4">
+                <a href="{% url 'payroll:payroll_detail' payroll.pk %}"
+                   class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors">
+                    Bekor qilish
+                </a>
+                <button type="submit"
+                        class="flex-1 px-4 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors">
+                    O'chirish
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

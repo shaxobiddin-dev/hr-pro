@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+            <p class="text-gray-500">Xush kelibsiz, {{ user.get_full_name|default:user.email }}!</p>
+        </div>
+        <div class="mt-4 sm:mt-0 text-sm text-gray-500">
+            {{ "now"|date:"l, d F Y" }}
+        </div>
+    </div>
+
+    <!-- Stats cards -->
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <!-- Total Employees -->
+        <div class="bg-white overflow-hidden shadow-sm rounded-xl border border-gray-100">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Jami Xodimlar</dt>
+                            <dd class="text-2xl font-bold text-gray-900">{{ total_employees }}</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <a href="{% url 'employees:employee_list' %}" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
+                        Barchasini ko'rish →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Departments -->
+        <div class="bg-white overflow-hidden shadow-sm rounded-xl border border-gray-100">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Bo'limlar</dt>
+                            <dd class="text-2xl font-bold text-gray-900">{{ total_departments }}</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <a href="{% url 'departments:department_list' %}" class="text-sm text-green-600 hover:text-green-800 font-medium">
+                        Barchasini ko'rish →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- On Leave -->
+        <div class="bg-white overflow-hidden shadow-sm rounded-xl border border-gray-100">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Ta'tilda</dt>
+                            <dd class="text-2xl font-bold text-gray-900">{{ on_leave_count }}</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <a href="{% url 'employees:employee_list' %}?status=on_leave" class="text-sm text-amber-600 hover:text-amber-800 font-medium">
+                        Ro'yxatni ko'rish →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Positions -->
+        <div class="bg-white overflow-hidden shadow-sm rounded-xl border border-gray-100">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-gradient-to-br from-rose-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Lavozimlar</dt>
+                            <dd class="text-2xl font-bold text-gray-900">{{ total_positions }}</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <a href="{% url 'employees:position_list' %}" class="text-sm text-rose-600 hover:text-rose-800 font-medium">
+                        Barchasini ko'rish →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Quick Actions -->
+        <div class="bg-white shadow-sm rounded-xl border border-gray-100 p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Tezkor Amallar</h2>
+            <div class="space-y-3">
+                <a href="{% url 'employees:employee_create' %}"
+                   class="flex items-center p-3 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors">
+                    <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center mr-3">
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-medium text-gray-900">Yangi Xodim</div>
+                        <div class="text-sm text-gray-500">Xodim qo'shish</div>
+                    </div>
+                </a>
+
+                <a href="{% url 'departments:department_create' %}"
+                   class="flex items-center p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-medium text-gray-900">Yangi Bo'lim</div>
+                        <div class="text-sm text-gray-500">Bo'lim yaratish</div>
+                    </div>
+                </a>
+
+                <a href="{% url 'employees:position_create' %}"
+                   class="flex items-center p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
+                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+                        <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-medium text-gray-900">Yangi Lavozim</div>
+                        <div class="text-sm text-gray-500">Lavozim yaratish</div>
+                    </div>
+                </a>
+
+                <a href="{% url 'employees:level_list' %}"
+                   class="flex items-center p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors">
+                    <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center mr-3">
+                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-medium text-gray-900">Darajalar</div>
+                        <div class="text-sm text-gray-500">10-darajali tizim</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Recent Employees -->
+        <div class="lg:col-span-2 bg-white shadow-sm rounded-xl border border-gray-100 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-gray-900">So'nggi Qo'shilgan Xodimlar</h2>
+                <a href="{% url 'employees:employee_list' %}" class="text-sm text-indigo-600 hover:text-indigo-800">
+                    Barchasini ko'rish
+                </a>
+            </div>
+
+            {% if recent_employees %}
+            <div class="space-y-4">
+                {% for emp in recent_employees %}
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div class="flex items-center space-x-3">
+                        <div class="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-medium">
+                            {{ emp.user.first_name|slice:":1"|upper }}{{ emp.user.last_name|slice:":1"|upper }}
+                        </div>
+                        <div>
+                            <a href="{% url 'employees:employee_detail' emp.pk %}" class="font-medium text-gray-900 hover:text-indigo-600">
+                                {{ emp.full_name }}
+                            </a>
+                            <p class="text-sm text-gray-500">{{ emp.position.name }} • {{ emp.department.name }}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                            Level {{ emp.level.level }}
+                        </span>
+                        <p class="text-xs text-gray-400 mt-1">{{ emp.hire_date|date:"d.m.Y" }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-8">
+                <svg class="w-12 h-12 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <p class="text-gray-500">Hali xodimlar qo'shilmagan</p>
+                <a href="{% url 'employees:employee_create' %}" class="mt-2 inline-flex items-center text-indigo-600 hover:text-indigo-800">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Birinchi xodimni qo'shing
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

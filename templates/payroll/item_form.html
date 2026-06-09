@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Element Qo'shish - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold text-gray-900">Ish Haqiga Element Qo'shish</h1>
+        <p class="text-gray-600 mt-1">{{ payroll.employee.user.get_full_name }} - {{ payroll.period.name }}</p>
+    </div>
+
+    <!-- Form -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+
+            <div>
+                <label for="id_component" class="block text-sm font-medium text-gray-700 mb-1">
+                    Komponent *
+                </label>
+                {{ form.component }}
+                {% if form.component.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.component.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div>
+                <label for="id_amount" class="block text-sm font-medium text-gray-700 mb-1">
+                    Summa *
+                </label>
+                {{ form.amount }}
+                {% if form.amount.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.amount.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div>
+                <label for="id_notes" class="block text-sm font-medium text-gray-700 mb-1">
+                    Izoh
+                </label>
+                {{ form.notes }}
+            </div>
+
+            <div class="flex items-center justify-end space-x-4 pt-4 border-t">
+                <a href="{% url 'payroll:payroll_detail' payroll.pk %}"
+                   class="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                    Bekor qilish
+                </a>
+                <button type="submit"
+                        class="px-6 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors">
+                    Qo'shish
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
