@@ -131,7 +131,7 @@ jobs:
             python manage.py collectstatic --noinput
 
             # Restart app
-            sudo supervisorctl restart hr-pro
+            supervisorctl restart hr-pro
 
             echo "Deployment completed at $(date)"
 
