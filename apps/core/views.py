@@ -3,6 +3,7 @@ Core views.
 """
 
 from django.http import JsonResponse
+from django.shortcuts import redirect
 from django.views.generic import TemplateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import connection
@@ -45,6 +46,12 @@ class HealthCheckView(View):
 class HomeView(TemplateView):
     """Home page view."""
     template_name = 'home.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        # Login qilgan foydalanuvchi → Dashboard'ga redirect
+        if request.user.is_authenticated:
+            return redirect('core:dashboard')
+        return super().dispatch(request, *args, **kwargs)
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
