@@ -13,7 +13,7 @@ class LeaveRequestForm(forms.ModelForm):
     """Ta'til so'rovi formasi."""
 
     employee = forms.ModelChoiceField(
-        queryset=Employee.objects.filter(is_active=True, status='active'),
+        queryset=Employee.objects.eligible_for_operations(),
         required=False,
         widget=forms.Select(attrs={
             'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'
@@ -56,10 +56,9 @@ class LeaveRequestForm(forms.ModelForm):
         if not self.is_admin:
             del self.fields['employee']
         else:
-            # Admin uchun xodim tanlash majburiy
+            # Admin uchun xodim tanlash majburiy - faqat buyruqi tasdiqlangan
             self.fields['employee'].required = True
-            self.fields['employee'].queryset = Employee.objects.filter(
-                is_active=True, status='active'
+            self.fields['employee'].queryset = Employee.objects.eligible_for_operations(
             ).select_related('user').order_by('user__last_name', 'user__first_name')
 
     def clean(self):
@@ -73,6 +72,12 @@ class LeaveRequestForm(forms.ModelForm):
             emp = cleaned_data.get('employee')
         else:
             emp = self.employee
+
+        # Buyruq tekshiruvi
+        if emp and not emp.has_approved_hiring_order:
+            raise forms.ValidationError(
+                f"{emp.full_name} uchun ishga olish buyrug'i tasdiqlanmagan."
+            )
 
         if start_date and end_date:
             # Sanalar tekshiruvi

@@ -27,7 +27,7 @@ def attendance_dashboard(request):
 
     # Bugungi statistika - FAQAT faol xodimlar
     today_stats = {
-        'total_employees': Employee.objects.filter(is_active=True, status='active').count(),
+        'total_employees': Employee.objects.eligible_for_operations().count(),
         'present': Attendance.objects.filter(date=today, status__in=['present', 'late'], employee__is_active=True).count(),
         'absent': Attendance.objects.filter(date=today, status='absent', employee__is_active=True).count(),
         'late': Attendance.objects.filter(date=today, status='late', employee__is_active=True).count(),
@@ -260,7 +260,7 @@ def bulk_attendance(request):
             return redirect('attendance:bulk')
 
         # Xodimlarni olish
-        employees = Employee.objects.filter(is_active=True, status='active')
+        employees = Employee.objects.eligible_for_operations()
         if department_id:
             employees = employees.filter(department_id=department_id)
 
@@ -393,7 +393,7 @@ def generate_timesheets(request):
                 work_days += 1
 
         # Har bir xodim uchun tabel (faqat faol xodimlar)
-        employees = Employee.objects.filter(is_active=True, status='active')
+        employees = Employee.objects.eligible_for_operations()
         created_count = 0
 
         for emp in employees:
@@ -502,7 +502,7 @@ def mark_all_present(request):
             messages.error(request, "Kelajak sanasiga davomat kiritish mumkin emas.")
             return redirect('attendance:list')
 
-        employees = Employee.objects.filter(is_active=True, status='active')
+        employees = Employee.objects.eligible_for_operations()
         if department_id:
             employees = employees.filter(department_id=department_id)
 

@@ -12,7 +12,7 @@ class AttendanceForm(forms.ModelForm):
     """Davomat formasi."""
 
     employee = forms.ModelChoiceField(
-        queryset=Employee.objects.filter(is_active=True, status='active'),
+        queryset=Employee.objects.eligible_for_operations(),
         widget=forms.Select(attrs={
             'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500'
         }),
@@ -48,8 +48,8 @@ class AttendanceForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.is_edit = kwargs.pop('is_edit', False)
         super().__init__(*args, **kwargs)
-        self.fields['employee'].queryset = Employee.objects.filter(
-            is_active=True, status='active'
+        # Faqat buyruqi tasdiqlangan xodimlar
+        self.fields['employee'].queryset = Employee.objects.eligible_for_operations(
         ).select_related('user').order_by('user__last_name')
 
         # Tahrirlashda xodim va sana o'zgarmasin
@@ -64,6 +64,13 @@ class AttendanceForm(forms.ModelForm):
         status = cleaned_data.get('status')
         employee = cleaned_data.get('employee')
         date = cleaned_data.get('date')
+
+        # Xodim uchun tasdiqlangan buyruq bormi?
+        if employee and not employee.has_approved_hiring_order:
+            raise forms.ValidationError(
+                f"{employee.full_name} uchun ishga olish buyrug'i tasdiqlanmagan. "
+                "Avval buyruqni tasdiqlang."
+            )
 
         # Sana tekshiruvlari
         if employee and date:
@@ -138,7 +145,7 @@ class CheckInOutForm(forms.Form):
     """Tezkor kelish/ketish."""
 
     employee = forms.ModelChoiceField(
-        queryset=Employee.objects.filter(is_active=True, status='active'),
+        queryset=Employee.objects.eligible_for_operations(),
         widget=forms.Select(attrs={
             'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500'
         }),
@@ -157,3 +164,11 @@ class CheckInOutForm(forms.Form):
         }),
         label="Vaqt (bo'sh qolsa hozirgi vaqt)"
     )
+
+    def clean_employee(self):
+        employee = self.cleaned_data.get('employee')
+        if employee and not employee.has_approved_hiring_order:
+            raise forms.ValidationError(
+                f"Ishga olish buyrug'i tasdiqlanmagan."
+            )
+        return employee

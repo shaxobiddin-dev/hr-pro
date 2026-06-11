@@ -143,8 +143,8 @@ def generate_payrolls(request, pk):
         return redirect('payroll:period_detail', pk=pk)
 
     if request.method == 'POST':
-        # Faol xodimlar
-        employees = Employee.objects.filter(is_active=True, status='active')
+        # Faqat buyruqi tasdiqlangan faol xodimlar
+        employees = Employee.objects.eligible_for_operations()
 
         created_count = 0
         for employee in employees:
@@ -164,7 +164,7 @@ def generate_payrolls(request, pk):
 
     # Mavjud ish haqlari va xodimlar soni
     existing_count = period.payrolls.count()
-    employee_count = Employee.objects.filter(is_active=True, status='active').count()
+    employee_count = Employee.objects.eligible_for_operations().count()
 
     context = {
         'period': period,

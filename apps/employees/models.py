@@ -272,6 +272,42 @@ class MHTMHistory(models.Model):
         return Decimal(settings.MHTM_DEFAULT)
 
 
+class EmployeeQuerySet(models.QuerySet):
+    """Employee uchun custom queryset."""
+
+    def active(self):
+        """Faqat faol xodimlar."""
+        return self.filter(is_active=True, status='active')
+
+    def with_approved_order(self):
+        """Faqat tasdiqlangan buyruqli xodimlar."""
+        from apps.orders.models import HiringOrderItem, Order
+        approved_employee_ids = HiringOrderItem.objects.filter(
+            order__status=Order.Status.APPROVED
+        ).values_list('employee_id', flat=True)
+        return self.filter(id__in=approved_employee_ids)
+
+    def eligible_for_operations(self):
+        """Operatsiyalar uchun yaroqli xodimlar (active + buyruqli)."""
+        return self.active().with_approved_order()
+
+
+class EmployeeManager(models.Manager):
+    """Employee uchun custom manager."""
+
+    def get_queryset(self):
+        return EmployeeQuerySet(self.model, using=self._db)
+
+    def active(self):
+        return self.get_queryset().active()
+
+    def with_approved_order(self):
+        return self.get_queryset().with_approved_order()
+
+    def eligible_for_operations(self):
+        return self.get_queryset().eligible_for_operations()
+
+
 class Employee(SoftDeleteModel):
     """
     Xodim modeli.
@@ -365,7 +401,7 @@ class Employee(SoftDeleteModel):
     status = models.CharField(
         max_length=20,
         choices=Status.choices,
-        default=Status.ACTIVE,
+        default=Status.PENDING,  # Buyruq tasdiqlanmaguncha PENDING
         verbose_name="Holat"
     )
     termination_date = models.DateField(
@@ -377,6 +413,9 @@ class Employee(SoftDeleteModel):
         blank=True,
         verbose_name="Ishdan bo'shatilish sababi"
     )
+
+    # Custom manager
+    objects = EmployeeManager()
 
     class Meta:
         verbose_name = "Xodim"
@@ -502,3 +541,27 @@ class Employee(SoftDeleteModel):
         self.termination_date = None
         self.deleted_at = None
         self.save()
+
+    @property
+    def has_approved_hiring_order(self):
+        """Tasdiqlangan ishga olish buyrug'i bormi?"""
+        from apps.orders.models import HiringOrderItem, Order
+        return HiringOrderItem.objects.filter(
+            employee=self,
+            order__status=Order.Status.APPROVED
+        ).exists()
+
+    @property
+    def is_eligible_for_operations(self):
+        """
+        Xodim uchun operatsiyalar (davomat, ta'til, ish haqi)
+        bajarish mumkinmi?
+
+        Shartlar:
+        1. status = ACTIVE
+        2. Tasdiqlangan ishga olish buyrug'i mavjud
+        """
+        return (
+            self.status == self.Status.ACTIVE and
+            self.has_approved_hiring_order
+        )
