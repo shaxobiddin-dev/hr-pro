@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+
+{% block title %}Buyruqlar - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">
+                Buyruqlar
+                {% if show_archive %}
+                <span class="ml-2 px-2 py-1 text-sm bg-gray-100 text-gray-600 rounded-full">Arxiv</span>
+                {% endif %}
+            </h1>
+            <p class="text-gray-600">
+                {% if show_archive %}
+                Arxivlangan buyruqlar
+                {% else %}
+                Barcha buyruqlar ro'yxati
+                {% endif %}
+            </p>
+        </div>
+        <div class="mt-4 sm:mt-0 flex items-center gap-3">
+            <!-- Arxiv tugmasi -->
+            {% if show_archive %}
+            <a href="{% url 'orders:list' %}"
+               class="inline-flex items-center px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Faol buyruqlar
+            </a>
+            {% else %}
+            {% if archive_count > 0 %}
+            <a href="?archive=1"
+               class="inline-flex items-center px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+                </svg>
+                Arxiv
+                <span class="ml-1.5 px-1.5 py-0.5 text-xs bg-gray-200 rounded-full">{{ archive_count }}</span>
+            </a>
+            {% endif %}
+            {% endif %}
+
+            <!-- Yangi buyruq -->
+            {% if not show_archive %}
+            <div class="relative" x-data="{ open: false }">
+                <button @click="open = !open"
+                        class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Yangi buyruq
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div x-show="open" @click.away="open = false" x-transition
+                     class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border z-10">
+                    <a href="{% url 'orders:hiring_create' %}"
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-t-lg">
+                        Ishga qabul qilish
+                    </a>
+                    <a href="#"
+                       class="block px-4 py-2 text-sm text-gray-400 cursor-not-allowed">
+                        Boshqa lavozimga o'tkazish (tez kunda)
+                    </a>
+                    <a href="#"
+                       class="block px-4 py-2 text-sm text-gray-400 cursor-not-allowed rounded-b-lg">
+                        Mehnat shartnomasini bekor qilish (tez kunda)
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Filters -->
+    {% if not show_archive %}
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+        <form method="get" class="flex flex-col sm:flex-row gap-4">
+            <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Buyruq turi</label>
+                <select name="type" onchange="this.form.submit()"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    <option value="">Barchasi</option>
+                    {% for value, label in order_types %}
+                    <option value="{{ value }}" {% if current_type == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Holat</label>
+                <select name="status" onchange="this.form.submit()"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    <option value="">Barchasi</option>
+                    {% for value, label in status_choices %}
+                    <option value="{{ value }}" {% if current_status == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Buyruq raqami</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Turi</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sana</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Holat</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tasdiqlovchi</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Amallar</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for order in orders %}
+                    <tr class="hover:bg-gray-50" id="order-row-{{ order.pk }}">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <a href="{% url 'orders:detail' order.pk %}" class="font-medium text-indigo-600 hover:text-indigo-900">
+                                {{ order.order_number }}
+                            </a>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            {{ order.get_order_type_display }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            {{ order.order_date|date:"d.m.Y" }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="px-2 py-1 text-xs font-medium rounded-full
+                                {% if order.status == 'draft' %}bg-gray-100 text-gray-800
+                                {% elif order.status == 'pending' %}bg-yellow-100 text-yellow-800
+                                {% elif order.status == 'approved' %}bg-green-100 text-green-800
+                                {% elif order.status == 'rejected' %}bg-red-100 text-red-800
+                                {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                {{ order.get_status_display }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            {% if order.approved_by %}
+                            {{ order.approved_by.full_name }}
+                            {% else %}
+                            <span class="text-gray-400">-</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                            <div class="flex justify-end items-center space-x-2">
+                                <a href="{% url 'orders:detail' order.pk %}" class="text-indigo-600 hover:text-indigo-900">
+                                    Ko'rish
+                                </a>
+
+                                {% if show_archive %}
+                                <!-- Arxivdan tiklash -->
+                                <form method="post" action="{% url 'orders:restore' order.pk %}" class="inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="text-green-600 hover:text-green-900" title="Tiklash">
+                                        Tiklash
+                                    </button>
+                                </form>
+                                {% else %}
+                                <!-- Faol buyruqlar uchun -->
+                                {% if order.status == 'draft' %}
+                                <a href="{% url 'orders:hiring_update' order.pk %}" class="text-gray-600 hover:text-gray-900">
+                                    Tahrirlash
+                                </a>
+                                {% endif %}
+
+                                <!-- O'chirish tugmasi -->
+                                <form method="post" action="{% url 'orders:delete' order.pk %}" class="inline"
+                                      onsubmit="return confirm('{% if order.status == 'approved' %}Bu buyruq arxivlanadi. Davom etasizmi?{% else %}Bu buyruq butunlay o\'chiriladi. Davom etasizmi?{% endif %}');">
+                                    {% csrf_token %}
+                                    <button type="submit"
+                                            class="{% if order.status == 'approved' %}text-orange-600 hover:text-orange-900{% else %}text-red-600 hover:text-red-900{% endif %}"
+                                            title="{% if order.status == 'approved' %}Arxivlash{% else %}O'chirish{% endif %}">
+                                        {% if order.status == 'approved' %}Arxivlash{% else %}O'chirish{% endif %}
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                            {% if show_archive %}
+                            Arxivda buyruqlar yo'q
+                            {% else %}
+                            Buyruqlar topilmadi
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

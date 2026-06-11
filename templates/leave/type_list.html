@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Ta'til turlari - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto">
+    <!-- Header -->
+    <div class="mb-6">
+        <nav class="text-sm text-gray-500 mb-2">
+            <a href="{% url 'leave:dashboard' %}" class="hover:text-indigo-600">Ta'til</a>
+            <span class="mx-2">›</span>
+            <span>Ta'til turlari</span>
+        </nav>
+        <h1 class="text-2xl font-bold text-gray-900">Ta'til turlari</h1>
+        <p class="text-gray-600">O'zbekiston Mehnat Kodeksiga muvofiq ta'til turlari</p>
+    </div>
+
+    <!-- Leave types -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for lt in leave_types %}
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition">
+            <div class="flex items-start justify-between mb-4">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900">{{ lt.name }}</h3>
+                    <span class="text-xs text-gray-500 uppercase">{{ lt.code }}</span>
+                </div>
+                <span class="px-2 py-1 text-xs font-medium rounded-full
+                    {% if lt.category == 'annual' %}bg-blue-100 text-blue-800
+                    {% elif lt.category == 'sick' %}bg-red-100 text-red-800
+                    {% elif lt.category == 'unpaid' %}bg-gray-100 text-gray-800
+                    {% elif lt.category == 'maternity' %}bg-pink-100 text-pink-800
+                    {% elif lt.category == 'paternity' %}bg-purple-100 text-purple-800
+                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                    {{ lt.get_category_display }}
+                </span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 mb-4">
+                <div class="text-center p-3 bg-gray-50 rounded-lg">
+                    <span class="text-xl font-bold text-indigo-600">{{ lt.default_days }}</span>
+                    <p class="text-xs text-gray-500">Standart kun</p>
+                </div>
+                <div class="text-center p-3 bg-gray-50 rounded-lg">
+                    <span class="text-xl font-bold text-gray-600">{{ lt.min_days }}</span>
+                    <p class="text-xs text-gray-500">Min kun</p>
+                </div>
+                <div class="text-center p-3 bg-gray-50 rounded-lg">
+                    <span class="text-xl font-bold text-gray-600">{{ lt.max_days }}</span>
+                    <p class="text-xs text-gray-500">Max kun</p>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+                {% if lt.is_paid %}
+                <span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">To'lanadigan</span>
+                {% else %}
+                <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full">To'lanmaydigan</span>
+                {% endif %}
+
+                {% if lt.requires_document %}
+                <span class="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded-full">Hujjat talab qilinadi</span>
+                {% endif %}
+
+                {% if lt.can_be_carried_forward %}
+                <span class="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">O'tkazilishi mumkin</span>
+                {% endif %}
+            </div>
+
+            {% if lt.description %}
+            <p class="mt-4 text-sm text-gray-600">{{ lt.description }}</p>
+            {% endif %}
+        </div>
+        {% empty %}
+        <div class="col-span-2 p-12 text-center bg-white rounded-xl shadow-sm border border-gray-100">
+            <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+            </svg>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Ta'til turlari topilmadi</h3>
+            <p class="text-gray-500">Admin paneldan ta'til turlarini qo'shing</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Info box -->
+    <div class="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
+        <h3 class="text-lg font-semibold text-blue-900 mb-3">Yangi Mehnat Kodeksi (2023-yil 30-apreldan)</h3>
+        <ul class="text-sm text-blue-800 space-y-2">
+            <li>• <strong>Asosiy ta'til:</strong> Kamida <strong>21 kalendar kun</strong> (xalqaro standartga mos)</li>
+            <li>• <strong>Uzaytirilgan ta'til:</strong> Pedagoglar - 48 kun, sudyalar - 36 kun, nogironlar - 30 kun</li>
+            <li>• <strong>Qo'shimcha ta'til:</strong> Og'ir va zararli sharoitlarda ishlovchilarga</li>
+            <li>• <strong>Homiladorlik ta'tili:</strong> 126 kun (ikki va undan ortiq bola uchun 140 kun)</li>
+            <li>• <strong>Stajga bog'liq emas:</strong> Barcha xodimlar uchun 21 kun minimal</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

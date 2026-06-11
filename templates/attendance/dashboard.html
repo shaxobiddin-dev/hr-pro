@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block title %}Davomat - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Davomat</h1>
+            <p class="text-gray-600">{{ today|date:"l, d F Y" }}</p>
+        </div>
+        <div class="mt-4 sm:mt-0 flex flex-wrap gap-2">
+            <a href="{% url 'attendance:quick_check' %}"
+               class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Kelish/Ketish
+            </a>
+            <a href="{% url 'attendance:bulk' %}"
+               class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                </svg>
+                Ommaviy kiritish
+            </a>
+        </div>
+    </div>
+
+    <!-- Bugungi statistika -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+        <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+            <div class="text-2xl font-bold text-gray-900">{{ today_stats.total_employees }}</div>
+            <div class="text-sm text-gray-600">Jami xodimlar</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-4 border border-green-200 bg-green-50">
+            <div class="text-2xl font-bold text-green-600">{{ today_stats.present }}</div>
+            <div class="text-sm text-green-700">Keldi</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-4 border border-yellow-200 bg-yellow-50">
+            <div class="text-2xl font-bold text-yellow-600">{{ today_stats.late }}</div>
+            <div class="text-sm text-yellow-700">Kechikdi</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-4 border border-red-200 bg-red-50">
+            <div class="text-2xl font-bold text-red-600">{{ today_stats.absent }}</div>
+            <div class="text-sm text-red-700">Kelmadi</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-4 border border-blue-200 bg-blue-50">
+            <div class="text-2xl font-bold text-blue-600">{{ today_stats.on_leave }}</div>
+            <div class="text-sm text-blue-700">Ta'tilda</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
+            <div class="text-2xl font-bold text-gray-600">{{ today_stats.not_recorded }}</div>
+            <div class="text-sm text-gray-600">Kiritilmagan</div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Bugungi davomatlar -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                <h2 class="text-lg font-semibold text-gray-900">Bugungi davomatlar</h2>
+                <a href="{% url 'attendance:list' %}" class="text-sm text-indigo-600 hover:text-indigo-800">
+                    Barchasi →
+                </a>
+            </div>
+            <div class="p-6">
+                {% if today_attendances %}
+                <div class="space-y-3">
+                    {% for att in today_attendances %}
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-medium
+                                {% if att.status == 'present' %}bg-green-500
+                                {% elif att.status == 'late' %}bg-yellow-500
+                                {% elif att.status == 'absent' %}bg-red-500
+                                {% else %}bg-gray-500{% endif %}">
+                                {{ att.employee.user.first_name|slice:":1" }}{{ att.employee.user.last_name|slice:":1" }}
+                            </div>
+                            <div class="ml-3">
+                                <div class="font-medium text-gray-900">{{ att.employee.full_name }}</div>
+                                <div class="text-sm text-gray-500">{{ att.check_in_display }} - {{ att.check_out_display }}</div>
+                            </div>
+                        </div>
+                        <span class="px-2 py-1 text-xs font-medium rounded-full
+                            {% if att.status == 'present' %}bg-green-100 text-green-800
+                            {% elif att.status == 'late' %}bg-yellow-100 text-yellow-800
+                            {% elif att.status == 'absent' %}bg-red-100 text-red-800
+                            {% else %}bg-gray-100 text-gray-800{% endif %}">
+                            {{ att.get_status_display }}
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-gray-500 text-center py-4">Bugun hali davomat kiritilmagan</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Kechikkanlar -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div class="px-6 py-4 border-b border-gray-100">
+                <h2 class="text-lg font-semibold text-gray-900">Bugun kechikkanlar</h2>
+            </div>
+            <div class="p-6">
+                {% if late_today %}
+                <div class="space-y-3">
+                    {% for att in late_today %}
+                    <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-yellow-200 rounded-full flex items-center justify-center text-yellow-800 font-medium">
+                                {{ att.employee.user.first_name|slice:":1" }}{{ att.employee.user.last_name|slice:":1" }}
+                            </div>
+                            <div class="ml-3">
+                                <div class="font-medium text-gray-900">{{ att.employee.full_name }}</div>
+                                <div class="text-sm text-gray-500">Keldi: {{ att.check_in_display }}</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-yellow-600 font-medium">+{{ att.late_minutes }} daqiqa</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-gray-500 text-center py-4">Bugun kechikkan yo'q</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Tezkor havolalar -->
+    <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a href="{% url 'attendance:list' %}"
+           class="p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-indigo-300 transition text-center">
+            <svg class="w-8 h-8 mx-auto text-indigo-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+            </svg>
+            <span class="text-sm font-medium text-gray-700">Davomatlar</span>
+        </a>
+        <a href="{% url 'attendance:timesheet_list' %}"
+           class="p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-indigo-300 transition text-center">
+            <svg class="w-8 h-8 mx-auto text-green-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+            </svg>
+            <span class="text-sm font-medium text-gray-700">Tabellar</span>
+        </a>
+        <a href="{% url 'attendance:create' %}"
+           class="p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-indigo-300 transition text-center">
+            <svg class="w-8 h-8 mx-auto text-blue-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            <span class="text-sm font-medium text-gray-700">Yangi kiritish</span>
+        </a>
+        <a href="{% url 'attendance:generate_timesheets' %}"
+           class="p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-indigo-300 transition text-center">
+            <svg class="w-8 h-8 mx-auto text-purple-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+            </svg>
+            <span class="text-sm font-medium text-gray-700">Tabel yaratish</span>
+        </a>
+    </div>
+</div>
+{% endblock %}

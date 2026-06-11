@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}Tabellar - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6">
+        <div>
+            <nav class="text-sm text-gray-500 mb-2">
+                <a href="{% url 'attendance:dashboard' %}" class="hover:text-indigo-600">Davomat</a>
+                <span class="mx-2">›</span>
+                <span>Tabellar</span>
+            </nav>
+            <h1 class="text-2xl font-bold text-gray-900">Oylik tabellar</h1>
+        </div>
+        <div class="mt-4 sm:mt-0">
+            <a href="{% url 'attendance:generate_timesheets' %}"
+               class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                </svg>
+                Tabel yaratish
+            </a>
+        </div>
+    </div>
+
+    <!-- Filtr -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+        <form method="get" class="flex flex-col sm:flex-row gap-4">
+            <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Yil</label>
+                <select name="year" onchange="this.form.submit()"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    {% for y in years %}
+                    <option value="{{ y }}" {% if y == current_year %}selected{% endif %}>{{ y }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Oy</label>
+                <select name="month" onchange="this.form.submit()"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    {% for m, name in months %}
+                    <option value="{{ m }}" {% if m == current_month %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+    </div>
+
+    <!-- Jadval -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Xodim</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bo'lim</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Ish kunlari</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Keldi</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Kelmadi</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Kechikdi</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Ish soati</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Holat</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Amallar</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for ts in timesheets %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-medium">
+                                    {{ ts.employee.user.first_name|slice:":1" }}{{ ts.employee.user.last_name|slice:":1" }}
+                                </div>
+                                <div class="ml-3">
+                                    <div class="font-medium text-gray-900">{{ ts.employee.full_name }}</div>
+                                    <div class="text-sm text-gray-500">{{ ts.employee.employee_code }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            {{ ts.employee.department.name }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
+                            {{ ts.work_days }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="text-green-600 font-medium">{{ ts.present_days }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="{% if ts.absent_days > 0 %}text-red-600 font-medium{% else %}text-gray-500{% endif %}">
+                                {{ ts.absent_days }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="{% if ts.late_days > 0 %}text-yellow-600{% else %}text-gray-500{% endif %}">
+                                {{ ts.late_days }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
+                            {{ ts.total_work_hours|floatformat:1 }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="px-2 py-1 text-xs font-medium rounded-full
+                                {% if ts.status == 'draft' %}bg-gray-100 text-gray-800
+                                {% elif ts.status == 'confirmed' %}bg-green-100 text-green-800
+                                {% endif %}">
+                                {{ ts.get_status_display }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <a href="{% url 'attendance:timesheet_detail' ts.pk %}" class="text-indigo-600 hover:text-indigo-900">
+                                Batafsil
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" class="px-6 py-12 text-center text-gray-500">
+                            Bu oy uchun tabel topilmadi
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

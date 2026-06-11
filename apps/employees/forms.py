@@ -4,6 +4,7 @@ Employee forms - Xodim formatlari.
 
 from django import forms
 from django.contrib.auth import get_user_model
+from django.utils.crypto import get_random_string
 
 from .models import Employee, Position, Level
 from apps.departments.models import Department
@@ -12,16 +13,12 @@ User = get_user_model()
 
 
 class EmployeeForm(forms.ModelForm):
-    """Xodim yaratish/tahrirlash formasi."""
+    """
+    Xodim TAHRIRLASH formasi.
+    Yangi xodim faqat "Ishga olish buyrug'i" orqali yaratiladi.
+    """
 
     # User fields
-    email = forms.EmailField(
-        label="Email",
-        widget=forms.EmailInput(attrs={
-            'class': 'form-input',
-            'placeholder': 'email@example.com'
-        })
-    )
     first_name = forms.CharField(
         label="Ism",
         max_length=150,
@@ -50,65 +47,57 @@ class EmployeeForm(forms.ModelForm):
 
     class Meta:
         model = Employee
-        fields = [
-            'department', 'position', 'level', 'manager',
-            'contract_type', 'hire_date', 'contract_end_date',
-            'probation_end_date', 'prior_experience_months', 'status'
-        ]
+        fields = ['department', 'position', 'level', 'manager', 'prior_experience_months']
         widgets = {
-            'department': forms.Select(attrs={'class': 'form-select'}),
-            'position': forms.Select(attrs={'class': 'form-select'}),
+            'department': forms.Select(attrs={
+                'class': 'form-select',
+                'hx-get': '/employees/api/positions-by-department/',
+                'hx-target': '#id_position',
+                'hx-trigger': 'change',
+                'hx-include': '[name=position]',
+            }),
+            'position': forms.Select(attrs={'class': 'form-select', 'id': 'id_position'}),
             'level': forms.Select(attrs={'class': 'form-select'}),
             'manager': forms.Select(attrs={'class': 'form-select'}),
-            'contract_type': forms.Select(attrs={'class': 'form-select'}),
-            'hire_date': forms.DateInput(attrs={'class': 'form-input', 'type': 'date'}),
-            'contract_end_date': forms.DateInput(attrs={'class': 'form-input', 'type': 'date'}),
-            'probation_end_date': forms.DateInput(attrs={'class': 'form-input', 'type': 'date'}),
             'prior_experience_months': forms.NumberInput(attrs={'class': 'form-input', 'min': 0}),
-            'status': forms.Select(attrs={'class': 'form-select'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # Agar tahrirlash bo'lsa, user ma'lumotlarini to'ldirish
+        # User ma'lumotlarini to'ldirish
         if self.instance.pk:
-            self.fields['email'].initial = self.instance.user.email
             self.fields['first_name'].initial = self.instance.user.first_name
             self.fields['last_name'].initial = self.instance.user.last_name
             self.fields['phone'].initial = self.instance.user.phone
-            self.fields['email'].widget.attrs['readonly'] = True
+
+            # Bo'limga tegishli lavozimlarni filtrlash
+            if self.instance.department_id:
+                self.fields['position'].queryset = Position.objects.filter(
+                    is_active=True,
+                    department_id=self.instance.department_id
+                )
 
         # Querysetlarni optimallashtirish
         self.fields['department'].queryset = Department.objects.filter(is_active=True)
-        self.fields['position'].queryset = Position.objects.filter(is_active=True)
+        if not self.instance.pk or not self.instance.department_id:
+            self.fields['position'].queryset = Position.objects.filter(is_active=True)
         self.fields['level'].queryset = Level.objects.filter(is_active=True).order_by('level')
         self.fields['manager'].queryset = Employee.objects.filter(
             is_active=True, status=Employee.Status.ACTIVE
         ).select_related('user')
         self.fields['manager'].required = False
+        self.fields['prior_experience_months'].required = False
 
     def save(self, commit=True):
         employee = super().save(commit=False)
 
-        # Yangi xodim uchun user yaratish
-        if not employee.pk:
-            user = User.objects.create_user(
-                email=self.cleaned_data['email'],
-                password=User.objects.make_random_password(),
-                first_name=self.cleaned_data['first_name'],
-                last_name=self.cleaned_data['last_name'],
-                phone=self.cleaned_data.get('phone', ''),
-            )
-            employee.user = user
-            employee.employee_code = Employee.generate_employee_code()
-        else:
-            # Mavjud user ma'lumotlarini yangilash
-            user = employee.user
-            user.first_name = self.cleaned_data['first_name']
-            user.last_name = self.cleaned_data['last_name']
-            user.phone = self.cleaned_data.get('phone', '')
-            user.save()
+        # User ma'lumotlarini yangilash
+        user = employee.user
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.phone = self.cleaned_data.get('phone', '')
+        user.save()
 
         if commit:
             employee.save()

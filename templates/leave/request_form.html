@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+
+{% block title %}Yangi ta'til so'rovi - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <!-- Header -->
+    <div class="mb-6">
+        <a href="{% url 'leave:request_list' %}" class="inline-flex items-center text-gray-600 hover:text-indigo-600 mb-4">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Orqaga
+        </a>
+        <h1 class="text-2xl font-bold text-gray-900">Yangi ta'til so'rovi</h1>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Form -->
+        <div class="lg:col-span-2">
+            <form method="post" enctype="multipart/form-data" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <h4 class="text-red-800 font-medium mb-2">Xatoliklar:</h4>
+                    {% for field, errors in form.errors.items %}
+                    <p class="text-red-600 text-sm">{{ errors.0 }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="space-y-6">
+                    <!-- Xodim (faqat admin uchun) -->
+                    {% if is_admin %}
+                    <div>
+                        <label for="id_employee" class="block text-sm font-medium text-gray-700 mb-1">
+                            Xodim *
+                        </label>
+                        {{ form.employee }}
+                    </div>
+                    {% endif %}
+
+                    <!-- Ta'til turi -->
+                    <div>
+                        <label for="id_leave_type" class="block text-sm font-medium text-gray-700 mb-1">
+                            Ta'til turi *
+                        </label>
+                        {{ form.leave_type }}
+                    </div>
+
+                    <!-- Sanalar -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="id_start_date" class="block text-sm font-medium text-gray-700 mb-1">
+                                Boshlanish sanasi *
+                            </label>
+                            {{ form.start_date }}
+                        </div>
+                        <div>
+                            <label for="id_end_date" class="block text-sm font-medium text-gray-700 mb-1">
+                                Tugash sanasi *
+                            </label>
+                            {{ form.end_date }}
+                        </div>
+                    </div>
+
+                    <!-- Kunlar soni (avtomatik) -->
+                    <div id="days-display" class="hidden p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <span class="text-indigo-700 font-medium">Ta'til davomiyligi:</span>
+                            <span id="days-count" class="text-2xl font-bold text-indigo-600">0 kun</span>
+                        </div>
+                        <p id="date-range" class="text-sm text-indigo-600 mt-1"></p>
+                    </div>
+
+                    <!-- Sabab -->
+                    <div>
+                        <label for="id_reason" class="block text-sm font-medium text-gray-700 mb-1">
+                            Sabab
+                        </label>
+                        {{ form.reason }}
+                    </div>
+
+                    <!-- Hujjat -->
+                    <div>
+                        <label for="id_document" class="block text-sm font-medium text-gray-700 mb-1">
+                            Hujjat (ixtiyoriy)
+                        </label>
+                        {{ form.document }}
+                        <p class="text-xs text-gray-500 mt-1">Kasallik varaqasi yoki boshqa hujjatni yuklang</p>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-end space-x-3">
+                    <a href="{% url 'leave:request_list' %}"
+                       class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                        Bekor qilish
+                    </a>
+                    <button type="submit"
+                            class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        Yaratish
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Balance sidebar -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                {% if is_admin %}
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Admin rejimi</h3>
+                <p class="text-gray-600 text-sm mb-4">Siz istalgan xodim uchun ta'til so'rovi yaratishingiz mumkin.</p>
+                <div class="p-3 bg-blue-50 rounded-lg">
+                    <p class="text-sm text-blue-800">Xodimni tanlang va ta'til ma'lumotlarini kiriting.</p>
+                </div>
+                {% else %}
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Ta'til balansim</h3>
+
+                {% if balances %}
+                <div class="space-y-4">
+                    {% for balance in balances %}
+                    <div class="p-3 bg-gray-50 rounded-lg">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-700">{{ balance.leave_type.name }}</span>
+                            <span class="font-bold text-indigo-600">{{ balance.remaining_days|floatformat:0 }}</span>
+                        </div>
+                        <div class="mt-2 h-2 bg-gray-200 rounded-full">
+                            <div class="h-2 bg-indigo-600 rounded-full"
+                                 style="width: {{ balance.usage_percentage }}%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">
+                            {{ balance.used_days|floatformat:0 }} / {{ balance.total_days|floatformat:0 }} ishlatilgan
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-gray-500 text-sm">Balans ma'lumotlari topilmadi</p>
+                {% endif %}
+                {% endif %}
+
+                <div class="mt-6 pt-4 border-t border-gray-100">
+                    <h4 class="text-sm font-medium text-gray-700 mb-2">Qoidalar (MK 2023):</h4>
+                    <ul class="text-xs text-gray-500 space-y-1">
+                        <li>• Yillik ta'til: <strong>15-24 kun</strong></li>
+                        <li>• <strong>6 oy ishlash shart</strong> (MK 219-modda)</li>
+                        <li>• Kasallik varaqasi hujjat talab qiladi</li>
+                    </ul>
+                </div>
+
+                <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <p class="text-xs text-blue-800">
+                        <strong>Ta'til haqi:</strong><br>
+                        (12 oylik daromad ÷ 12) ÷ 25.3 × kun
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const startDateInput = document.getElementById('id_start_date');
+    const endDateInput = document.getElementById('id_end_date');
+    const daysDisplay = document.getElementById('days-display');
+    const daysCount = document.getElementById('days-count');
+    const dateRange = document.getElementById('date-range');
+
+    function calculateDays() {
+        const startVal = startDateInput.value;
+        const endVal = endDateInput.value;
+
+        if (startVal && endVal) {
+            const start = new Date(startVal);
+            const end = new Date(endVal);
+
+            if (end >= start) {
+                const diffTime = Math.abs(end - start);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+                daysCount.textContent = diffDays + ' kun';
+
+                // Format dates
+                const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+                const startStr = start.toLocaleDateString('uz-UZ', options);
+                const endStr = end.toLocaleDateString('uz-UZ', options);
+                dateRange.textContent = startStr + ' dan ' + endStr + ' gacha';
+
+                daysDisplay.classList.remove('hidden');
+
+                // Color based on days
+                if (diffDays > 21) {
+                    daysDisplay.className = 'p-4 bg-red-50 border border-red-200 rounded-lg';
+                    daysCount.className = 'text-2xl font-bold text-red-600';
+                    dateRange.className = 'text-sm text-red-600 mt-1';
+                } else if (diffDays > 14) {
+                    daysDisplay.className = 'p-4 bg-yellow-50 border border-yellow-200 rounded-lg';
+                    daysCount.className = 'text-2xl font-bold text-yellow-600';
+                    dateRange.className = 'text-sm text-yellow-600 mt-1';
+                } else {
+                    daysDisplay.className = 'p-4 bg-indigo-50 border border-indigo-200 rounded-lg';
+                    daysCount.className = 'text-2xl font-bold text-indigo-600';
+                    dateRange.className = 'text-sm text-indigo-600 mt-1';
+                }
+            } else {
+                daysDisplay.classList.add('hidden');
+            }
+        } else {
+            daysDisplay.classList.add('hidden');
+        }
+    }
+
+    // Flatpickr init - boshlanish sanasi
+    const startPicker = initDatePicker(startDateInput, {
+        defaultDate: startDateInput.value || null,
+        onChange: function(selectedDates, dateStr) {
+            calculateDays();
+            // Tugash sanasi minimum sifatida
+            if (endPicker && selectedDates[0]) {
+                endPicker.set('minDate', selectedDates[0]);
+            }
+        }
+    });
+
+    // Flatpickr init - tugash sanasi
+    const endPicker = initDatePicker(endDateInput, {
+        defaultDate: endDateInput.value || null,
+        onChange: function(selectedDates, dateStr) {
+            calculateDays();
+        }
+    });
+
+    // Initial calculation if values exist
+    calculateDays();
+});
+</script>
+{% endblock %}

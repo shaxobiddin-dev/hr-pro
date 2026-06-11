@@ -5,7 +5,7 @@
 {% block content %}
 <div class="space-y-6">
     <!-- Header -->
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div class="flex items-center space-x-4">
             <a href="{% url 'employees:employee_list' %}" class="text-gray-400 hover:text-gray-600">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,7 +51,7 @@
                             {% endif %}
                         </div>
                         <p class="text-gray-500 mt-1">{{ employee.position.name }}</p>
-                        <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+                        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                             <div>
                                 <span class="text-gray-500">Email:</span>
                                 <span class="text-gray-900 ml-2">{{ employee.user.email }}</span>
@@ -68,7 +68,7 @@
             <!-- Work Info -->
             <div class="bg-white rounded-xl shadow-sm p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Ish Ma'lumotlari</h3>
-                <div class="grid grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                         <label class="text-sm text-gray-500">Bo'lim</label>
                         <p class="text-gray-900 font-medium">{{ employee.department.name }}</p>
@@ -136,6 +136,18 @@
             <!-- Salary Card -->
             <div class="bg-white rounded-xl shadow-sm p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Ish Haqi</h3>
+
+                {% if order_salary %}
+                <!-- Buyruqdagi maosh -->
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <p class="text-sm text-green-600">Buyruqdagi maosh</p>
+                    <p class="text-2xl font-bold text-green-700">{{ order_salary|floatformat:0 }} so'm</p>
+                    {% if hiring_item.rate != 1 %}
+                    <p class="text-sm text-green-600">{{ hiring_item.rate }} stavka</p>
+                    {% endif %}
+                </div>
+                {% else %}
+                <!-- Hisoblangan maosh -->
                 <div id="salary-info"
                      hx-get="{% url 'employees:employee_salary' employee.pk %}"
                      hx-trigger="load">
@@ -144,6 +156,7 @@
                         <div class="h-4 bg-gray-100 rounded w-1/2"></div>
                     </div>
                 </div>
+                {% endif %}
 
                 <div class="mt-4 pt-4 border-t border-gray-100 space-y-2 text-sm">
                     <div class="flex justify-between">
@@ -169,24 +182,39 @@
             <div class="bg-white rounded-xl shadow-sm p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Tezkor Amallar</h3>
                 <div class="space-y-2">
-                    <button class="w-full flex items-center px-4 py-2 text-sm text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100">
-                        <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {% if hiring_order %}
+                    <!-- Buyruqi bor - ko'rish tugmasi -->
+                    <a href="{% url 'orders:detail' hiring_order.pk %}"
+                       class="w-full flex items-center px-4 py-2 text-sm text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100">
+                        <svg class="w-5 h-5 mr-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
-                        Buyruq yaratish
-                    </button>
-                    <button class="w-full flex items-center px-4 py-2 text-sm text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100">
+                        Ishga olish buyrug'i (#{{ hiring_order.order_number }})
+                    </a>
+                    {% else %}
+                    <!-- Buyruqi yo'q - yaratish uchun warning -->
+                    <div class="w-full flex items-center px-4 py-2 text-sm text-orange-700 bg-orange-50 rounded-lg">
+                        <svg class="w-5 h-5 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                        Ishga olish buyrug'i yo'q
+                    </div>
+                    {% endif %}
+
+                    <a href="{% url 'leave:request_create' %}"
+                       class="w-full flex items-center px-4 py-2 text-sm text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100">
                         <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
                         Ta'til so'rovi
-                    </button>
-                    <button class="w-full flex items-center px-4 py-2 text-sm text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100">
+                    </a>
+
+                    <a href="#" class="w-full flex items-center px-4 py-2 text-sm text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100">
                         <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                         Oylik varaqasi
-                    </button>
+                    </a>
                 </div>
             </div>
 

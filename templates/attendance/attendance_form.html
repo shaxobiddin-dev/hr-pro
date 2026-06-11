@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto" x-data="attendanceForm()">
+    <!-- Header -->
+    <div class="mb-6">
+        <a href="{% url 'attendance:list' %}{% if attendance %}?date={{ attendance.date|date:'Y-m-d' }}{% endif %}" class="inline-flex items-center text-gray-600 hover:text-indigo-600 mb-4">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Orqaga
+        </a>
+        <h1 class="text-2xl font-bold text-gray-900">{{ title }}</h1>
+    </div>
+
+    <form method="post" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        {% csrf_token %}
+
+        {% if form.errors %}
+        <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <h4 class="text-red-800 font-medium mb-2">Xatoliklar:</h4>
+            {% for field, errors in form.errors.items %}
+            <p class="text-red-600 text-sm">{{ errors.0 }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="space-y-6">
+            <!-- Xodim -->
+            <div>
+                <label for="id_employee" class="block text-sm font-medium text-gray-700 mb-1">
+                    Xodim *
+                </label>
+                {{ form.employee }}
+            </div>
+
+            <!-- Sana -->
+            <div>
+                <label for="id_date" class="block text-sm font-medium text-gray-700 mb-1">
+                    Sana *
+                </label>
+                {{ form.date }}
+            </div>
+
+            <!-- Holat -->
+            <div>
+                <label for="id_status" class="block text-sm font-medium text-gray-700 mb-1">
+                    Holat *
+                </label>
+                <select name="status" id="id_status" x-model="status"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    {% for value, label in form.fields.status.choices %}
+                    <option value="{{ value }}" {% if form.instance.status == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Holat haqida ma'lumot -->
+            <template x-if="status === 'sick'">
+                <div class="p-3 bg-purple-50 border border-purple-200 rounded-lg">
+                    <p class="text-purple-800 text-sm">
+                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Kasallik holati - kelish/ketish vaqti kiritilmaydi
+                    </p>
+                </div>
+            </template>
+            <template x-if="status === 'on_leave'">
+                <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <p class="text-blue-800 text-sm">
+                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Ta'tilda - kelish/ketish vaqti kiritilmaydi
+                    </p>
+                </div>
+            </template>
+            <template x-if="status === 'absent'">
+                <div class="p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p class="text-red-800 text-sm">
+                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Kelmadi - kelish/ketish vaqti kiritilmaydi
+                    </p>
+                </div>
+            </template>
+
+            <!-- Vaqtlar - faqat kerakli holatlarda ko'rsatish -->
+            <div x-show="!['sick', 'on_leave', 'absent'].includes(status)"
+                 x-transition
+                 class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="id_check_in" class="block text-sm font-medium text-gray-700 mb-1">
+                        Kelish vaqti
+                        <span x-show="['present', 'late'].includes(status)" class="text-red-500">*</span>
+                    </label>
+                    {{ form.check_in }}
+                </div>
+                <div>
+                    <label for="id_check_out" class="block text-sm font-medium text-gray-700 mb-1">
+                        Ketish vaqti
+                    </label>
+                    {{ form.check_out }}
+                </div>
+            </div>
+
+            <!-- Izoh -->
+            <div>
+                <label for="id_notes" class="block text-sm font-medium text-gray-700 mb-1">
+                    Izoh
+                </label>
+                {{ form.notes }}
+            </div>
+        </div>
+
+        <div class="mt-8 flex justify-end space-x-3">
+            <a href="{% url 'attendance:list' %}{% if attendance %}?date={{ attendance.date|date:'Y-m-d' }}{% endif %}"
+               class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                Bekor qilish
+            </a>
+            <button type="submit"
+                    class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                Saqlash
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+function attendanceForm() {
+    return {
+        status: '{{ form.instance.status|default:"present" }}',
+
+        init() {
+            // Holat o'zgarganda vaqtlarni tozalash
+            this.$watch('status', (value) => {
+                if (['sick', 'on_leave', 'absent'].includes(value)) {
+                    document.getElementById('id_check_in').value = '';
+                    document.getElementById('id_check_out').value = '';
+                }
+            });
+
+            // Flatpickr - sana uchun (bugundan keyingi sanalar mumkin emas)
+            const dateInput = document.getElementById('id_date');
+            if (dateInput && dateInput.type === 'date') {
+                initDatePicker(dateInput, {
+                    defaultDate: dateInput.value || null,
+                    maxDate: 'today'
+                });
+            }
+        }
+    }
+}
+</script>
+{% endblock %}

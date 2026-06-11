@@ -1,0 +1,321 @@
+{% extends 'base.html' %}
+
+{% block title %}Davomatlar - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6">
+        <div>
+            <nav class="text-sm text-gray-500 mb-2">
+                <a href="{% url 'attendance:dashboard' %}" class="hover:text-indigo-600">Davomat</a>
+                <span class="mx-2">›</span>
+                <span>Ro'yxat</span>
+            </nav>
+            <h1 class="text-2xl font-bold text-gray-900">Davomatlar</h1>
+            <p class="text-gray-600">{{ selected_date|date:"d F Y, l" }}</p>
+        </div>
+        <div class="mt-4 sm:mt-0 flex flex-wrap gap-2">
+            {% if attendances %}
+            <button type="button" onclick="document.getElementById('clearModal').classList.remove('hidden')"
+                    class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+                Tozalash
+            </button>
+            {% endif %}
+            <a href="{% url 'attendance:create' %}"
+               class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Yangi
+            </a>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+        <form method="get" id="filterForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Sana</label>
+                <input type="text" name="date" id="datePicker" value="{{ selected_date|date:'Y-m-d' }}"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 cursor-pointer">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Bo'lim</label>
+                <select name="department" onchange="this.form.submit()"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    <option value="">Barchasi</option>
+                    {% for dept in departments %}
+                    <option value="{{ dept.id }}" {% if current_department == dept.id|stringformat:"s" %}selected{% endif %}>{{ dept.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Holat</label>
+                <select name="status" onchange="this.form.submit()"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    <option value="">Barchasi</option>
+                    {% for value, label in status_choices %}
+                    <option value="{{ value }}" {% if current_status == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Qidiruv</label>
+                <input type="text" name="search" value="{{ search }}" placeholder="Ism, kod..."
+                       id="searchInput"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+            </div>
+        </form>
+    </div>
+
+    <!-- Barchani keldi deb belgilash -->
+    {% if not_recorded %}
+    <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6">
+        <form method="post" action="{% url 'attendance:mark_all_present' %}" class="flex flex-wrap items-center gap-4">
+            {% csrf_token %}
+            <input type="hidden" name="date" value="{{ selected_date|date:'Y-m-d' }}">
+            <span class="text-yellow-800">{{ not_recorded|length }} ta xodim davomati kiritilmagan.</span>
+            <input type="time" name="check_in" value="09:00" class="px-3 py-1 border rounded-lg">
+            <span class="text-gray-600">-</span>
+            <input type="time" name="check_out" value="18:00" class="px-3 py-1 border rounded-lg">
+            <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                Barchasini keldi deb belgilash
+            </button>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Xodim</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bo'lim</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Keldi</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Ketdi</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Soat</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Holat</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Amallar</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for att in attendances %}
+                <tr class="{% if att.status == 'sick' %}bg-purple-50{% elif att.status == 'on_leave' %}bg-blue-50{% elif att.status == 'absent' %}bg-red-50{% elif att.status == 'business_trip' %}bg-cyan-50{% elif att.status == 'half_day' %}bg-orange-50{% else %}hover:bg-gray-50{% endif %}">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-medium
+                                {% if att.status == 'present' %}bg-green-500
+                                {% elif att.status == 'late' %}bg-yellow-500
+                                {% elif att.status == 'absent' %}bg-red-500
+                                {% elif att.status == 'sick' %}bg-purple-500
+                                {% elif att.status == 'on_leave' %}bg-blue-500
+                                {% elif att.status == 'business_trip' %}bg-cyan-500
+                                {% elif att.status == 'half_day' %}bg-orange-500
+                                {% else %}bg-gray-500{% endif %}">
+                                {{ att.employee.user.first_name|slice:":1" }}{{ att.employee.user.last_name|slice:":1" }}
+                            </div>
+                            <div class="ml-3">
+                                <div class="font-medium text-gray-900">{{ att.employee.full_name }}</div>
+                                <div class="text-sm text-gray-500">{{ att.employee.employee_code }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        {{ att.employee.department.name }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                        {% if att.status == 'sick' or att.status == 'on_leave' or att.status == 'absent' %}
+                        <span class="text-gray-400">-</span>
+                        {% else %}
+                        <span class="text-gray-900 font-medium">{{ att.check_in_display }}</span>
+                        {% if att.late_minutes > 0 %}
+                        <span class="text-xs text-red-600">(+{{ att.late_minutes }})</span>
+                        {% endif %}
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center text-gray-900">
+                        {% if att.status == 'sick' or att.status == 'on_leave' or att.status == 'absent' %}
+                        <span class="text-gray-400">-</span>
+                        {% else %}
+                        {{ att.check_out_display }}
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                        {% if att.status == 'sick' or att.status == 'on_leave' or att.status == 'absent' %}
+                        <span class="text-gray-400">-</span>
+                        {% else %}
+                        <span class="font-medium {% if att.work_hours >= 8 %}text-green-600{% else %}text-orange-600{% endif %}">
+                            {{ att.work_hours }}
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <span class="px-2 py-1 text-xs font-medium rounded-full
+                            {% if att.status == 'present' %}bg-green-100 text-green-800
+                            {% elif att.status == 'late' %}bg-yellow-100 text-yellow-800
+                            {% elif att.status == 'absent' %}bg-red-100 text-red-800
+                            {% elif att.status == 'on_leave' %}bg-blue-100 text-blue-800
+                            {% elif att.status == 'sick' %}bg-purple-100 text-purple-800
+                            {% elif att.status == 'business_trip' %}bg-cyan-100 text-cyan-800
+                            {% elif att.status == 'half_day' %}bg-orange-100 text-orange-800
+                            {% else %}bg-gray-100 text-gray-800{% endif %}">
+                            {{ att.get_status_display }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right">
+                        <a href="{% url 'attendance:update' att.pk %}" class="text-indigo-600 hover:text-indigo-900">
+                            Tahrirlash
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                        Bu sana uchun davomat topilmadi
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <!-- Kiritilmaganlar -->
+    {% if not_recorded %}
+    <div class="mt-6 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+            <h3 class="font-semibold text-gray-900">Davomati kiritilmagan xodimlar ({{ not_recorded|length }})</h3>
+        </div>
+        <div class="p-6">
+            <div class="flex flex-wrap gap-2">
+                {% for emp in not_recorded %}
+                <a href="{% url 'attendance:create' %}?employee={{ emp.id }}&date={{ selected_date|date:'Y-m-d' }}"
+                   class="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 text-sm">
+                    {{ emp.full_name }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+// Qidiruv uchun debounce
+let searchTimeout;
+document.getElementById('searchInput').addEventListener('input', function() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        document.getElementById('filterForm').submit();
+    }, 400);
+});
+
+// Tozalash modal
+function toggleAllEmployees() {
+    const selectAll = document.getElementById('selectAll');
+    const checkboxes = document.querySelectorAll('.employee-checkbox');
+    checkboxes.forEach(cb => cb.checked = selectAll.checked);
+    updateClearButtonText();
+}
+
+function updateClearButtonText() {
+    const checkboxes = document.querySelectorAll('.employee-checkbox:checked');
+    const btn = document.getElementById('clearSubmitBtn');
+    if (checkboxes.length === 0) {
+        btn.textContent = 'Barchasini tozalash';
+    } else {
+        btn.textContent = `${checkboxes.length} ta davomatni tozalash`;
+    }
+}
+</script>
+
+<!-- Tozalash Modal -->
+{% if attendances %}
+<div id="clearModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-xl shadow-xl max-w-lg w-full mx-4 max-h-[90vh] flex flex-col">
+        <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+            <h3 class="text-lg font-semibold text-gray-900">Davomatlarni tozalash</h3>
+            <button type="button" onclick="document.getElementById('clearModal').classList.add('hidden')"
+                    class="text-gray-400 hover:text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <form method="post" action="{% url 'attendance:clear' %}">
+            {% csrf_token %}
+            <input type="hidden" name="date" value="{{ selected_date|date:'Y-m-d' }}">
+            {% if current_department %}
+            <input type="hidden" name="department" value="{{ current_department }}">
+            {% endif %}
+
+            <div class="p-4">
+                <p class="text-gray-600 mb-4">
+                    <strong>{{ selected_date|date:"d F Y" }}</strong> sanasidagi davomatlarni o'chirish.
+                    Hech narsa tanlamasangiz barchasi o'chiriladi.
+                </p>
+
+                <div class="mb-3 flex items-center gap-2 border-b pb-3">
+                    <input type="checkbox" id="selectAll" onchange="toggleAllEmployees()"
+                           class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                    <label for="selectAll" class="text-sm font-medium text-gray-700">Barchasini tanlash</label>
+                </div>
+
+                <div class="max-h-60 overflow-y-auto space-y-2">
+                    {% for att in attendances %}
+                    <label class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer">
+                        <input type="checkbox" name="employees" value="{{ att.employee.id }}"
+                               class="employee-checkbox w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                               onchange="updateClearButtonText()">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-medium
+                                {% if att.status == 'present' %}bg-green-500
+                                {% elif att.status == 'late' %}bg-yellow-500
+                                {% elif att.status == 'absent' %}bg-red-500
+                                {% else %}bg-gray-500{% endif %}">
+                                {{ att.employee.user.first_name|slice:":1" }}{{ att.employee.user.last_name|slice:":1" }}
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium text-gray-900">{{ att.employee.full_name }}</div>
+                                <div class="text-xs text-gray-500">{{ att.get_status_display }}</div>
+                            </div>
+                        </div>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-gray-200 bg-gray-50 flex justify-end gap-3 rounded-b-xl">
+                <button type="button" onclick="document.getElementById('clearModal').classList.add('hidden')"
+                        class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                    Bekor qilish
+                </button>
+                <button type="submit" id="clearSubmitBtn"
+                        class="px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700">
+                    Barchasini tozalash
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Flatpickr init - bugundan keyingi sanalar tanlash mumkin emas
+initDatePicker('#datePicker', {
+    defaultDate: '{{ selected_date|date:"Y-m-d" }}',
+    maxDate: 'today',
+    onChange: function(selectedDates, dateStr) {
+        document.getElementById('filterForm').submit();
+    }
+});
+</script>
+{% endblock %}

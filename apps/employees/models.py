@@ -281,6 +281,7 @@ class Employee(SoftDeleteModel):
     """
 
     class Status(models.TextChoices):
+        PENDING = 'pending', "Kutilmoqda"  # Buyruq tasdiqlanmagan
         ACTIVE = 'active', "Faol"
         ON_LEAVE = 'on_leave', "Ta'tilda"
         SUSPENDED = 'suspended', "To'xtatilgan"
@@ -446,3 +447,58 @@ class Employee(SoftDeleteModel):
             num = 1
 
         return f"{prefix}{num:04d}"
+
+    def soft_delete(self):
+        """
+        Xodimni arxivlash.
+
+        - is_active = False
+        - status = TERMINATED
+        - termination_date = bugun
+        - Bog'liq buyruqlar: tasdiqlangan -> arxiv, qolganlar -> o'chirish
+        """
+        from django.utils import timezone
+
+        # Bog'liq buyruqlarni boshqarish
+        self._handle_related_orders()
+
+        self.is_active = False
+        self.status = self.Status.TERMINATED
+        self.termination_date = timezone.now().date()
+        self.deleted_at = timezone.now()
+        self.save()
+
+    def _handle_related_orders(self):
+        """
+        Xodimga bog'liq buyruqlarni boshqarish.
+
+        - Tasdiqlangan buyruqlar → arxivlanadi (soft delete)
+        - Qolgan buyruqlar → o'chiriladi (hard delete)
+        """
+        from apps.orders.models import HiringOrderItem, Order
+
+        # Ishga olish buyruqlari
+        hiring_items = HiringOrderItem.objects.filter(employee=self).select_related('order')
+
+        for item in hiring_items:
+            order = item.order
+            if order.status == Order.Status.APPROVED:
+                # Tasdiqlangan buyruq - arxivlash
+                order.soft_delete()
+            else:
+                # Qolgan buyruqlar - o'chirish
+                order.delete()
+
+    def restore(self):
+        """
+        Xodimni arxivdan tiklash.
+
+        - is_active = True
+        - status = ACTIVE
+        - termination_date = None
+        """
+        self.is_active = True
+        self.status = self.Status.ACTIVE
+        self.termination_date = None
+        self.deleted_at = None
+        self.save()

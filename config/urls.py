@@ -31,6 +31,15 @@ urlpatterns = [
 
     # Payroll Module
     path('payroll/', include('apps.payroll.urls')),
+
+    # Leave Module
+    path('leave/', include('apps.leave.urls')),
+
+    # Attendance Module
+    path('attendance/', include('apps.attendance.urls')),
+
+    # Orders Module
+    path('orders/', include('apps.orders.urls')),
 ]
 
 # Debug toolbar (development only)

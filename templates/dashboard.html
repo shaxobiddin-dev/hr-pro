@@ -127,7 +127,7 @@
         <div class="bg-white shadow-sm rounded-xl border border-gray-100 p-6">
             <h2 class="text-lg font-semibold text-gray-900 mb-4">Tezkor Amallar</h2>
             <div class="space-y-3">
-                <a href="{% url 'employees:employee_create' %}"
+                <a href="{% url 'orders:hiring_create' %}"
                    class="flex items-center p-3 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors">
                     <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center mr-3">
                         <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -135,8 +135,8 @@
                         </svg>
                     </div>
                     <div>
-                        <div class="font-medium text-gray-900">Yangi Xodim</div>
-                        <div class="text-sm text-gray-500">Xodim qo'shish</div>
+                        <div class="font-medium text-gray-900">Ishga olish</div>
+                        <div class="text-sm text-gray-500">Buyruq yaratish</div>
                     </div>
                 </a>
 
@@ -220,11 +220,11 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
                 <p class="text-gray-500">Hali xodimlar qo'shilmagan</p>
-                <a href="{% url 'employees:employee_create' %}" class="mt-2 inline-flex items-center text-indigo-600 hover:text-indigo-800">
+                <a href="{% url 'orders:hiring_create' %}" class="mt-2 inline-flex items-center text-indigo-600 hover:text-indigo-800">
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
-                    Birinchi xodimni qo'shing
+                    Ishga olish buyrug'i yarating
                 </a>
             </div>
             {% endif %}

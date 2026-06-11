@@ -83,15 +83,15 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     def statistics(self, request):
         """Xodimlar statistikasi."""
         total = Employee.objects.filter(is_active=True).count()
-        working = Employee.objects.filter(is_active=True, status='working').count()
+        active = Employee.objects.filter(is_active=True, status='active').count()
         on_leave = Employee.objects.filter(is_active=True, status='on_leave').count()
-        probation = Employee.objects.filter(is_active=True, status='probation').count()
+        suspended = Employee.objects.filter(is_active=True, status='suspended').count()
 
         return Response({
             'total': total,
-            'working': working,
+            'active': active,
             'on_leave': on_leave,
-            'probation': probation,
+            'suspended': suspended,
         })
 
 

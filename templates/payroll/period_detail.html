@@ -14,7 +14,7 @@
             <span>{{ period.name }}</span>
         </div>
 
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">{{ period.name }}</h1>
                 <p class="text-gray-600 mt-1">
@@ -30,7 +30,7 @@
                 </p>
             </div>
 
-            <div class="flex items-center space-x-3">
+            <div class="flex flex-wrap items-center gap-3">
                 {% if period.status == 'draft' %}
                 <a href="{% url 'payroll:generate_payrolls' period.pk %}"
                    class="inline-flex items-center px-4 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors">
@@ -71,8 +71,97 @@
         </div>
     </div>
 
+    <!-- Workflow Steps -->
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <h3 class="text-sm font-medium text-gray-500 mb-4">Ish haqi hisoblash bosqichlari</h3>
+        <div class="flex items-center justify-between">
+            <!-- Step 1: Create -->
+            <div class="flex-1 flex items-center">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full
+                    {% if period.status != 'draft' %}bg-green-500 text-white{% else %}bg-indigo-500 text-white{% endif %}">
+                    {% if period.status != 'draft' %}
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    {% else %}
+                    <span class="font-bold">1</span>
+                    {% endif %}
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-gray-900">Davr yaratildi</p>
+                    <p class="text-xs text-gray-500">{{ period.start_date|date:"d.m.Y" }} - {{ period.end_date|date:"d.m.Y" }}</p>
+                </div>
+            </div>
+            <div class="w-12 h-0.5 {% if period.status != 'draft' %}bg-green-500{% else %}bg-gray-200{% endif %}"></div>
+
+            <!-- Step 2: Generate -->
+            <div class="flex-1 flex items-center">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full
+                    {% if payrolls|length > 0 %}
+                        {% if period.status in 'confirmed,paid' %}bg-green-500 text-white
+                        {% else %}bg-indigo-500 text-white{% endif %}
+                    {% else %}bg-gray-200 text-gray-400{% endif %}">
+                    {% if payrolls|length > 0 and period.status in 'confirmed,paid' %}
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    {% else %}
+                    <span class="font-bold">2</span>
+                    {% endif %}
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium {% if payrolls|length > 0 %}text-gray-900{% else %}text-gray-400{% endif %}">Ish haqlarini yaratish</p>
+                    <p class="text-xs {% if payrolls|length > 0 %}text-gray-500{% else %}text-gray-400{% endif %}">{{ payrolls|length }} ta xodim</p>
+                </div>
+            </div>
+            <div class="w-12 h-0.5 {% if period.status in 'processing,confirmed,paid' %}bg-green-500{% else %}bg-gray-200{% endif %}"></div>
+
+            <!-- Step 3: Calculate -->
+            {% with draft_count=payrolls|length %}
+            <div class="flex-1 flex items-center">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full
+                    {% if period.status in 'confirmed,paid' %}bg-green-500 text-white
+                    {% elif period.status == 'processing' %}bg-indigo-500 text-white
+                    {% else %}bg-gray-200 text-gray-400{% endif %}">
+                    {% if period.status in 'confirmed,paid' %}
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    {% else %}
+                    <span class="font-bold">3</span>
+                    {% endif %}
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium {% if period.status in 'processing,confirmed,paid' %}text-gray-900{% else %}text-gray-400{% endif %}">Hisoblash</p>
+                    <p class="text-xs text-gray-500">"Hammasini hisoblash" bosing</p>
+                </div>
+            </div>
+            {% endwith %}
+            <div class="w-12 h-0.5 {% if period.status in 'confirmed,paid' %}bg-green-500{% else %}bg-gray-200{% endif %}"></div>
+
+            <!-- Step 4: Confirm -->
+            <div class="flex-1 flex items-center">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full
+                    {% if period.status in 'confirmed,paid' %}bg-green-500 text-white
+                    {% else %}bg-gray-200 text-gray-400{% endif %}">
+                    {% if period.status in 'confirmed,paid' %}
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    {% else %}
+                    <span class="font-bold">4</span>
+                    {% endif %}
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium {% if period.status in 'confirmed,paid' %}text-gray-900{% else %}text-gray-400{% endif %}">Tasdiqlash</p>
+                    <p class="text-xs text-gray-500">Hisoblangandan keyin</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
         <div class="bg-white rounded-xl shadow-sm p-6">
             <div class="text-sm text-gray-500">Xodimlar soni</div>
             <div class="text-2xl font-bold text-gray-900 mt-1">{{ payrolls|length }}</div>
@@ -125,17 +214,24 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     {% for payroll in payrolls %}
-                    <tr class="hover:bg-gray-50">
+                    <tr class="hover:bg-gray-50 {% if payroll.work_days == 0 %}bg-red-50{% endif %}">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
-                                <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                                    <span class="text-indigo-600 font-medium">
+                                <div class="h-10 w-10 rounded-full {% if payroll.work_days == 0 %}bg-red-100{% else %}bg-indigo-100{% endif %} flex items-center justify-center">
+                                    <span class="{% if payroll.work_days == 0 %}text-red-600{% else %}text-indigo-600{% endif %} font-medium">
                                         {{ payroll.employee.user.first_name|slice:":1" }}{{ payroll.employee.user.last_name|slice:":1" }}
                                     </span>
                                 </div>
                                 <div class="ml-4">
                                     <div class="text-sm font-medium text-gray-900">
                                         {{ payroll.employee.user.get_full_name }}
+                                        {% if payroll.work_days == 0 %}
+                                        <span class="ml-2 text-xs text-red-600" title="Davomat kiritilmagan!">
+                                            <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                            </svg>
+                                        </span>
+                                        {% endif %}
                                     </div>
                                     <div class="text-sm text-gray-500">{{ payroll.employee.employee_code }}</div>
                                 </div>
@@ -144,8 +240,11 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {{ payroll.employee.position.name|default:"-" }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-center {% if payroll.work_days == 0 %}text-red-600 font-bold{% else %}text-gray-900{% endif %}">
                             {{ payroll.work_days }}/{{ period.work_days }}
+                            {% if payroll.work_days == 0 %}
+                            <div class="text-xs text-red-500">Davomat yo'q!</div>
+                            {% endif %}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 font-medium">
                             {{ payroll.gross_salary|floatformat:0 }}

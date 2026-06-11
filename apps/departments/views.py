@@ -101,8 +101,10 @@ class DepartmentDeleteView(LoginRequiredMixin, DeleteView):
             return HttpResponse(status=400)
 
         self.object.soft_delete()
-        messages.success(request, "Bo'lim o'chirildi!")
 
         if request.headers.get('HX-Request'):
+            # HTMX so'rovda message qo'shmaymiz
             return HttpResponse(status=200, headers={'HX-Trigger': 'departmentDeleted'})
+
+        messages.success(request, "Bo'lim o'chirildi!")
         return super().delete(request, *args, **kwargs)

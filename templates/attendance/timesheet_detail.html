@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}Tabel - {{ timesheet.employee.full_name }} - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-6">
+        <a href="{% url 'attendance:timesheet_list' %}" class="inline-flex items-center text-gray-600 hover:text-indigo-600 mb-4">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Orqaga
+        </a>
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">{{ timesheet.employee.full_name }}</h1>
+                <p class="text-gray-600">{{ timesheet.month_name }} {{ timesheet.year }} - Oylik tabel</p>
+            </div>
+            <span class="mt-2 sm:mt-0 px-3 py-1 text-sm font-medium rounded-full
+                {% if timesheet.status == 'draft' %}bg-gray-100 text-gray-800
+                {% elif timesheet.status == 'confirmed' %}bg-green-100 text-green-800
+                {% endif %}">
+                {{ timesheet.get_status_display }}
+            </span>
+        </div>
+    </div>
+
+    <!-- Statistika -->
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
+        <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+            <div class="text-2xl font-bold text-gray-900">{{ timesheet.work_days }}</div>
+            <div class="text-sm text-gray-600">Ish kunlari</div>
+        </div>
+        <div class="bg-green-50 rounded-xl shadow-sm p-4 border border-green-200">
+            <div class="text-2xl font-bold text-green-600">{{ timesheet.present_days }}</div>
+            <div class="text-sm text-green-700">Keldi</div>
+        </div>
+        <div class="bg-red-50 rounded-xl shadow-sm p-4 border border-red-200">
+            <div class="text-2xl font-bold text-red-600">{{ timesheet.absent_days }}</div>
+            <div class="text-sm text-red-700">Kelmadi</div>
+        </div>
+        <div class="bg-yellow-50 rounded-xl shadow-sm p-4 border border-yellow-200">
+            <div class="text-2xl font-bold text-yellow-600">{{ timesheet.late_days }}</div>
+            <div class="text-sm text-yellow-700">Kechikdi</div>
+        </div>
+        <div class="bg-blue-50 rounded-xl shadow-sm p-4 border border-blue-200">
+            <div class="text-2xl font-bold text-blue-600">{{ timesheet.leave_days }}</div>
+            <div class="text-sm text-blue-700">Ta'tilda</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+            <div class="text-2xl font-bold text-gray-900">{{ timesheet.total_work_hours|floatformat:1 }}</div>
+            <div class="text-sm text-gray-600">Ish soati</div>
+        </div>
+    </div>
+
+    <!-- Kunlik davomatlar -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100">
+            <h2 class="text-lg font-semibold text-gray-900">Kunlik davomatlar</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sana</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kun</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Keldi</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Ketdi</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Ish soati</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Holat</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Izoh</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for att in attendances %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {{ att.date|date:"d.m.Y" }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            {{ att.date|date:"l" }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
+                            {{ att.check_in_display }}
+                            {% if att.late_minutes > 0 %}
+                            <span class="text-xs text-red-600">(+{{ att.late_minutes }})</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
+                            {{ att.check_out_display }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="font-medium {% if att.work_hours >= 8 %}text-green-600{% else %}text-orange-600{% endif %}">
+                                {{ att.work_hours }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="px-2 py-1 text-xs font-medium rounded-full
+                                {% if att.status == 'present' %}bg-green-100 text-green-800
+                                {% elif att.status == 'late' %}bg-yellow-100 text-yellow-800
+                                {% elif att.status == 'absent' %}bg-red-100 text-red-800
+                                {% elif att.status == 'on_leave' %}bg-blue-100 text-blue-800
+                                {% elif att.status == 'sick' %}bg-purple-100 text-purple-800
+                                {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                {{ att.get_status_display }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-600">
+                            {{ att.notes|default:"-" }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                            Bu oy uchun davomat topilmadi
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

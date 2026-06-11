@@ -116,12 +116,16 @@
                 <table class="min-w-full">
                     <tbody class="divide-y divide-gray-100">
                         <tr>
-                            <td class="py-2 text-gray-700">JSHDT (12%)</td>
-                            <td class="py-2 text-right font-medium text-red-600">{{ payroll.jshdt_amount|floatformat:0 }}</td>
+                            <td class="py-2 text-gray-700">Daromad solig'i (12%)</td>
+                            <td class="py-2 text-right font-medium text-red-600">{{ payroll.total_deductions|floatformat:0 }}</td>
                         </tr>
-                        <tr>
-                            <td class="py-2 text-gray-700">INPS (0.1%)</td>
-                            <td class="py-2 text-right font-medium text-red-600">{{ payroll.inps_amount|floatformat:0 }}</td>
+                        <tr class="text-xs text-gray-400">
+                            <td class="py-1 pl-4">- JSHDT jamg'armasiga</td>
+                            <td class="py-1 text-right">{{ payroll.jshdt_amount|floatformat:0 }}</td>
+                        </tr>
+                        <tr class="text-xs text-gray-400">
+                            <td class="py-1 pl-4">- INPS jamg'armasiga</td>
+                            <td class="py-1 text-right">{{ payroll.inps_amount|floatformat:0 }}</td>
                         </tr>
                         {% for item in deductions %}
                         <tr>

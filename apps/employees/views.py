@@ -6,12 +6,16 @@ HTMX bilan ishlaydi.
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.db.models import Q
+from django.db import IntegrityError
 from django.contrib import messages
 
 from .models import Employee, Position, Level, TenureBracket, MHTMHistory
+from apps.departments.models import Department
 from .forms import EmployeeForm, PositionForm
 
 
@@ -23,9 +27,23 @@ class EmployeeListView(LoginRequiredMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        queryset = Employee.objects.filter(is_active=True).select_related(
-            'user', 'department', 'position', 'level'
-        )
+        # Arxiv rejimi tekshiruvi
+        show_archive = self.request.GET.get('archive') == '1'
+
+        if show_archive:
+            # Arxivdagi xodimlar (is_active=False)
+            queryset = Employee.objects.filter(
+                is_active=False
+            ).select_related(
+                'user', 'department', 'position', 'level'
+            )
+        else:
+            # Faol xodimlar (is_active=True)
+            queryset = Employee.objects.filter(
+                is_active=True
+            ).select_related(
+                'user', 'department', 'position', 'level'
+            )
 
         # Qidiruv
         search = self.request.GET.get('search', '')
@@ -61,10 +79,21 @@ class EmployeeListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['departments'] = self.request.user.employee.department.get_descendants(include_self=True) if hasattr(self.request.user, 'employee') else []
+        context['departments'] = Department.objects.filter(is_active=True)
         context['levels'] = Level.objects.filter(is_active=True)
         context['statuses'] = Employee.Status.choices
-        context['total_count'] = Employee.objects.filter(is_active=True).count()
+
+        # Arxiv rejimi
+        show_archive = self.request.GET.get('archive') == '1'
+        context['show_archive'] = show_archive
+
+        if show_archive:
+            context['total_count'] = Employee.objects.filter(is_active=False).count()
+            context['archive_count'] = context['total_count']
+        else:
+            context['total_count'] = Employee.objects.filter(is_active=True).count()
+            context['archive_count'] = Employee.objects.filter(is_active=False).count()
+
         return context
 
 
@@ -79,25 +108,20 @@ class EmployeeDetailView(LoginRequiredMixin, DetailView):
         employee = self.object
         context['base_salary'] = employee.calculate_base_salary()
         context['mhtm'] = MHTMHistory.get_current()
+
+        # Ishga olish buyrug'ini olish
+        hiring_item = employee.hiring_order_items.select_related('order').first()
+        if hiring_item:
+            context['hiring_order'] = hiring_item.order
+            context['hiring_item'] = hiring_item
+            # Buyruqdagi maosh
+            context['order_salary'] = hiring_item.salary
+
         return context
 
 
-class EmployeeCreateView(LoginRequiredMixin, CreateView):
-    """Yangi xodim yaratish."""
-    model = Employee
-    form_class = EmployeeForm
-    template_name = 'employees/employee_form.html'
-    success_url = reverse_lazy('employees:employee_list')
-
-    def form_valid(self, form):
-        messages.success(self.request, "Xodim muvaffaqiyatli yaratildi!")
-        return super().form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = "Yangi Xodim"
-        context['button_text'] = "Yaratish"
-        return context
+# EmployeeCreateView olib tashlandi - xodim faqat buyruq orqali yaratiladi
+# Yangi xodim yaratish: orders:hiring_create
 
 
 class EmployeeUpdateView(LoginRequiredMixin, UpdateView):
@@ -110,8 +134,17 @@ class EmployeeUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('employees:employee_detail', kwargs={'pk': self.object.pk})
 
     def form_valid(self, form):
-        messages.success(self.request, "Xodim ma'lumotlari yangilandi!")
-        return super().form_valid(form)
+        try:
+            response = super().form_valid(form)
+            messages.success(self.request, "Xodim ma'lumotlari yangilandi!")
+            return response
+        except IntegrityError as e:
+            error_msg = str(e)
+            if 'email' in error_msg.lower():
+                messages.error(self.request, "Bu email allaqachon ro'yxatdan o'tgan.")
+            else:
+                messages.error(self.request, f"Xatolik: {error_msg}")
+            return self.form_invalid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -128,11 +161,25 @@ class EmployeeDeleteView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.soft_delete()
-        messages.success(request, "Xodim o'chirildi!")
 
         if request.headers.get('HX-Request'):
+            # HTMX so'rovda message qo'shmaymiz - qator o'chiriladi
             return HttpResponse(status=200, headers={'HX-Trigger': 'employeeDeleted'})
+
+        messages.success(request, "Xodim o'chirildi!")
         return super().delete(request, *args, **kwargs)
+
+
+@login_required
+def employee_restore(request, pk):
+    """Xodimni arxivdan tiklash."""
+    if request.method == 'POST':
+        # Arxivdagi xodimni olish (is_active=False ham)
+        employee = get_object_or_404(Employee, pk=pk)
+        employee.restore()  # is_active=True, status=ACTIVE, termination_date=None
+        messages.success(request, f"{employee.full_name} tiklandi va faol holatga qaytarildi!")
+
+    return redirect('employees:employee_list')
 
 
 # Position views
@@ -160,8 +207,17 @@ class PositionCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('employees:position_list')
 
     def form_valid(self, form):
-        messages.success(self.request, "Lavozim yaratildi!")
-        return super().form_valid(form)
+        try:
+            response = super().form_valid(form)
+            messages.success(self.request, "Lavozim yaratildi!")
+            return response
+        except IntegrityError as e:
+            error_msg = str(e)
+            if 'code' in error_msg.lower():
+                messages.error(self.request, "Bu lavozim kodi allaqachon mavjud.")
+            else:
+                messages.error(self.request, f"Xatolik: {error_msg}")
+            return self.form_invalid(form)
 
 
 class PositionUpdateView(LoginRequiredMixin, UpdateView):
@@ -172,8 +228,17 @@ class PositionUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('employees:position_list')
 
     def form_valid(self, form):
-        messages.success(self.request, "Lavozim yangilandi!")
-        return super().form_valid(form)
+        try:
+            response = super().form_valid(form)
+            messages.success(self.request, "Lavozim yangilandi!")
+            return response
+        except IntegrityError as e:
+            error_msg = str(e)
+            if 'code' in error_msg.lower():
+                messages.error(self.request, "Bu lavozim kodi allaqachon mavjud.")
+            else:
+                messages.error(self.request, f"Xatolik: {error_msg}")
+            return self.form_invalid(form)
 
 
 class PositionDeleteView(LoginRequiredMixin, DeleteView):
@@ -184,10 +249,12 @@ class PositionDeleteView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.soft_delete()
-        messages.success(request, "Lavozim o'chirildi!")
 
         if request.headers.get('HX-Request'):
+            # HTMX so'rovda message qo'shmaymiz
             return HttpResponse(status=200, headers={'HX-Trigger': 'positionDeleted'})
+
+        messages.success(request, "Lavozim o'chirildi!")
         return super().delete(request, *args, **kwargs)
 
 
@@ -219,3 +286,24 @@ def employee_salary_calculator(request, pk):
     </div>
     '''
     return HttpResponse(html)
+
+
+def positions_by_department(request):
+    """HTMX: Bo'limga tegishli lavozimlarni olish."""
+    department_id = request.GET.get('department')
+    selected = request.GET.get('selected', '')
+
+    if department_id:
+        positions = Position.objects.filter(
+            is_active=True,
+            department_id=department_id
+        ).order_by('name')
+    else:
+        positions = Position.objects.filter(is_active=True).order_by('name')
+
+    options = ['<option value="">---------</option>']
+    for pos in positions:
+        sel = 'selected' if str(pos.pk) == selected else ''
+        options.append(f'<option value="{pos.pk}" {sel}>{pos.code} - {pos.name}</option>')
+
+    return HttpResponse('\n'.join(options))

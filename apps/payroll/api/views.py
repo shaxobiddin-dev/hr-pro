@@ -103,7 +103,7 @@ class PayrollPeriodViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        employees = Employee.objects.filter(is_active=True, status='working')
+        employees = Employee.objects.filter(is_active=True, status='active')
         created_count = 0
 
         for employee in employees:

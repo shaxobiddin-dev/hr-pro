@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+
+{% block title %}Ta'til so'rovi - {{ leave_request.employee.user.get_full_name }} - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="mb-6">
+        <a href="{% url 'leave:request_list' %}" class="inline-flex items-center text-gray-600 hover:text-indigo-600 mb-4">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            So'rovlar ro'yxati
+        </a>
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">Ta'til so'rovi</h1>
+                <p class="text-gray-600">{{ leave_request.leave_type.name }}</p>
+            </div>
+            <span class="self-start px-3 py-1 text-sm font-medium rounded-full
+                {% if leave_request.status == 'approved' %}bg-green-100 text-green-800
+                {% elif leave_request.status == 'pending' %}bg-yellow-100 text-yellow-800
+                {% elif leave_request.status == 'rejected' %}bg-red-100 text-red-800
+                {% elif leave_request.status == 'draft' %}bg-gray-100 text-gray-800
+                {% else %}bg-gray-100 text-gray-800{% endif %}">
+                {{ leave_request.get_status_display }}
+            </span>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Main info -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Xodim -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Xodim</h3>
+                <div class="flex items-center">
+                    <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 text-xl font-bold">
+                        {{ leave_request.employee.user.first_name|slice:":1" }}{{ leave_request.employee.user.last_name|slice:":1" }}
+                    </div>
+                    <div class="ml-4">
+                        <h4 class="text-lg font-semibold text-gray-900">{{ leave_request.employee.user.get_full_name }}</h4>
+                        <p class="text-gray-600">{{ leave_request.employee.position.name }}</p>
+                        <p class="text-sm text-gray-500">{{ leave_request.employee.department.name }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ta'til tafsilotlari -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Ta'til tafsilotlari</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <span class="text-sm text-gray-500">Ta'til turi</span>
+                        <p class="font-medium text-gray-900">{{ leave_request.leave_type.name }}</p>
+                    </div>
+                    <div>
+                        <span class="text-sm text-gray-500">Kunlar soni</span>
+                        <p class="font-medium text-gray-900">{{ leave_request.requested_days|floatformat:0 }} kun</p>
+                    </div>
+                    <div>
+                        <span class="text-sm text-gray-500">Boshlanish</span>
+                        <p class="font-medium text-gray-900">{{ leave_request.start_date|date:"d.m.Y" }}</p>
+                    </div>
+                    <div>
+                        <span class="text-sm text-gray-500">Tugash</span>
+                        <p class="font-medium text-gray-900">{{ leave_request.end_date|date:"d.m.Y" }}</p>
+                    </div>
+                </div>
+
+                {% if leave_request.reason %}
+                <div class="mt-6 pt-4 border-t border-gray-100">
+                    <span class="text-sm text-gray-500">Sabab</span>
+                    <p class="text-gray-900 mt-1">{{ leave_request.reason }}</p>
+                </div>
+                {% endif %}
+
+                {% if leave_request.document %}
+                <div class="mt-6 pt-4 border-t border-gray-100">
+                    <span class="text-sm text-gray-500">Hujjat</span>
+                    <a href="{{ leave_request.document.url }}" target="_blank"
+                       class="mt-2 inline-flex items-center text-indigo-600 hover:text-indigo-800">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Hujjatni yuklab olish
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Tasdiqlash (agar rahbar bo'lsa) -->
+            {% if can_approve %}
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Tasdiqlash</h3>
+                <form method="post" action="{% url 'leave:request_approve' leave_request.pk %}">
+                    {% csrf_token %}
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Rad etish sababi (ixtiyoriy)</label>
+                            <textarea name="rejection_reason" rows="2"
+                                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                      placeholder="Rad etilsa sabab..."></textarea>
+                        </div>
+                        <div class="flex space-x-4">
+                            <button type="submit" name="action" value="approve"
+                                    class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                                Tasdiqlash
+                            </button>
+                            <button type="submit" name="action" value="reject"
+                                    class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                                Rad etish
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="lg:col-span-1 space-y-6">
+            <!-- Holat -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-sm font-medium text-gray-500 mb-4">Holat tarixi</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">Yaratildi</p>
+                            <p class="text-xs text-gray-500">{{ leave_request.created_at|date:"d.m.Y H:i" }}</p>
+                        </div>
+                    </div>
+
+                    {% if leave_request.approved_at %}
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 {% if leave_request.status == 'approved' %}bg-green-100{% else %}bg-red-100{% endif %} rounded-full flex items-center justify-center">
+                            {% if leave_request.status == 'approved' %}
+                            <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% else %}
+                            <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            {% endif %}
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">{{ leave_request.get_status_display }}</p>
+                            <p class="text-xs text-gray-500">{{ leave_request.approved_at|date:"d.m.Y H:i" }}</p>
+                            {% if leave_request.approved_by %}
+                            <p class="text-xs text-gray-500">{{ leave_request.approved_by.user.get_full_name }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if leave_request.rejection_reason %}
+                <div class="mt-4 p-3 bg-red-50 rounded-lg">
+                    <p class="text-sm text-red-800">{{ leave_request.rejection_reason }}</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Amallar -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-sm font-medium text-gray-500 mb-4">Amallar</h3>
+                <div class="space-y-2">
+                    {% if leave_request.status == 'draft' %}
+                    <form method="post" action="{% url 'leave:request_submit' leave_request.pk %}">
+                        {% csrf_token %}
+                        <button type="submit"
+                                class="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                            So'rovni yuborish
+                        </button>
+                    </form>
+                    {% endif %}
+
+                    {% if leave_request.status in 'draft,pending' %}
+                    <form method="post" action="{% url 'leave:request_cancel' leave_request.pk %}"
+                          onsubmit="return confirm('Bekor qilishni tasdiqlaysizmi?')">
+                        {% csrf_token %}
+                        <button type="submit"
+                                class="w-full px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition">
+                            Bekor qilish
+                        </button>
+                    </form>
+                    {% endif %}
+
+                    <a href="{% url 'leave:request_list' %}"
+                       class="block w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition text-center">
+                        Ro'yxatga qaytish
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

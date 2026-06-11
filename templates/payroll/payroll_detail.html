@@ -18,7 +18,7 @@
             <span>{{ payroll.employee.employee_code }}</span>
         </div>
 
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div class="flex items-center space-x-4">
                 <div class="h-16 w-16 rounded-full bg-indigo-100 flex items-center justify-center">
                     <span class="text-xl font-bold text-indigo-600">
@@ -31,7 +31,7 @@
                 </div>
             </div>
 
-            <div class="flex items-center space-x-3">
+            <div class="flex flex-wrap items-center gap-3">
                 {% if payroll.status == 'draft' or payroll.status == 'calculated' %}
                 <a href="{% url 'payroll:payroll_calculate' payroll.pk %}"
                    class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors">
@@ -62,7 +62,7 @@
             <!-- Work Days -->
             <div class="bg-white rounded-xl shadow-sm p-6">
                 <h2 class="text-lg font-semibold text-gray-900 mb-4">Ish kunlari</h2>
-                <div class="grid grid-cols-4 gap-4 text-center">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
                     <div class="bg-green-50 rounded-lg p-4">
                         <div class="text-2xl font-bold text-green-600">{{ payroll.work_days }}</div>
                         <div class="text-sm text-green-700">Ishlangan</div>
@@ -125,12 +125,15 @@
                 <table class="min-w-full">
                     <tbody class="divide-y divide-gray-100">
                         <tr>
-                            <td class="py-3 text-gray-600">JSHDT (12%)</td>
-                            <td class="py-3 text-right font-medium text-red-600">-{{ payroll.jshdt_amount|floatformat:0 }}</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 text-gray-600">INPS (0.1%)</td>
-                            <td class="py-3 text-right font-medium text-red-600">-{{ payroll.inps_amount|floatformat:0 }}</td>
+                            <td class="py-3 text-gray-600">
+                                Daromad solig'i (12%)
+                                <p class="text-xs text-gray-400 mt-1">JSHDT jamg'armasiga: {{ payroll.jshdt_amount|floatformat:0 }}, INPS jamg'armasiga: {{ payroll.inps_amount|floatformat:0 }}</p>
+                            </td>
+                            <td class="py-3 text-right font-medium text-red-600">
+                                {% widthratio payroll.jshdt_amount 1 1 as jshdt %}
+                                {% widthratio payroll.inps_amount 1 1 as inps %}
+                                -{{ payroll.total_deductions|floatformat:0 }}
+                            </td>
                         </tr>
                         {% for item in deductions %}
                         <tr>
@@ -179,12 +182,16 @@
                         <span class="font-medium text-gray-900">{{ payroll.gross_salary|floatformat:0 }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-500">JSHDT</span>
-                        <span class="font-medium text-red-600">-{{ payroll.jshdt_amount|floatformat:0 }}</span>
+                        <span class="text-gray-500">Daromad solig'i (12%)</span>
+                        <span class="font-medium text-red-600">-{{ payroll.total_deductions|floatformat:0 }}</span>
                     </div>
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">INPS</span>
-                        <span class="font-medium text-red-600">-{{ payroll.inps_amount|floatformat:0 }}</span>
+                    <div class="flex justify-between text-xs text-gray-400 pl-4">
+                        <span>└ JSHDT jamg'armasiga</span>
+                        <span>{{ payroll.jshdt_amount|floatformat:0 }}</span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-400 pl-4">
+                        <span>└ INPS jamg'armasiga</span>
+                        <span>{{ payroll.inps_amount|floatformat:0 }}</span>
                     </div>
                     <div class="flex justify-between pt-3 border-t">
                         <span class="font-semibold text-gray-900">Sof ish haqi</span>

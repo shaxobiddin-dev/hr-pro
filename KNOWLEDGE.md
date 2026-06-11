@@ -519,9 +519,20 @@ tenure_years = prior_experience + (today - first_contract_date) / 365.25 - unpai
 |-------|-----|--------|------|
 | JSHDT (Daromad solig'i) | `l10n_uz_tax_rate` | **12%** | Jismoniy shaxslardan |
 | JSHDT (IT Park) | `l10n_uz_tax_rate_it_park` | **7.5%** | IT Park rezidentlari |
-| INPS (Pensiya fondi) | `l10n_uz_pension_rate` | **0.1%** | Xodimdan ushlanadi |
+| INPS (Pensiya fondi) | `l10n_uz_pension_rate` | **0.1%** | JSHDT ichidan to'lanadi! |
 | Ijtimoiy soliq | `l10n_uz_social_tax_rate` | **12%** | Ish beruvchi to'laydi |
 | Ijtimoiy soliq (IT Park) | - | **0%** | IT Park rezidentlari |
+
+**MUHIM: INPS hisoblash tartibi**
+```
+Yalpi ish haqi: 4,500,000 so'm
+Daromad solig'i (12%): 540,000 so'm ← xodimdan ushlanadi
+  └── JSHDT jamg'armasiga: 535,500 so'm (540,000 - 4,500)
+  └── INPS jamg'armasiga: 4,500 so'm (0.1% × 4,500,000)
+Sof ish haqi: 3,960,000 so'm (4,500,000 - 540,000)
+```
+
+INPS alohida ushlanma EMAS! U JSHDT ichidan ajratiladi.
 
 ### 10.2 Ish Vaqti Parametrlari
 

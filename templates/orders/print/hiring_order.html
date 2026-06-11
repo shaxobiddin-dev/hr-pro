@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyruq #{{ order.order_number }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #000;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        .order-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .order-number {
+            font-weight: bold;
+        }
+
+        .order-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .content {
+            margin-bottom: 30px;
+        }
+
+        .content p {
+            text-indent: 1.5em;
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+
+        .employee-block {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .employee-name {
+            font-weight: bold;
+        }
+
+        .basis {
+            margin-top: 30px;
+        }
+
+        .basis-title {
+            font-weight: bold;
+        }
+
+        .signature-block {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .signature {
+            width: 45%;
+        }
+
+        .signature-line {
+            border-bottom: 1px solid #000;
+            height: 1px;
+            margin: 30px 0 5px;
+        }
+
+        .signature-name {
+            font-size: 12px;
+        }
+
+        @media print {
+            body {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #4F46E5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .print-button:hover {
+            background: #4338CA;
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button no-print" onclick="window.print()">Chop etish</button>
+
+    <div class="header">
+        <h1>BUYRUQ</h1>
+        <h2>Ishga qabul qilish to'g'risida</h2>
+    </div>
+
+    <div class="order-info">
+        <div class="order-number">№ {{ order.order_number }}</div>
+        <div class="order-date">{{ order.order_date|date:"d.m.Y" }} y.</div>
+    </div>
+
+    <div class="content">
+        {% for item in items %}
+        <p>
+            <strong>{{ forloop.counter }}.</strong>
+            <span class="employee-name">{{ item.employee.full_name }}</span> –
+            {{ item.department.name }} bo'limining
+            {{ item.position.name }} lavozimiga
+            shtatlar jadvaliga muvofiq
+            {{ item.start_date|date:"Y" }}-yilning {{ item.start_date|date:"d" }}-{{ item.start_date|date:"F"|lower }}idan
+            {% if item.has_probation %}
+            {{ item.probation_end_date|date:"d.m.Y" }} gacha sinov muddati bilan
+            {% endif %}
+            ishga qabul qilinsin.
+        </p>
+
+        <p>
+            {{ item.employee.user.last_name }} {{ item.employee.user.first_name|slice:":1" }}. ga
+            {% if item.has_probation and item.probation_salary %}
+            sinov muddati davomida {{ item.probation_salary|floatformat:0 }} so'm,
+            sinov muddati tugagandan so'ng {{ item.salary|floatformat:0 }} so'm
+            {% else %}
+            {{ item.salary|floatformat:0 }} so'm
+            {% endif %}
+            miqdorida oylik maosh to'lansin.
+            {% if item.rate|floatformat:2 != "1.00" %}
+            ({{ item.rate }} stavka)
+            {% endif %}
+        </p>
+
+        {% if item.contract_number %}
+        <p>
+            Mehnat shartnomasi: {{ item.contract_number }}-son,
+            {{ item.contract_date|date:"d.m.Y" }} y.
+        </p>
+        {% endif %}
+
+        {% if not forloop.last %}
+        <hr style="margin: 20px 0; border: none; border-top: 1px dashed #ccc;">
+        {% endif %}
+        {% endfor %}
+
+        <p>
+            <strong>{{ items|length|add:1 }}.</strong>
+            Bosh hisobchi tegishli to'lovlarni amalga oshirsin.
+        </p>
+    </div>
+
+    {% if order.legal_basis %}
+    <div class="basis">
+        <p><span class="basis-title">Asos:</span> {{ order.legal_basis }}</p>
+    </div>
+    {% else %}
+    <div class="basis">
+        <p><span class="basis-title">Asos:</span> O'zbekiston Respublikasi Mehnat kodeksining 127-moddasi,
+        xodim{% if items|length > 1 %}lar{% endif %}ning ishga qabul qilish to'g'risidagi ariza{% if items|length > 1 %}lari{% endif %}
+        va ular bilan tuzilgan mehnat shartnoma{% if items|length > 1 %}lari{% endif %}.</p>
+    </div>
+    {% endif %}
+
+    <div class="signature-block">
+        <div class="signature">
+            <div class="signature-line"></div>
+            <div class="signature-name">
+                {% if order.approved_by %}
+                {{ order.approved_by.position.name }}<br>
+                {{ order.approved_by.full_name }}
+                {% else %}
+                Direktor<br>
+                _______________________
+                {% endif %}
+            </div>
+        </div>
+        <div class="signature">
+            <div class="signature-line"></div>
+            <div class="signature-name">M.O'.</div>
+        </div>
+    </div>
+</body>
+</html>

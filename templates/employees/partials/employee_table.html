@@ -1,4 +1,5 @@
-<div class="bg-white rounded-lg shadow overflow-hidden">
+<div class="bg-white rounded-lg shadow overflow-hidden" x-data>
+    <div class="overflow-x-auto">
     <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
             <tr>
@@ -52,7 +53,11 @@
                     </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                    {% if employee.status == 'active' %}
+                    {% if employee.status == 'pending' %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                        Kutilmoqda
+                    </span>
+                    {% elif employee.status == 'active' %}
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                         Faol
                     </span>
@@ -82,21 +87,34 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                             </svg>
                         </a>
+                        {% if employee.is_active %}
                         <a href="{% url 'employees:employee_update' employee.pk %}"
                            class="text-yellow-600 hover:text-yellow-900" title="Tahrirlash">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                             </svg>
                         </a>
-                        <button hx-delete="{% url 'employees:employee_delete' employee.pk %}"
-                                hx-target="#employee-row-{{ employee.pk }}"
-                                hx-swap="outerHTML"
-                                hx-confirm="Rostdan ham bu xodimni o'chirmoqchimisiz?"
+                        <button @click="$dispatch('confirm-delete', {
+                                    message: 'Rostdan ham {{ employee.full_name }} ni o\'chirmoqchimisiz?',
+                                    url: '{% url 'employees:employee_delete' employee.pk %}',
+                                    target: '#employee-row-{{ employee.pk }}'
+                                })"
                                 class="text-red-600 hover:text-red-900" title="O'chirish">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                             </svg>
                         </button>
+                        {% else %}
+                        <!-- Arxivdagi xodim uchun tiklash tugmasi -->
+                        <form method="post" action="{% url 'employees:employee_restore' employee.pk %}" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="text-green-600 hover:text-green-900" title="Tiklash">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                </svg>
+                            </button>
+                        </form>
+                        {% endif %}
                     </div>
                 </td>
             </tr>
@@ -113,6 +131,7 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
 
     {% if page_obj.has_other_pages %}
     <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">

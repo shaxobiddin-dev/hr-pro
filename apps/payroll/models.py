@@ -344,17 +344,92 @@ class Payroll(BaseModel):
     def __str__(self):
         return f"{self.employee.employee_code} - {self.period.name}"
 
-    def calculate(self):
-        """Ish haqini hisoblash."""
+    def get_employee_salary(self):
+        """
+        Xodimning joriy oylik maoshini olish.
+
+        Avvalo ishga olish buyrug'idan olinadi.
+        Agar buyruq topilmasa, formula bilan hisoblanadi.
+        """
         from apps.employees.models import MHTMHistory
 
-        # 1. Asosiy ish haqi
-        mhtm = MHTMHistory.get_current()
-        self.base_salary = self.employee.calculate_base_salary(mhtm)
+        # Ishga olish buyrug'ini tekshirish
+        hiring_item = self.employee.hiring_order_items.select_related('order').filter(
+            order__status='approved'
+        ).order_by('-order__order_date').first()
 
-        # 2. Ishlangan kunlar bo'yicha hisoblash
+        if hiring_item:
+            # Buyruqdagi current_salary (sinov muddatini ham hisobga oladi)
+            return hiring_item.current_salary
+
+        # Buyruq topilmasa, formula bilan hisoblash
+        mhtm = MHTMHistory.get_current()
+        return self.employee.calculate_base_salary(mhtm)
+
+    def load_from_timesheet(self):
+        """Tabeldan ma'lumotlarni yuklash."""
+        from apps.attendance.models import MonthlyTimesheet
+
+        # Davr oyi va yilini aniqlash
+        year = self.period.start_date.year
+        month = self.period.start_date.month
+
+        try:
+            timesheet = MonthlyTimesheet.objects.get(
+                employee=self.employee,
+                year=year,
+                month=month
+            )
+            # Tabeldan ma'lumotlarni olish
+            self.work_days = timesheet.present_days + timesheet.late_days
+            self.absent_days = timesheet.absent_days
+            self.leave_days = timesheet.leave_days
+            self.sick_days = timesheet.sick_days
+            return True
+        except MonthlyTimesheet.DoesNotExist:
+            # Tabel topilmasa, davomatlardan to'g'ridan-to'g'ri hisoblash
+            return self._calculate_from_attendances()
+
+    def _calculate_from_attendances(self):
+        """Davomatlardan kunlarni hisoblash (tabel yo'q bo'lsa)."""
+        from apps.attendance.models import Attendance
+
+        year = self.period.start_date.year
+        month = self.period.start_date.month
+
+        attendances = Attendance.objects.filter(
+            employee=self.employee,
+            date__year=year,
+            date__month=month
+        )
+
+        self.work_days = attendances.filter(
+            status__in=[Attendance.Status.PRESENT, Attendance.Status.LATE]
+        ).count()
+        self.absent_days = attendances.filter(status=Attendance.Status.ABSENT).count()
+        self.leave_days = attendances.filter(status=Attendance.Status.ON_LEAVE).count()
+        self.sick_days = attendances.filter(status=Attendance.Status.SICK).count()
+
+        return self.work_days > 0
+
+    def calculate(self):
+        """Ish haqini hisoblash."""
+        # 1. Asosiy ish haqi - buyruqdan olish
+        self.base_salary = self.get_employee_salary()
+
+        # 2. Tabeldan ishlangan kunlarni yuklash
+        self.load_from_timesheet()
+
+        # 3. Ishlangan kunlar bo'yicha hisoblash
         period_days = self.period.work_days
-        actual_days = self.work_days or period_days
+
+        # Nol bo'lmasligini ta'minlash
+        if period_days == 0:
+            period_days = 22
+
+        # Ishlangan kunlar - tabeldan olinadi
+        actual_days = self.work_days  # 0 bo'lsa 0 qoladi!
+
         day_rate = self.base_salary / Decimal(period_days)
 
         # Proporsional hisoblash
@@ -370,13 +445,16 @@ class Payroll(BaseModel):
         self.gross_salary = calculated_salary + earnings
 
         # 4. Soliqlar
-        # JSHDT - 12% (yoki IT Park 7.5%)
+        # JSHDT - 12% (yoki IT Park 7.5%) - xodimdan ushlanadi
         jshdt_rate = TaxRate.get_rate(TaxRate.TaxType.JSHDT) or Decimal("0.12")
-        self.jshdt_amount = self.gross_salary * jshdt_rate
+        total_jshdt = self.gross_salary * jshdt_rate
 
-        # INPS - 0.1%
+        # INPS - 0.1% - JSHDT ichidan to'lanadi, alohida ushlanmaydi!
+        # INPS jamg'armasiga: JSHDT summasidan 0.1%
+        # JSHDT jamg'armasiga: JSHDT - INPS
         inps_rate = TaxRate.get_rate(TaxRate.TaxType.INPS) or Decimal("0.001")
         self.inps_amount = self.gross_salary * inps_rate
+        self.jshdt_amount = total_jshdt - self.inps_amount  # JSHDT jamg'armasiga ketadigan qism
 
         # 5. Boshqa ushlanmalar
         other_deductions = Decimal("0")
@@ -384,7 +462,8 @@ class Payroll(BaseModel):
             if item.component.code not in ['JSHDT', 'INPS']:
                 other_deductions += item.amount
 
-        self.total_deductions = self.jshdt_amount + self.inps_amount + other_deductions
+        # Xodimdan faqat JSHDT (12%) ushlanadi, INPS alohida ushlanmaydi
+        self.total_deductions = total_jshdt + other_deductions
 
         # 6. Sof ish haqi
         self.net_salary = self.gross_salary - self.total_deductions

@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Ta'til kalendari - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <nav class="text-sm text-gray-500 mb-2">
+                <a href="{% url 'leave:dashboard' %}" class="hover:text-indigo-600">Ta'til</a>
+                <span class="mx-2">›</span>
+                <span>Kalendar</span>
+            </nav>
+            <h1 class="text-2xl font-bold text-gray-900">Ta'til kalendari</h1>
+        </div>
+    </div>
+
+    <!-- Month selector -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+        <form method="get" class="flex items-center justify-center space-x-4">
+            <select name="month"
+                    class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    onchange="this.form.submit()">
+                {% for num, name in months %}
+                <option value="{{ num }}" {% if num == current_month %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+            <select name="year"
+                    class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    onchange="this.form.submit()">
+                {% for y in years %}
+                <option value="{{ y }}" {% if y == current_year %}selected{% endif %}>{{ y }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    <!-- Calendar content -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
+            <h2 class="text-lg font-semibold text-gray-900">
+                {% for num, name in months %}
+                    {% if num == current_month %}{{ name }}{% endif %}
+                {% endfor %}
+                {{ current_year }}
+            </h2>
+        </div>
+
+        {% if leaves %}
+        <div class="p-6">
+            <div class="space-y-4">
+                {% for leave in leaves %}
+                <div class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                    <div class="flex-shrink-0 w-20 text-center">
+                        <span class="text-2xl font-bold text-indigo-600">{{ leave.start_date|date:"d" }}</span>
+                        <span class="text-sm text-gray-500 block">{{ leave.start_date|date:"M" }}</span>
+                    </div>
+                    <div class="flex-shrink-0 w-8 flex flex-col items-center">
+                        <div class="w-px h-4 bg-gray-300"></div>
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                        <div class="w-px h-4 bg-gray-300"></div>
+                    </div>
+                    <div class="flex-shrink-0 w-20 text-center">
+                        <span class="text-2xl font-bold text-indigo-600">{{ leave.end_date|date:"d" }}</span>
+                        <span class="text-sm text-gray-500 block">{{ leave.end_date|date:"M" }}</span>
+                    </div>
+                    <div class="ml-6 flex-grow">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-medium">
+                                {{ leave.employee.user.first_name|slice:":1" }}{{ leave.employee.user.last_name|slice:":1" }}
+                            </div>
+                            <div class="ml-3">
+                                <h4 class="font-medium text-gray-900">{{ leave.employee.user.get_full_name }}</h4>
+                                <p class="text-sm text-gray-600">
+                                    {{ leave.leave_type.name }} • {{ leave.requested_days|floatformat:0 }} kun
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <span class="px-3 py-1 text-sm font-medium rounded-full
+                            {% if leave.is_active %}bg-green-100 text-green-800
+                            {% else %}bg-blue-100 text-blue-800{% endif %}">
+                            {% if leave.is_active %}Hozir ta'tilda{% else %}Rejalashtirilgan{% endif %}
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="p-12 text-center">
+            <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Ta'tillar yo'q</h3>
+            <p class="text-gray-500">Bu oyda tasdiqlangan ta'tillar mavjud emas</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

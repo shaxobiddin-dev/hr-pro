@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
 from django.db.models import Sum, Count
+from django.db import IntegrityError
 from django.core.paginator import Paginator
 
 from apps.employees.models import Employee, MHTMHistory
@@ -20,8 +21,8 @@ def period_list(request):
     """Ish haqi davrlari ro'yxati."""
     periods = PayrollPeriod.objects.annotate(
         employee_count=Count('payrolls'),
-        total_gross=Sum('payrolls__gross_salary'),
-        total_net=Sum('payrolls__net_salary')
+        sum_gross=Sum('payrolls__gross_salary'),
+        sum_net=Sum('payrolls__net_salary')
     ).order_by('-start_date')
 
     # Filtrlash
@@ -46,7 +47,9 @@ def period_list(request):
 def period_detail(request, pk):
     """Ish haqi davri tafsiloti."""
     period = get_object_or_404(PayrollPeriod, pk=pk)
-    payrolls = period.payrolls.select_related('employee__user', 'employee__position').order_by(
+    payrolls = period.payrolls.filter(
+        employee__is_active=True  # Faqat faol xodimlar
+    ).select_related('employee__user', 'employee__position').order_by(
         'employee__user__last_name', 'employee__user__first_name'
     )
 
@@ -73,9 +76,16 @@ def period_create(request):
     if request.method == 'POST':
         form = PayrollPeriodForm(request.POST)
         if form.is_valid():
-            period = form.save()
-            messages.success(request, f"'{period.name}' davri yaratildi.")
-            return redirect('payroll:period_detail', pk=period.pk)
+            try:
+                period = form.save()
+                messages.success(request, f"'{period.name}' davri yaratildi.")
+                return redirect('payroll:period_detail', pk=period.pk)
+            except IntegrityError as e:
+                error_msg = str(e)
+                if 'code' in error_msg.lower():
+                    messages.error(request, "Bu davr kodi allaqachon mavjud.")
+                else:
+                    messages.error(request, f"Xatolik: {error_msg}")
     else:
         form = PayrollPeriodForm()
 
@@ -134,7 +144,7 @@ def generate_payrolls(request, pk):
 
     if request.method == 'POST':
         # Faol xodimlar
-        employees = Employee.objects.filter(is_active=True, status='working')
+        employees = Employee.objects.filter(is_active=True, status='active')
 
         created_count = 0
         for employee in employees:
@@ -154,7 +164,7 @@ def generate_payrolls(request, pk):
 
     # Mavjud ish haqlari va xodimlar soni
     existing_count = period.payrolls.count()
-    employee_count = Employee.objects.filter(is_active=True, status='working').count()
+    employee_count = Employee.objects.filter(is_active=True, status='active').count()
 
     context = {
         'period': period,
@@ -168,6 +178,9 @@ def generate_payrolls(request, pk):
 @login_required
 def calculate_all(request, pk):
     """Davrdagi barcha ish haqlarni hisoblash."""
+    from apps.attendance.models import MonthlyTimesheet, Attendance
+    import calendar
+
     period = get_object_or_404(PayrollPeriod, pk=pk)
 
     if period.status not in ['draft', 'processing']:
@@ -175,13 +188,58 @@ def calculate_all(request, pk):
         return redirect('payroll:period_detail', pk=pk)
 
     if request.method == 'POST':
-        payrolls = period.payrolls.all()
+        # 1. Avval tabellarni yaratish/yangilash
+        year = period.start_date.year
+        month = period.start_date.month
+        _, days_in_month = calendar.monthrange(year, month)
+
+        # Ish kunlarini hisoblash (yakshanba emas)
+        work_days = 0
+        for day in range(1, days_in_month + 1):
+            from datetime import date
+            d = date(year, month, day)
+            if d.weekday() != 6:  # Yakshanba emas
+                work_days += 1
+
+        payrolls = period.payrolls.select_related('employee')
+        timesheet_count = 0
+        for payroll in payrolls:
+            # Har bir xodim uchun tabel yaratish/yangilash
+            timesheet, created = MonthlyTimesheet.objects.get_or_create(
+                employee=payroll.employee,
+                year=year,
+                month=month,
+                defaults={'work_days': work_days}
+            )
+            timesheet.work_days = work_days
+            timesheet.calculate_from_attendances()
+            timesheet_count += 1
+
+        # 2. Ish haqlarni hisoblash
         count = 0
+        no_attendance = []  # Davomati yo'q xodimlar
         for payroll in payrolls:
             payroll.calculate()
             count += 1
+            # Ogohlantirish: davomat yo'q
+            if payroll.work_days == 0:
+                no_attendance.append(payroll.employee.full_name)
 
-        messages.success(request, f"{count} ta ish haqi hisoblandi.")
+        # Natijalar
+        messages.success(request, f"{timesheet_count} ta tabel yangilandi, {count} ta ish haqi hisoblandi.")
+
+        # Ogohlantirish: davomati yo'q xodimlar
+        if no_attendance:
+            if len(no_attendance) <= 5:
+                names = ", ".join(no_attendance)
+            else:
+                names = ", ".join(no_attendance[:5]) + f" va yana {len(no_attendance) - 5} ta"
+            messages.warning(
+                request,
+                f"DIQQAT: {len(no_attendance)} ta xodimning davomati kiritilmagan (ish kunlari: 0): {names}. "
+                f"Ularning oyligi 0 so'm hisoblanadi!"
+            )
+
         return redirect('payroll:period_detail', pk=pk)
 
     context = {'period': period, 'payroll_count': period.payrolls.count()}

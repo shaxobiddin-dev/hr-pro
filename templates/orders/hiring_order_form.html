@@ -1,0 +1,760 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - HR-Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto" x-data="hiringOrderForm()">
+    <!-- Header -->
+    <div class="mb-6">
+        <a href="{% url 'orders:list' %}" class="inline-flex items-center text-gray-600 hover:text-indigo-600 mb-4">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Orqaga
+        </a>
+        <h1 class="text-2xl font-bold text-gray-900">{{ title }}</h1>
+    </div>
+
+    <form method="post" id="hiringOrderForm">
+        {% csrf_token %}
+
+        {% if form.errors or formset.errors or formset.non_form_errors %}
+        <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <h4 class="text-red-800 font-medium mb-2">Xatoliklar:</h4>
+            {% for field in form %}
+            {% if field.errors %}
+            <p class="text-red-600 text-sm">{{ field.label }}: {{ field.errors.0 }}</p>
+            {% endif %}
+            {% endfor %}
+            {% for error in formset.non_form_errors %}
+            <p class="text-red-600 text-sm">{{ error }}</p>
+            {% endfor %}
+            {% for item_form in formset %}
+            {% for field in item_form %}
+            {% if field.errors %}
+            <p class="text-red-600 text-sm">Xodim #{{ forloop.parentloop.counter }}: {{ field.label }} - {{ field.errors.0 }}</p>
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Buyruq asosiy ma'lumotlari -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Buyruq ma'lumotlari</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Buyruq raqami *</label>
+                    {{ form.order_number }}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Buyruq sanasi *</label>
+                    {{ form.order_date }}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tasdiqlovchi</label>
+                    {{ form.approved_by }}
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Asos</label>
+                {{ form.legal_basis }}
+                <p class="text-xs text-gray-500 mt-1">Masalan: O'zbekiston Respublikasi Mehnat kodeksining 127-moddasi</p>
+            </div>
+        </div>
+
+        <!-- Xodimlar (Add-a-line) -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold text-gray-900">Xodimlar</h2>
+                <button type="button" @click="addRow()"
+                        class="inline-flex items-center px-3 py-1 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Qator qo'shish
+                </button>
+            </div>
+
+            {{ formset.management_form }}
+
+            <div id="formset-container">
+                {% for item_form in formset %}
+                <div class="hiring-item border border-gray-200 rounded-lg p-4 mb-4"
+                     x-data="hiringItemData({{ item_form.instance.employee_id|default:'null' }}, {% if item_form.has_probation.value %}true{% else %}false{% endif %}, {% if item_form.is_new_employee.value %}true{% else %}false{% endif %})"
+                     x-show="!isDeleted" x-transition>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-sm font-medium text-gray-500">Xodim #<span class="item-number">{{ forloop.counter }}</span></span>
+                        <button type="button" @click="deleteRow()"
+                                class="text-red-500 hover:text-red-700">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- DELETE field for formset -->
+                    <input type="hidden" name="{{ item_form.prefix }}-DELETE" :value="isDeleted ? 'on' : ''">
+
+                    {% if item_form.instance.pk %}
+                    <input type="hidden" name="{{ item_form.prefix }}-id" value="{{ item_form.instance.pk }}">
+                    {% endif %}
+
+                    <!-- Xodim tanlash yoki yangi yaratish -->
+                    <div class="mb-4">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="{{ item_form.prefix }}-is_new_employee"
+                                   x-model="isNewEmployee"
+                                   {% if item_form.is_new_employee.value %}checked{% endif %}
+                                   class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                            <span class="ml-2 text-sm text-gray-600">Yangi xodim yaratish</span>
+                        </label>
+                    </div>
+
+                    <!-- Mavjud xodim tanlash -->
+                    <div x-show="!isNewEmployee" class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Xodim *</label>
+                        <select name="{{ item_form.prefix }}-employee"
+                                x-on:change="onEmployeeSelect($event.target.value)"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 employee-select">
+                            <option value="">-- Tanlang --</option>
+                            {% for emp in item_form.fields.employee.queryset %}
+                            <option value="{{ emp.id }}"
+                                    data-department="{{ emp.department_id }}"
+                                    data-department-name="{{ emp.department.name }}"
+                                    data-position="{{ emp.position_id }}"
+                                    data-position-name="{{ emp.position.name }}"
+                                    {% if item_form.instance.employee_id == emp.id %}selected{% endif %}>
+                                {{ emp.employee_code }} - {{ emp.full_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Tanlangan xodim ma'lumotlari (sinov muddatida yashiriladi) -->
+                    <div x-show="!isNewEmployee && selectedEmployee && !hasProbation" class="mb-4 p-3 bg-gray-50 rounded-lg">
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <span class="text-gray-500">Bo'lim:</span>
+                                <span class="font-medium text-gray-900" x-text="employeeDepartmentName"></span>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">Lavozim:</span>
+                                <span class="font-medium text-gray-900" x-text="employeePositionName"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Hidden fields for department/position (mavjud xodim uchun) -->
+                    <input type="hidden"
+                           :name="!isNewEmployee ? '{{ item_form.prefix }}-department' : null"
+                           x-bind:value="employeeDepartment"
+                           x-effect="$el.value = employeeDepartment || ''">
+                    <input type="hidden"
+                           :name="!isNewEmployee ? '{{ item_form.prefix }}-position' : null"
+                           x-bind:value="employeePosition"
+                           x-effect="$el.value = employeePosition || ''">
+
+                    <!-- Yangi xodim ma'lumotlari -->
+                    <div x-show="isNewEmployee" class="space-y-4 mb-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Familiya *</label>
+                                <input type="text" name="{{ item_form.prefix }}-new_last_name"
+                                       value="{{ item_form.new_last_name.value|default:'' }}"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                       placeholder="Karimov">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Ism *</label>
+                                <input type="text" name="{{ item_form.prefix }}-new_first_name"
+                                       value="{{ item_form.new_first_name.value|default:'' }}"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                       placeholder="Alisher">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                                <input type="email" name="{{ item_form.prefix }}-new_email"
+                                       value="{{ item_form.new_email.value|default:'' }}"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                       placeholder="alisher@company.uz">
+                            </div>
+                        </div>
+
+                        <!-- Yangi xodim uchun bo'lim va lavozim -->
+                        <div x-show="!hasProbation" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Bo'lim *</label>
+                                {{ item_form.department }}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Lavozim *</label>
+                                {{ item_form.position }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Oylik (sinov muddatida readonly) -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Oylik maosh *</label>
+                        <input type="number" name="{{ item_form.prefix }}-salary"
+                               id="id_{{ item_form.prefix }}-salary"
+                               step="0.01" min="0"
+                               :readonly="hasProbation"
+                               :class="hasProbation ? 'bg-gray-100 cursor-not-allowed' : ''"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                               value="{{ item_form.salary.value|default:item_form.instance.salary|default:'' }}">
+                        <p x-show="hasProbation" class="text-xs text-gray-500 mt-1">Sinov muddatida alohida oylik belgilanadi</p>
+                    </div>
+
+                    <!-- Ish boshlash sanasi (har doim ko'rinadi) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                <span x-show="!hasProbation">Ish boshlash sanasi *</span>
+                                <span x-show="hasProbation">Sinov boshlanish sanasi *</span>
+                            </label>
+                            {{ item_form.start_date }}
+                        </div>
+                        <div x-show="!hasProbation">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Tugash sanasi</label>
+                            {{ item_form.end_date }}
+                            <p class="text-xs text-gray-500 mt-1">Nomuayyan muddat uchun bo'sh</p>
+                        </div>
+                    </div>
+
+                    <!-- Sinov muddati -->
+                    <div class="border-t border-gray-200 pt-4 mt-4">
+                        <label class="inline-flex items-center mb-4">
+                            <input type="checkbox" name="{{ item_form.prefix }}-has_probation"
+                                   x-model="hasProbation"
+                                   {% if item_form.has_probation.value or item_form.instance.has_probation %}checked{% endif %}
+                                   class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                            <span class="ml-2 text-sm font-medium text-gray-700">Sinov muddati bilan qabul qilish</span>
+                        </label>
+
+                        <div x-show="hasProbation" x-transition class="space-y-4">
+                            <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                <p class="text-yellow-800 text-sm">
+                                    Sinov muddatida xodim boshqa bo'lim/lavozimda ishlashi mumkin.
+                                    Sinov muddati tugagach asosiy bo'lim/lavozimga o'tadi.
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Sinov bo'limi *</label>
+                                    {{ item_form.probation_department }}
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Sinov lavozimi *</label>
+                                    {{ item_form.probation_position }}
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Sinov tugash sanasi *</label>
+                                {{ item_form.probation_end_date }}
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Sinov muddati oyligi</label>
+                                    {{ item_form.probation_salary }}
+                                    <p class="text-xs text-gray-500 mt-1">Bo'sh qolsa asosiy oylik</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shartnoma -->
+                    <div class="border-t border-gray-200 pt-4 mt-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Shartnoma raqami</label>
+                                {{ item_form.contract_number }}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Shartnoma sanasi</label>
+                                {{ item_form.contract_date }}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Ish tartibi</label>
+                                {{ item_form.work_schedule }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hidden rate field with default value -->
+                    <input type="hidden" name="{{ item_form.prefix }}-rate" value="1.00">
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Izohlar -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Qo'shimcha izohlar</label>
+            {{ form.notes }}
+        </div>
+
+        <!-- Tugmalar -->
+        <div class="flex justify-end space-x-3">
+            <a href="{% url 'orders:list' %}"
+               class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                Bekor qilish
+            </a>
+            <button type="submit"
+                    class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                Saqlash
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Empty form template -->
+<template id="empty-form-template">
+    <div class="hiring-item border border-gray-200 rounded-lg p-4 mb-4"
+         x-data="hiringItemData(null, false)"
+         x-show="!isDeleted" x-transition>
+        <div class="flex justify-between items-start mb-4">
+            <span class="text-sm font-medium text-gray-500">Xodim #<span class="item-number">__prefix__</span></span>
+            <button type="button" @click="deleteRow()"
+                    class="text-red-500 hover:text-red-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- DELETE field for formset -->
+        <input type="hidden" name="items-__prefix__-DELETE" :value="isDeleted ? 'on' : ''">
+
+        <!-- Yangi xodim checkbox -->
+        <div class="mb-4">
+            <label class="inline-flex items-center">
+                <input type="checkbox" name="items-__prefix__-is_new_employee"
+                       x-model="isNewEmployee"
+                       class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                <span class="ml-2 text-sm text-gray-600">Yangi xodim yaratish</span>
+            </label>
+        </div>
+
+        <!-- Mavjud xodim tanlash -->
+        <div x-show="!isNewEmployee" class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Xodim *</label>
+            <select name="items-__prefix__-employee"
+                    x-on:change="onEmployeeSelect($event.target.value)"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 employee-select">
+                <option value="">-- Tanlang --</option>
+            </select>
+        </div>
+
+        <!-- Tanlangan xodim ma'lumotlari (sinov muddatida yashiriladi) -->
+        <div x-show="!isNewEmployee && selectedEmployee && !hasProbation" class="mb-4 p-3 bg-gray-50 rounded-lg">
+            <div class="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                    <span class="text-gray-500">Bo'lim:</span>
+                    <span class="font-medium text-gray-900" x-text="employeeDepartmentName"></span>
+                </div>
+                <div>
+                    <span class="text-gray-500">Lavozim:</span>
+                    <span class="font-medium text-gray-900" x-text="employeePositionName"></span>
+                </div>
+            </div>
+        </div>
+        <!-- Hidden fields for department/position (mavjud xodim uchun) -->
+        <input type="hidden"
+               :name="!isNewEmployee ? 'items-__prefix__-department' : null"
+               x-bind:value="employeeDepartment"
+               x-effect="$el.value = employeeDepartment || ''">
+        <input type="hidden"
+               :name="!isNewEmployee ? 'items-__prefix__-position' : null"
+               x-bind:value="employeePosition"
+               x-effect="$el.value = employeePosition || ''">
+
+        <!-- Yangi xodim ma'lumotlari -->
+        <div x-show="isNewEmployee" class="space-y-4 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Familiya *</label>
+                    <input type="text" name="items-__prefix__-new_last_name"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ism *</label>
+                    <input type="text" name="items-__prefix__-new_first_name"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                    <input type="email" name="items-__prefix__-new_email"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+            </div>
+
+            <div x-show="!hasProbation" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Bo'lim *</label>
+                    <select name="items-__prefix__-department"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 department-select">
+                        <option value="">-- Tanlang --</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Lavozim *</label>
+                    <select name="items-__prefix__-position"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 position-select">
+                        <option value="">-- Tanlang --</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Oylik (sinov muddatida readonly) -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Oylik maosh *</label>
+            <input type="number" name="items-__prefix__-salary" step="0.01" min="0"
+                   :readonly="hasProbation"
+                   :class="hasProbation ? 'bg-gray-100 cursor-not-allowed' : ''"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 salary-input">
+            <p x-show="hasProbation" class="text-xs text-gray-500 mt-1">Sinov muddatida alohida oylik belgilanadi</p>
+        </div>
+
+        <!-- Ish boshlash sanasi (har doim ko'rinadi) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    <span x-show="!hasProbation">Ish boshlash sanasi *</span>
+                    <span x-show="hasProbation">Sinov boshlanish sanasi *</span>
+                </label>
+                <input type="date" name="items-__prefix__-start_date"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div x-show="!hasProbation">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Tugash sanasi</label>
+                <input type="date" name="items-__prefix__-end_date"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                <p class="text-xs text-gray-500 mt-1">Nomuayyan muddat uchun bo'sh</p>
+            </div>
+        </div>
+
+        <!-- Sinov muddati -->
+        <div class="border-t border-gray-200 pt-4 mt-4">
+            <label class="inline-flex items-center mb-4">
+                <input type="checkbox" name="items-__prefix__-has_probation"
+                       x-model="hasProbation"
+                       class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                <span class="ml-2 text-sm font-medium text-gray-700">Sinov muddati bilan qabul qilish</span>
+            </label>
+
+            <div x-show="hasProbation" x-transition class="space-y-4">
+                <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <p class="text-yellow-800 text-sm">
+                        Sinov muddatida xodim boshqa bo'lim/lavozimda ishlashi mumkin.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Sinov bo'limi *</label>
+                        <select name="items-__prefix__-probation_department"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                            <option value="">-- Tanlang --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Sinov lavozimi *</label>
+                        <select name="items-__prefix__-probation_position"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                            <option value="">-- Tanlang --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Sinov tugash sanasi *</label>
+                    <input type="date" name="items-__prefix__-probation_end_date"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Sinov muddati oyligi</label>
+                        <input type="number" name="items-__prefix__-probation_salary" step="0.01" min="0"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shartnoma -->
+        <div class="border-t border-gray-200 pt-4 mt-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Shartnoma raqami</label>
+                    <input type="text" name="items-__prefix__-contract_number"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Shartnoma sanasi</label>
+                    <input type="date" name="items-__prefix__-contract_date"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ish tartibi</label>
+                    <select name="items-__prefix__-work_schedule"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                        <option value="full_time">To'liq ish kuni</option>
+                        <option value="part_time">To'liqsiz ish kuni</option>
+                        <option value="part_week">To'liqsiz ish haftasi</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" name="items-__prefix__-rate" value="1.00">
+    </div>
+</template>
+
+<script>
+// Data
+const departmentsData = [
+    {% for dept in formset.forms.0.fields.department.queryset %}
+    { id: {{ dept.id }}, name: "{{ dept.name|escapejs }}" },
+    {% endfor %}
+];
+
+const positionsData = [
+    {% for pos in formset.forms.0.fields.position.queryset %}
+    { id: {{ pos.id }}, name: "{{ pos.name|escapejs }}", department: {{ pos.department_id|default:"null" }} },
+    {% endfor %}
+];
+
+const employeesData = [
+    {% for emp in formset.forms.0.fields.employee.queryset %}
+    { id: {{ emp.id }}, name: "{{ emp.employee_code }} - {{ emp.full_name|escapejs }}", department: {{ emp.department_id|default:"null" }}, departmentName: "{{ emp.department.name|default:''|escapejs }}", position: {{ emp.position_id|default:"null" }}, positionName: "{{ emp.position.name|default:''|escapejs }}" },
+    {% endfor %}
+];
+
+// Har bir item uchun data
+function hiringItemData(employeeId, hasProbationInit, isNewEmployeeInit = false) {
+    const emp = employeeId ? employeesData.find(e => e.id === employeeId) : null;
+    return {
+        isNewEmployee: isNewEmployeeInit,
+        isDeleted: false,
+        hasProbation: hasProbationInit,
+        selectedEmployee: emp ? employeeId : null,
+        employeeDepartment: emp ? emp.department : null,
+        employeeDepartmentName: emp ? emp.departmentName : '',
+        employeePosition: emp ? emp.position : null,
+        employeePositionName: emp ? emp.positionName : '',
+
+        init() {
+            // Sahifa yuklanganda tanlangan xodim bo'lsa, oylikni yuklash
+            if (this.selectedEmployee && this.employeePosition) {
+                this.loadSalary(this.employeePosition);
+            }
+        },
+
+        onEmployeeSelect(id) {
+            const emp = employeesData.find(e => e.id === parseInt(id));
+            if (emp) {
+                this.selectedEmployee = emp.id;
+                this.employeeDepartment = emp.department;
+                this.employeeDepartmentName = emp.departmentName;
+                this.employeePosition = emp.position;
+                this.employeePositionName = emp.positionName;
+
+                // Lavozim bo'yicha oylikni yuklash
+                if (emp.position) {
+                    this.loadSalary(emp.position);
+                }
+            } else {
+                this.selectedEmployee = null;
+                this.employeeDepartment = null;
+                this.employeeDepartmentName = '';
+                this.employeePosition = null;
+                this.employeePositionName = '';
+            }
+        },
+
+        async loadSalary(positionId) {
+            try {
+                const response = await fetch(`/orders/api/salary/${positionId}/`);
+                const data = await response.json();
+                // $root orqali to'g'ri elementni topish
+                const row = this.$root;
+                const salaryInput = row.querySelector('input[name$="-salary"]');
+                if (salaryInput) {
+                    salaryInput.value = Math.round(data.salary);
+                }
+            } catch (error) {
+                console.error('Oylik yuklashda xatolik:', error);
+            }
+        },
+
+        deleteRow() {
+            this.isDeleted = true;
+            // Raqamlarni yangilash
+            updateFormIndex();
+        }
+    }
+}
+
+function hiringOrderForm() {
+    return {
+        totalForms: {{ formset.total_form_count }},
+
+        addRow() {
+            const container = document.getElementById('formset-container');
+            const template = document.getElementById('empty-form-template');
+            const newRow = template.content.cloneNode(true);
+
+            const html = newRow.querySelector('.hiring-item').outerHTML.replace(/__prefix__/g, this.totalForms);
+            container.insertAdjacentHTML('beforeend', html);
+
+            const newItem = container.lastElementChild;
+            this.populateSelects(newItem);
+
+            this.totalForms++;
+            document.querySelector('[name="items-TOTAL_FORMS"]').value = this.totalForms;
+            this.updateItemNumbers();
+
+            Alpine.initTree(newItem);
+
+            // Yangi qatordagi date inputlarni Flatpickr ga o'zgartirish
+            setTimeout(() => initAllDatePickers(newItem), 50);
+        },
+
+        populateSelects(item) {
+            // Employee select
+            const empSelect = item.querySelector('.employee-select');
+            if (empSelect) {
+                employeesData.forEach(emp => {
+                    const option = document.createElement('option');
+                    option.value = emp.id;
+                    option.textContent = emp.name;
+                    option.dataset.department = emp.department;
+                    option.dataset.departmentName = emp.departmentName;
+                    option.dataset.position = emp.position;
+                    option.dataset.positionName = emp.positionName;
+                    empSelect.appendChild(option);
+                });
+            }
+
+            // Department selects
+            item.querySelectorAll('.department-select, select[name$="-probation_department"]').forEach(select => {
+                departmentsData.forEach(dept => {
+                    const option = document.createElement('option');
+                    option.value = dept.id;
+                    option.textContent = dept.name;
+                    select.appendChild(option);
+                });
+            });
+
+            // Position selects
+            item.querySelectorAll('.position-select, select[name$="-probation_position"]').forEach(select => {
+                positionsData.forEach(pos => {
+                    const option = document.createElement('option');
+                    option.value = pos.id;
+                    option.textContent = pos.name;
+                    select.appendChild(option);
+                });
+            });
+        },
+
+        updateItemNumbers() {
+            document.querySelectorAll('.hiring-item').forEach((item, index) => {
+                item.querySelector('.item-number').textContent = index + 1;
+            });
+        }
+    }
+}
+
+function updateFormIndex() {
+    document.querySelectorAll('.hiring-item').forEach((item, index) => {
+        item.querySelector('.item-number').textContent = index + 1;
+    });
+}
+
+// Position o'zgarganda oylikni yuklash (yangi xodim uchun)
+document.addEventListener('change', async function(e) {
+    if (e.target.classList.contains('position-select')) {
+        const positionId = e.target.value;
+        if (!positionId) return;
+
+        try {
+            const response = await fetch(`/orders/api/salary/${positionId}/`);
+            const data = await response.json();
+            const row = e.target.closest('.hiring-item');
+            const salaryInput = row.querySelector('.salary-input, input[name$="-salary"]');
+            if (salaryInput) {
+                // Lavozim tanlanganda doim oylikni yangilash
+                salaryInput.value = Math.round(data.salary);
+            }
+        } catch (error) {
+            console.error('Oylik yuklashda xatolik:', error);
+        }
+    }
+
+    // Bo'lim tanlanganda lavozimlarni filtrlash
+    if (e.target.name && e.target.name.includes('-probation_department')) {
+        filterPositionsByDepartment(e.target);
+    }
+    if (e.target.name && e.target.name.includes('-department') && !e.target.name.includes('probation')) {
+        filterPositionsByDepartment(e.target, false);
+    }
+});
+
+// Lavozimlarni bo'lim bo'yicha filtrlash
+function filterPositionsByDepartment(departmentSelect, isProbation = true) {
+    const departmentId = parseInt(departmentSelect.value);
+    const row = departmentSelect.closest('.hiring-item');
+    const positionSelect = isProbation
+        ? row.querySelector('select[name$="-probation_position"]')
+        : row.querySelector('select[name$="-position"]:not([name*="probation"])');
+
+    if (!positionSelect) return;
+
+    const currentValue = positionSelect.value;
+
+    // Optionlarni filtrlash
+    positionSelect.innerHTML = '<option value="">-- Tanlang --</option>';
+
+    positionsData.forEach(pos => {
+        // Bo'limi yo'q yoki tanlangan bo'limga tegishli lavozimlar
+        if (!departmentId || pos.department === null || pos.department === departmentId) {
+            const option = document.createElement('option');
+            option.value = pos.id;
+            option.textContent = pos.name;
+            if (pos.id === parseInt(currentValue)) {
+                option.selected = true;
+            }
+            positionSelect.appendChild(option);
+        }
+    });
+}
+
+// Barcha date inputlarni Flatpickr ga o'zgartirish
+function initAllDatePickers(container = document) {
+    container.querySelectorAll('input[type="date"]').forEach(input => {
+        // Allaqachon init qilinganlarni skip
+        if (input._flatpickr) return;
+
+        const defaultDate = input.value || null;
+        input.type = 'text';
+        input.classList.add('cursor-pointer');
+        initDatePicker(input, {
+            defaultDate: defaultDate
+        });
+    });
+}
+
+// Sahifa yuklanganda
+document.addEventListener('DOMContentLoaded', function() {
+    initAllDatePickers();
+});
+</script>
+{% endblock %}
