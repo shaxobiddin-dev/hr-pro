@@ -160,51 +160,86 @@ django-cors-headers
 
 ---
 
-## 5. CI/CD Pipeline (GitHub Actions)
+## 5. CI/CD Pipeline (GitHub Actions) - JORIY
 
-### Workflow tuzilishi
+### Production Server
+| Parametr | Qiymat |
+|----------|--------|
+| **Provider** | DigitalOcean Droplet |
+| **IP** | 137.184.104.67 |
+| **OS** | Ubuntu 24.04 |
+| **RAM** | 2GB |
+| **CPU** | 1 vCPU |
+| **Disk** | 50GB SSD |
+| **Narx** | $12/oy |
+
+### Server Stack
+```
+Nginx → Gunicorn → Django → PostgreSQL
+         ↓
+    Supervisor (process manager)
+```
+
+### Deploy Workflow (`.github/workflows/deploy.yml`)
 ```yaml
-name: CI/CD
+name: Deploy HR-Pro
 
 on:
   push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main]
+    branches: [develop]
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install dependencies
-        run: pip install -r requirements/dev.txt
-      - name: Run linting
-        run: ruff check .
-      - name: Run tests
-        run: pytest --cov
+      - Checkout code
+      - Setup Python 3.12
+      - Install dependencies
+      - Run migrations
+      - Run tests
 
   deploy:
-    needs: test
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    needs: [test]
+    if: github.ref == 'refs/heads/develop'
     steps:
-      - name: Deploy to server
-        run: # deployment script
+      - SSH to server
+      - git pull
+      - pip install
+      - migrate
+      - collectstatic
+      - supervisorctl restart
 ```
 
-### GitHub Secrets (kerak bo'ladi)
-- `DJANGO_SECRET_KEY`
-- `DATABASE_URL`
-- `SERVER_HOST`
-- `SERVER_USER`
-- `SSH_PRIVATE_KEY`
+### GitHub Secrets (SOZLANGAN)
+| Secret | Qiymat |
+|--------|--------|
+| `SERVER_HOST` | 137.184.104.67 |
+| `SERVER_USER` | root |
+| `SERVER_SSH_KEY` | PEM format RSA key |
 
-**Manba:** [DigitalOcean - Django CI/CD](https://www.digitalocean.com/community/questions/advanced-django-ci-cd-pipeline-with-github-actions)
+### SSH Key Yaratish (PEM format - GitHub Actions uchun)
+```bash
+ssh-keygen -t rsa -b 4096 -m PEM -f ~/.ssh/hr-deploy -N ""
+# Private key → GitHub secret
+# Public key → Server ~/.ssh/authorized_keys
+```
+
+### Manual Deploy (agar kerak bo'lsa)
+```bash
+ssh root@137.184.104.67
+cd /var/www/hr-pro
+git pull origin develop
+source venv/bin/activate
+pip install -r requirements/prod.txt
+python manage.py migrate --noinput
+python manage.py collectstatic --noinput
+supervisorctl restart hr-pro
+```
+
+**Status:** ✅ Ishlayapti
 
 ---
 
@@ -673,15 +708,84 @@ Hisobot yopish:  Xodim/kompaniya qarzdorligi balanslash
 
 ---
 
-## 14. Keyingi Tadqiqot Kerak
+## 14. Xodim Buyruq Talabi (MUHIM BIZNES LOGIKA)
 
-- [ ] Frontend framework tanlash (React/Vue/HTMX)
-- [ ] Hosting platforma (AWS/DigitalOcean/VPS)
+### Asosiy Qoida
+```
+Xodim = PENDING (buyruqsiz) → Hech narsa ishlamaydi
+Xodim = ACTIVE + Buyruq → Hammasi ishlaydi
+```
+
+### Workflow
+```
+1. User yaratish
+2. Employee yaratish (status = PENDING)
+3. HiringOrder yaratish (status = DRAFT)
+4. HiringOrder tasdiqlash (status = APPROVED)
+5. Employee aktivlash (status = ACTIVE)
+6. Endi davomat, ta'til, ish haqi ishlaydi
+```
+
+### Kod Implementatsiyasi
+
+**Employee Model:**
+```python
+class Employee(SoftDeleteModel):
+    status = models.CharField(default=Status.PENDING)  # MUHIM!
+
+    @property
+    def has_approved_hiring_order(self):
+        return HiringOrderItem.objects.filter(
+            employee=self,
+            order__status=Order.Status.APPROVED
+        ).exists()
+
+    @property
+    def is_eligible_for_operations(self):
+        return self.status == 'active' and self.has_approved_hiring_order
+```
+
+**Employee Manager:**
+```python
+class EmployeeQuerySet(models.QuerySet):
+    def eligible_for_operations(self):
+        """Faqat buyruqi tasdiqlangan active xodimlar."""
+        return self.active().with_approved_order()
+```
+
+**Formalar:**
+```python
+# Barcha formalarda:
+employee = Employee.objects.eligible_for_operations()
+
+# Validatsiya:
+if not employee.has_approved_hiring_order:
+    raise ValidationError("Ishga olish buyrug'i tasdiqlanmagan")
+```
+
+### Mixin (View himoyasi)
+```python
+class ActiveEmployeeRequiredMixin:
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.employee.is_eligible_for_operations:
+            messages.error(request, "Xodim faol emas")
+            return redirect('dashboard')
+        return super().dispatch(...)
+```
+
+---
+
+## 15. Keyingi Tadqiqot Kerak
+
+- [x] Frontend framework tanlash (HTMX + Tailwind) ✓
+- [x] Hosting platforma (DigitalOcean $12/oy) ✓
+- [x] CI/CD (GitHub Actions) ✓
 - [ ] SMS/Email xabar yuborish servisi
 - [ ] Moliya integratsiyasi (1C, bank)
 - [x] Raqobatchi tahlili (Verifix) ✓
 - [x] Odoo HR/Payroll audit ✓
+- [x] Buyruq-xodim bog'liqligi ✓
 
 ---
 
-*Oxirgi yangilanish: 2026-06-09*
+*Oxirgi yangilanish: 2026-06-11*
