@@ -1,257 +1,307 @@
 {% extends "base.html" %}
 
-{% block title %}Biz Haqimizda - HR-Pro{% endblock %}
+{% block title %}Biz Haqimizda — HR-Pro{% endblock %}
+{% block meta_description %}HR-Pro — O'zbekiston kompaniyalari uchun ishlab chiqilgan zamonaviy HR platformasi. Kadrlar bo'limining kundalik ishlarini avtomatlashtiring.{% endblock %}
 
 {% block extra_css %}
 <style>
     .gradient-text {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #7C3AED 0%, #06B6D4 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+    }
+    .hero-gradient {
+        background: linear-gradient(135deg, #7C3AED 0%, #9333EA 50%, #06B6D4 100%);
     }
     .value-card {
         transition: all 0.3s ease;
     }
     .value-card:hover {
         transform: translateY(-4px);
+        box-shadow: 0 20px 40px rgba(124, 58, 237, 0.1);
+    }
+    .team-gradient {
+        background: linear-gradient(135deg, #1E1B4B 0%, #312E81 100%);
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
-<div class="text-center py-16">
-    <h1 class="text-4xl md:text-5xl font-extrabold">
-        <span class="text-gray-900">Biz</span>
-        <span class="gradient-text">Haqimizda</span>
-    </h1>
-    <p class="mt-6 text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-        HR-Pro — O'zbekiston korxonalari uchun maxsus ishlab chiqilgan zamonaviy
-        kadrlar va ish haqi boshqaruv tizimi. Mehnat Kodeksi va Soliq Kodeksiga
-        to'liq mos keluvchi yagona yechim.
-    </p>
+<div class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10">
+        <div class="absolute top-20 right-20 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+        <div class="absolute bottom-20 left-20 w-72 h-72 bg-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+    </div>
+
+    <div class="text-center py-16 lg:py-20">
+        <span class="inline-flex items-center px-4 py-1.5 bg-purple-100 rounded-full text-sm text-purple-700 font-medium mb-6">
+            Kompaniya haqida
+        </span>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+            <span class="text-gray-900">HR jarayonlarini</span><br>
+            <span class="gradient-text">soddalashtirish missiyasi</span>
+        </h1>
+        <p class="mt-6 text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            HR-Pro — O'zbekiston kompaniyalari uchun maxsus ishlab chiqilgan zamonaviy
+            kadrlar boshqaruv platformasi. Biz HR bo'limining kundalik vazifalarini
+            avtomatlashtirib, vaqtingizni tejashga yordam beramiz.
+        </p>
+    </div>
 </div>
 
-<!-- Mission & Vision -->
+<!-- Mission & Vision Cards -->
 <div class="grid md:grid-cols-2 gap-8 py-12">
-    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-3xl p-8 text-white">
-        <div class="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center mb-6">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-            </svg>
-        </div>
-        <h2 class="text-2xl font-bold mb-4">Missiyamiz</h2>
-        <p class="text-indigo-100 leading-relaxed">
-            O'zbekiston korxonalarini zamonaviy HR texnologiyalari bilan ta'minlash
-            va kadrlar ishini soddalashtirish. Har bir xodimning mehnatini to'g'ri
-            baholash va qonunga muvofiq ish haqi hisoblashni avtomatlashtirish.
-        </p>
-    </div>
-
-    <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-8 text-white">
-        <div class="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center mb-6">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-            </svg>
-        </div>
-        <h2 class="text-2xl font-bold mb-4">Vazifamiz</h2>
-        <p class="text-emerald-100 leading-relaxed">
-            2027-yilga kelib O'zbekistonning yetakchi HR platformasiga aylanish.
-            Sun'iy intellekt va avtomatlashtirish yordamida kadrlar ishini yangi
-            bosqichga olib chiqish.
-        </p>
-    </div>
-</div>
-
-<!-- Why HR-Pro -->
-<div class="py-16">
-    <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
-        Nima Uchun HR-Pro?
-    </h2>
-
-    <div class="grid md:grid-cols-3 gap-8">
-        <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 value-card">
-            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
-                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                </svg>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">100% Qonunga Mos</h3>
-            <p class="text-gray-600">
-                O'zbekiston Mehnat Kodeksi (MK) va Soliq Kodeksiga to'liq muvofiq.
-                VM 314-son, VM 796-son kabi barcha me'yoriy hujjatlar hisobga olingan.
-            </p>
-        </div>
-
-        <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 value-card">
-            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-6">
-                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="hero-gradient rounded-3xl p-8 text-white relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+        <div class="relative z-10">
+            <div class="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center mb-6">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                 </svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">Tez va Aniq</h3>
-            <p class="text-gray-600">
-                Ish haqi hisoblash bir necha soniyada. MHTM, darajalar, staj —
-                barchasi avtomatik. Xatosiz natija kafolatlangan.
+            <h2 class="text-2xl font-bold mb-4">Missiyamiz</h2>
+            <p class="text-purple-100 leading-relaxed text-lg">
+                O'zbekiston kompaniyalariga HR jarayonlarini avtomatlashtirish orqali
+                samaradorlikni oshirish. Kadrlar bo'limining kundalik ishlarini soddalashtirish
+                va xodimlar bilan ishlashni yangi bosqichga olib chiqish.
             </p>
         </div>
+    </div>
 
-        <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 value-card">
-            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
-                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+    <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-8 text-white relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+        <div class="relative z-10">
+            <div class="w-14 h-14 bg-white/10 rounded-xl flex items-center justify-center mb-6">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                 </svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">Moslashuvchan</h3>
-            <p class="text-gray-600">
-                Har bir kompaniya uchun maxsus sozlash. O'zingizning koeffitsiyentlar,
-                qo'shimchalar va ushlanmalaringizni qo'shing.
+            <h2 class="text-2xl font-bold mb-4">Maqsadimiz</h2>
+            <p class="text-gray-300 leading-relaxed text-lg">
+                O'zbekistonda yetakchi HR platformasiga aylanish. Mahalliy kompaniyalar
+                ehtiyojlarini chuqur tushunadigan va ularga mos yechimlar taqdim etadigan
+                ishonchli texnologik hamkorga aylanish.
             </p>
         </div>
     </div>
 </div>
 
-<!-- Technology Stack -->
+<!-- Why HR-Pro Section -->
+<div class="py-20">
+    <div class="text-center mb-16">
+        <span class="inline-flex items-center px-4 py-1.5 bg-purple-100 rounded-full text-sm text-purple-700 font-medium mb-4">
+            Afzalliklar
+        </span>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900">
+            Nima uchun <span class="gradient-text">HR-Pro</span>?
+        </h2>
+        <p class="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
+            Bizni tanlashingiz uchun asosiy sabablar
+        </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+        <!-- Card 1 -->
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 value-card">
+            <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-6 shadow-lg">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">Mahalliy yechim</h3>
+            <p class="text-gray-600 leading-relaxed">
+                O'zbekiston bozori va qonunchiligini yaxshi bilamiz. Platforma mahalliy
+                ehtiyojlarga to'liq moslashtirilgan va o'zbek tilida ishlaydi.
+            </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 value-card">
+            <div class="w-14 h-14 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-xl flex items-center justify-center mb-6 shadow-lg">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">Tez va oson</h3>
+            <p class="text-gray-600 leading-relaxed">
+                3 daqiqada ro'yxatdan o'ting va ishni boshlang. Murakkab o'rnatish yoki
+                texnik bilim talab qilinmaydi. Intuitiv interfeys.
+            </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 value-card">
+            <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mb-6 shadow-lg">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">Doimo yoningizda</h3>
+            <p class="text-gray-600 leading-relaxed">
+                24/7 texnik yordam. Har qanday savol yoki muammoda tezkor yordam beramiz.
+                Telegram orqali doimiy aloqadamiz.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Section -->
 <div class="py-16 bg-gray-50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-3xl">
-    <h2 class="text-3xl font-bold text-center text-gray-900 mb-4">
-        Zamonaviy Texnologiyalar
-    </h2>
-    <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-        Eng so'nggi va ishonchli texnologiyalar asosida qurilgan
-    </p>
-
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-        <div class="bg-white rounded-xl p-6 text-center shadow-sm">
-            <div class="text-3xl mb-2">🐍</div>
-            <div class="font-bold text-gray-900">Python 3.12</div>
-            <div class="text-sm text-gray-500">Backend</div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+        <div class="text-center">
+            <div class="text-4xl md:text-5xl font-bold text-purple-600">30</div>
+            <div class="text-gray-600 mt-2">Kunlik bepul sinov</div>
         </div>
-        <div class="bg-white rounded-xl p-6 text-center shadow-sm">
-            <div class="text-3xl mb-2">🎸</div>
-            <div class="font-bold text-gray-900">Django 5.0</div>
-            <div class="text-sm text-gray-500">Framework</div>
+        <div class="text-center">
+            <div class="text-4xl md:text-5xl font-bold text-cyan-600">24/7</div>
+            <div class="text-gray-600 mt-2">Texnik yordam</div>
         </div>
-        <div class="bg-white rounded-xl p-6 text-center shadow-sm">
-            <div class="text-3xl mb-2">🐘</div>
-            <div class="font-bold text-gray-900">PostgreSQL</div>
-            <div class="text-sm text-gray-500">Database</div>
+        <div class="text-center">
+            <div class="text-4xl md:text-5xl font-bold text-green-600">100%</div>
+            <div class="text-gray-600 mt-2">Mahalliy yechim</div>
         </div>
-        <div class="bg-white rounded-xl p-6 text-center shadow-sm">
-            <div class="text-3xl mb-2">⚡</div>
-            <div class="font-bold text-gray-900">HTMX</div>
-            <div class="text-sm text-gray-500">Frontend</div>
-        </div>
-        <div class="bg-white rounded-xl p-6 text-center shadow-sm">
-            <div class="text-3xl mb-2">🎨</div>
-            <div class="font-bold text-gray-900">Tailwind</div>
-            <div class="text-sm text-gray-500">CSS</div>
-        </div>
-        <div class="bg-white rounded-xl p-6 text-center shadow-sm">
-            <div class="text-3xl mb-2">🔐</div>
-            <div class="font-bold text-gray-900">JWT</div>
-            <div class="text-sm text-gray-500">Auth</div>
-        </div>
-        <div class="bg-white rounded-xl p-6 text-center shadow-sm">
-            <div class="text-3xl mb-2">📦</div>
-            <div class="font-bold text-gray-900">Docker</div>
-            <div class="text-sm text-gray-500">Deploy</div>
-        </div>
-        <div class="bg-white rounded-xl p-6 text-center shadow-sm">
-            <div class="text-3xl mb-2">🚀</div>
-            <div class="font-bold text-gray-900">CI/CD</div>
-            <div class="text-sm text-gray-500">GitHub Actions</div>
+        <div class="text-center">
+            <div class="text-4xl md:text-5xl font-bold text-orange-600">3 daq</div>
+            <div class="text-gray-600 mt-2">O'rnatish vaqti</div>
         </div>
     </div>
 </div>
 
-<!-- Legal Compliance -->
-<div class="py-16">
-    <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
-        Qonunchilik Asoslari
-    </h2>
+<!-- Features We're Building -->
+<div class="py-20">
+    <div class="text-center mb-16">
+        <span class="inline-flex items-center px-4 py-1.5 bg-cyan-100 rounded-full text-sm text-cyan-700 font-medium mb-4">
+            Rivojlanish
+        </span>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900">
+            Doimiy <span class="gradient-text">takomillashtirish</span>
+        </h2>
+        <p class="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
+            Biz platformani doimiy ravishda yangilab, yangi imkoniyatlar qo'shib boramiz
+        </p>
+    </div>
 
-    <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-        <div class="flex items-start space-x-4 p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-            <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="flex items-start p-6 bg-white rounded-xl border border-gray-100">
+            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                 </svg>
             </div>
             <div>
-                <h3 class="font-bold text-gray-900">O'zbekiston Mehnat Kodeksi</h3>
-                <p class="text-gray-600 text-sm mt-1">Moddalar: 127, 130, 157, 159, 165, 171-173, 196, 220, 222, 270, 312, 492</p>
+                <h3 class="font-bold text-gray-900">Xodimlar boshqaruvi</h3>
+                <p class="text-gray-500 text-sm mt-1">Mavjud va ishlamoqda</p>
             </div>
         </div>
 
-        <div class="flex items-start space-x-4 p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        <div class="flex items-start p-6 bg-white rounded-xl border border-gray-100">
+            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                 </svg>
             </div>
             <div>
-                <h3 class="font-bold text-gray-900">Soliq Kodeksi</h3>
-                <p class="text-gray-600 text-sm mt-1">JSHDT 12%, INPS 0.1%, Ijtimoiy soliq 12%, IT Park 7.5%</p>
+                <h3 class="font-bold text-gray-900">Davomat nazorati</h3>
+                <p class="text-gray-500 text-sm mt-1">Mavjud va ishlamoqda</p>
             </div>
         </div>
 
-        <div class="flex items-start space-x-4 p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-            <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        <div class="flex items-start p-6 bg-white rounded-xl border border-gray-100">
+            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                 </svg>
             </div>
             <div>
-                <h3 class="font-bold text-gray-900">VM 314-son (31.05.2024)</h3>
-                <p class="text-gray-600 text-sm mt-1">Kasallik nafaqasi hisoblash tartibi</p>
+                <h3 class="font-bold text-gray-900">Oylik hisoblash</h3>
+                <p class="text-gray-500 text-sm mt-1">Mavjud va ishlamoqda</p>
             </div>
         </div>
 
-        <div class="flex items-start space-x-4 p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-            <div class="w-10 h-10 bg-rose-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        <div class="flex items-start p-6 bg-white rounded-xl border border-gray-100">
+            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                 </svg>
             </div>
             <div>
-                <h3 class="font-bold text-gray-900">VM 796-son (17.12.2025)</h3>
-                <p class="text-gray-600 text-sm mt-1">2026-yil 1-iyuldan kuchga kiruvchi o'zgarishlar</p>
+                <h3 class="font-bold text-gray-900">Ta'til boshqaruvi</h3>
+                <p class="text-gray-500 text-sm mt-1">Mavjud va ishlamoqda</p>
+            </div>
+        </div>
+
+        <div class="flex items-start p-6 bg-white rounded-xl border border-purple-200 bg-purple-50/50">
+            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                <svg class="w-5 h-5 text-purple-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+            </div>
+            <div>
+                <h3 class="font-bold text-purple-900">Telegram bot</h3>
+                <p class="text-purple-600 text-sm mt-1">Tez kunda ishga tushadi</p>
+            </div>
+        </div>
+
+        <div class="flex items-start p-6 bg-white rounded-xl border border-purple-200 bg-purple-50/50">
+            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                <svg class="w-5 h-5 text-purple-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+            </div>
+            <div>
+                <h3 class="font-bold text-purple-900">Biometrik integratsiya</h3>
+                <p class="text-purple-600 text-sm mt-1">Ishlab chiqilmoqda</p>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Contact CTA -->
-<div class="py-16 text-center">
-    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl p-12">
-        <h2 class="text-3xl font-bold text-white mb-4">
-            Bepul Maslahat Oling
-        </h2>
-        <p class="text-indigo-100 text-lg mb-8 max-w-2xl mx-auto">
-            Kompaniyangiz uchun maxsus taklif olish yoki demo ko'rish uchun
-            biz bilan bog'laning. Mutaxassislarimiz sizga yordam berishga tayyor.
-        </p>
-        <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="tel:+998330052230"
-               class="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-indigo-600 bg-white rounded-xl hover:bg-indigo-50 transition-all duration-300">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                </svg>
-                +998 33 005-22-30
-            </a>
-            <a href="https://t.me/SamadovSherzod" target="_blank"
-               class="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white border-2 border-white/30 rounded-xl hover:bg-white/10 transition-all duration-300">
-                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                </svg>
-                Telegram: @SamadovSherzod
-            </a>
+<div class="py-16">
+    <div class="hero-gradient rounded-3xl p-12 relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-10">
+            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <defs>
+                    <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                        <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/>
+                    </pattern>
+                </defs>
+                <rect width="100" height="100" fill="url(#grid)"/>
+            </svg>
         </div>
-        <p class="text-indigo-200 text-sm mt-6">
-            Ish vaqti: Du-Ju 9:00-18:00 | Sh 9:00-15:00
-        </p>
+
+        <div class="relative z-10 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                Savollaringiz bormi?
+            </h2>
+            <p class="text-purple-100 text-lg mb-8 max-w-2xl mx-auto">
+                Biz bilan bog'laning — barcha savollarga javob beramiz va
+                kompaniyangiz uchun eng yaxshi yechimni topishga yordam beramiz.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="https://t.me/SamadovSherzod" target="_blank"
+                   class="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-purple-700 bg-white rounded-xl hover:bg-purple-50 transition-all duration-300 shadow-lg">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                    </svg>
+                    Telegram: @SamadovSherzod
+                </a>
+                <a href="tel:+998330052230"
+                   class="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white border-2 border-white/30 rounded-xl hover:bg-white/10 transition-all duration-300">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                    </svg>
+                    +998 33 005-22-30
+                </a>
+            </div>
+            <p class="text-purple-200 text-sm mt-6">
+                Ish vaqti: Du-Ju 9:00-18:00 | Sh 9:00-15:00
+            </p>
+        </div>
     </div>
 </div>
 {% endblock %}
