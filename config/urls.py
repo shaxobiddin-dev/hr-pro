@@ -33,7 +33,8 @@ class StaticViewSitemap(Sitemap):
     changefreq = 'weekly'
 
     def items(self):
-        return ['core:home', 'core:dashboard']
+        # Faqat ommaviy sahifalar (login talab qilmaydigan)
+        return ['core:home', 'core:about']
 
     def location(self, item):
         from django.urls import reverse
