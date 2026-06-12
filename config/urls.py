@@ -6,9 +6,49 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.sitemaps.views import sitemap
+from django.contrib.sitemaps import Sitemap
+from django.http import HttpResponse
+from django.views.decorators.http import require_GET
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
+
+@require_GET
+def robots_txt(request):
+    """robots.txt - qidiruv robotlari uchun."""
+    lines = [
+        "User-Agent: *",
+        "Allow: /",
+        "Disallow: /admin/",
+        "Disallow: /api/",
+        "",
+        f"Sitemap: https://hrmpro.uz/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
+
+
+class StaticViewSitemap(Sitemap):
+    """Asosiy sahifalar uchun sitemap."""
+    priority = 0.8
+    changefreq = 'weekly'
+
+    def items(self):
+        return ['core:home', 'core:dashboard']
+
+    def location(self, item):
+        from django.urls import reverse
+        return reverse(item)
+
+
+sitemaps = {
+    'static': StaticViewSitemap,
+}
+
 urlpatterns = [
+    # SEO
+    path('robots.txt', robots_txt, name='robots_txt'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
+
     # Admin
     path('admin/', admin.site.urls),
 
