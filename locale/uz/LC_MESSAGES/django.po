@@ -1,0 +1,559 @@
+# HR-Pro Uzbek Translations (Source Language)
+# Copyright (C) 2024 HR-Pro
+# This file is distributed under the same license as the HR-Pro package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: HR-Pro 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-12 19:23+0500\n"
+"PO-Revision-Date: 2026-06-12 19:30+0500\n"
+"Last-Translator: HR-Pro Team\n"
+"Language-Team: Uzbek\n"
+"Language: uz\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "O'zbek"
+msgstr "O'zbek"
+
+msgid "Русский"
+msgstr "Русский"
+
+msgid "English"
+msgstr "English"
+
+msgid "Biz Haqimizda"
+msgstr "Biz Haqimizda"
+
+msgid ""
+"HR-Pro — O'zbekiston kompaniyalari uchun ishlab chiqilgan zamonaviy HR "
+"platformasi. Kadrlar bo'limining kundalik ishlarini avtomatlashtiring."
+msgstr ""
+"HR-Pro — O'zbekiston kompaniyalari uchun ishlab chiqilgan zamonaviy HR "
+"platformasi. Kadrlar bo'limining kundalik ishlarini avtomatlashtiring."
+
+msgid "Kompaniya haqida"
+msgstr "Kompaniya haqida"
+
+msgid "HR jarayonlarini"
+msgstr "HR jarayonlarini"
+
+msgid "soddalashtirish missiyasi"
+msgstr "soddalashtirish missiyasi"
+
+msgid ""
+"HR-Pro — O'zbekiston kompaniyalari uchun maxsus ishlab chiqilgan zamonaviy "
+"kadrlar boshqaruv platformasi. Biz HR bo'limining kundalik vazifalarini "
+"avtomatlashtirib, vaqtingizni tejashga yordam beramiz."
+msgstr ""
+"HR-Pro — O'zbekiston kompaniyalari uchun maxsus ishlab chiqilgan zamonaviy "
+"kadrlar boshqaruv platformasi. Biz HR bo'limining kundalik vazifalarini "
+"avtomatlashtirib, vaqtingizni tejashga yordam beramiz."
+
+msgid "Missiyamiz"
+msgstr "Missiyamiz"
+
+msgid ""
+"O'zbekiston kompaniyalariga HR jarayonlarini avtomatlashtirish orqali "
+"samaradorlikni oshirish. Kadrlar bo'limining kundalik ishlarini "
+"soddalashtirish va xodimlar bilan ishlashni yangi bosqichga olib chiqish."
+msgstr ""
+"O'zbekiston kompaniyalariga HR jarayonlarini avtomatlashtirish orqali "
+"samaradorlikni oshirish. Kadrlar bo'limining kundalik ishlarini "
+"soddalashtirish va xodimlar bilan ishlashni yangi bosqichga olib chiqish."
+
+msgid "Maqsadimiz"
+msgstr "Maqsadimiz"
+
+msgid ""
+"O'zbekistonda yetakchi HR platformasiga aylanish. Mahalliy kompaniyalar "
+"ehtiyojlarini chuqur tushunadigan va ularga mos yechimlar taqdim etadigan "
+"ishonchli texnologik hamkorga aylanish."
+msgstr ""
+"O'zbekistonda yetakchi HR platformasiga aylanish. Mahalliy kompaniyalar "
+"ehtiyojlarini chuqur tushunadigan va ularga mos yechimlar taqdim etadigan "
+"ishonchli texnologik hamkorga aylanish."
+
+msgid "Afzalliklar"
+msgstr "Afzalliklar"
+
+msgid "Nima uchun"
+msgstr "Nima uchun"
+
+msgid "Bizni tanlashingiz uchun asosiy sabablar"
+msgstr "Bizni tanlashingiz uchun asosiy sabablar"
+
+msgid "Mahalliy yechim"
+msgstr "Mahalliy yechim"
+
+msgid ""
+"O'zbekiston bozori va qonunchiligini yaxshi bilamiz. Platforma mahalliy "
+"ehtiyojlarga to'liq moslashtirilgan va o'zbek tilida ishlaydi."
+msgstr ""
+"O'zbekiston bozori va qonunchiligini yaxshi bilamiz. Platforma mahalliy "
+"ehtiyojlarga to'liq moslashtirilgan va o'zbek tilida ishlaydi."
+
+msgid "Tez va oson"
+msgstr "Tez va oson"
+
+msgid ""
+"3 daqiqada ro'yxatdan o'ting va ishni boshlang. Murakkab o'rnatish yoki "
+"texnik bilim talab qilinmaydi. Intuitiv interfeys."
+msgstr ""
+"3 daqiqada ro'yxatdan o'ting va ishni boshlang. Murakkab o'rnatish yoki "
+"texnik bilim talab qilinmaydi. Intuitiv interfeys."
+
+msgid "Doimo yoningizda"
+msgstr "Doimo yoningizda"
+
+msgid ""
+"24/7 texnik yordam. Har qanday savol yoki muammoda tezkor yordam beramiz. "
+"Telegram orqali doimiy aloqadamiz."
+msgstr ""
+"24/7 texnik yordam. Har qanday savol yoki muammoda tezkor yordam beramiz. "
+"Telegram orqali doimiy aloqadamiz."
+
+msgid "Kunlik bepul sinov"
+msgstr "Kunlik bepul sinov"
+
+msgid "Texnik yordam"
+msgstr "Texnik yordam"
+
+msgid "daq"
+msgstr "daq"
+
+msgid "O'rnatish vaqti"
+msgstr "O'rnatish vaqti"
+
+msgid "Rivojlanish"
+msgstr "Rivojlanish"
+
+msgid "Doimiy"
+msgstr "Doimiy"
+
+msgid "takomillashtirish"
+msgstr "takomillashtirish"
+
+msgid ""
+"Biz platformani doimiy ravishda yangilab, yangi imkoniyatlar qo'shib boramiz"
+msgstr ""
+"Biz platformani doimiy ravishda yangilab, yangi imkoniyatlar qo'shib boramiz"
+
+msgid "Xodimlar boshqaruvi"
+msgstr "Xodimlar boshqaruvi"
+
+msgid "Mavjud va ishlamoqda"
+msgstr "Mavjud va ishlamoqda"
+
+msgid "Davomat nazorati"
+msgstr "Davomat nazorati"
+
+msgid "Oylik hisoblash"
+msgstr "Oylik hisoblash"
+
+msgid "Ta'til boshqaruvi"
+msgstr "Ta'til boshqaruvi"
+
+msgid "Telegram bot"
+msgstr "Telegram bot"
+
+msgid "Tez kunda ishga tushadi"
+msgstr "Tez kunda ishga tushadi"
+
+msgid "Biometrik integratsiya"
+msgstr "Biometrik integratsiya"
+
+msgid "Ishlab chiqilmoqda"
+msgstr "Ishlab chiqilmoqda"
+
+msgid "Savollaringiz bormi?"
+msgstr "Savollaringiz bormi?"
+
+msgid ""
+"Biz bilan bog'laning — barcha savollarga javob beramiz va kompaniyangiz "
+"uchun eng yaxshi yechimni topishga yordam beramiz."
+msgstr ""
+"Biz bilan bog'laning — barcha savollarga javob beramiz va kompaniyangiz "
+"uchun eng yaxshi yechimni topishga yordam beramiz."
+
+msgid "Ish vaqti: Du-Ju 9:00-18:00 | Sh 9:00-15:00"
+msgstr "Ish vaqti: Du-Ju 9:00-18:00 | Sh 9:00-15:00"
+
+msgid ""
+"HR-Pro — O'zbekiston korxonalari uchun zamonaviy kadrlar va ish haqi "
+"boshqaruv tizimi."
+msgstr ""
+"HR-Pro — O'zbekiston korxonalari uchun zamonaviy kadrlar va ish haqi "
+"boshqaruv tizimi."
+
+msgid ""
+"HR tizimi, kadrlar boshqaruvi, ish haqi hisoblash, payroll, O'zbekiston, "
+"HRM, xodimlar boshqaruvi"
+msgstr ""
+"HR tizimi, kadrlar boshqaruvi, ish haqi hisoblash, payroll, O'zbekiston, "
+"HRM, xodimlar boshqaruvi"
+
+msgid "HR-Pro — Kadrlar va Ish Haqi Boshqaruv Tizimi"
+msgstr "HR-Pro — Kadrlar va Ish Haqi Boshqaruv Tizimi"
+
+msgid "O'zbekiston korxonalari uchun zamonaviy HR va Payroll tizimi."
+msgstr "O'zbekiston korxonalari uchun zamonaviy HR va Payroll tizimi."
+
+msgid "O'chirishni tasdiqlang"
+msgstr "O'chirishni tasdiqlang"
+
+msgid "O'chirish"
+msgstr "O'chirish"
+
+msgid "Bekor qilish"
+msgstr "Bekor qilish"
+
+msgid "Telegram orqali yozing"
+msgstr "Telegram orqali yozing"
+
+msgid "Qo'ng'iroq qiling"
+msgstr "Qo'ng'iroq qiling"
+
+msgid "HR-Pro — O'zbekiston uchun Zamonaviy HR Platformasi"
+msgstr "HR-Pro — O'zbekiston uchun Zamonaviy HR Platformasi"
+
+msgid ""
+"HR-Pro — xodimlar boshqaruvi, davomat nazorati, oylik hisob-kitob va "
+"vazifalar boshqaruvini bir tizimda avtomatlashtiring."
+msgstr ""
+"HR-Pro — xodimlar boshqaruvi, davomat nazorati, oylik hisob-kitob va "
+"vazifalar boshqaruvini bir tizimda avtomatlashtiring."
+
+msgid "Yangi: Telegram bot integratsiyasi"
+msgstr "Yangi: Telegram bot integratsiyasi"
+
+msgid "HR tizimingizni"
+msgstr "HR tizimingizni"
+
+msgid "to'liq avtomatlashtiring"
+msgstr "to'liq avtomatlashtiring"
+
+msgid "Xodimlar boshqaruvi, davomat nazorati, oylik hisob-kitob va vazifalar"
+msgstr "Xodimlar boshqaruvi, davomat nazorati, oylik hisob-kitob va vazifalar"
+
+msgid "barchasi bitta platformada"
+msgstr "barchasi bitta platformada"
+
+msgid "O'zbekiston qonunchiligiga to'liq mos."
+msgstr "O'zbekiston qonunchiligiga to'liq mos."
+
+msgid "Avtomatik oylik"
+msgstr "Avtomatik oylik"
+
+msgid "Telegram hisobotlar"
+msgstr "Telegram hisobotlar"
+
+msgid "Vazifalar boshqaruvi"
+msgstr "Vazifalar boshqaruvi"
+
+msgid "Dashboard'ga o'tish"
+msgstr "Dashboard'ga o'tish"
+
+msgid "Bepul demo so'rang"
+msgstr "Bepul demo so'rang"
+
+msgid "Qanday ishlaydi?"
+msgstr "Qanday ishlaydi?"
+
+msgid "Boshqaruv paneli"
+msgstr "Boshqaruv paneli"
+
+msgid "Jami xodimlar"
+msgstr "Jami xodimlar"
+
+msgid "Bugun keldi"
+msgstr "Bugun keldi"
+
+msgid "Davomat foizi"
+msgstr "Davomat foizi"
+
+msgid "Bugungi davomat"
+msgstr "Bugungi davomat"
+
+msgid "Oylik tayyor"
+msgstr "Oylik tayyor"
+
+msgid "Avtomatik hisoblandi"
+msgstr "Avtomatik hisoblandi"
+
+msgid "kun"
+msgstr "kun"
+
+msgid "Bepul sinov"
+msgstr "Bepul sinov"
+
+msgid "Uptime kafolati"
+msgstr "Uptime kafolati"
+
+msgid "Qo'llab-quvvatlash"
+msgstr "Qo'llab-quvvatlash"
+
+msgid "Imkoniyatlar"
+msgstr "Imkoniyatlar"
+
+msgid "Bir tizimda"
+msgstr "Bir tizimda"
+
+msgid "barcha yechim"
+msgstr "barcha yechim"
+
+msgid ""
+"HR bo'limining kundalik vazifalarini avtomatlashtirish uchun zarur bo'lgan "
+"barcha vositalar"
+msgstr ""
+"HR bo'limining kundalik vazifalarini avtomatlashtirish uchun zarur bo'lgan "
+"barcha vositalar"
+
+msgid ""
+"Barcha mashhur qurilmalar bilan to'liq integratsiya. Avtomatik "
+"sinxronizatsiya."
+msgstr ""
+"Barcha mashhur qurilmalar bilan to'liq integratsiya. Avtomatik "
+"sinxronizatsiya."
+
+msgid "Real vaqt"
+msgstr "Real vaqt"
+
+msgid "Kirdi-chiqdi nazorati"
+msgstr "Kirdi-chiqdi nazorati"
+
+msgid ""
+"Xodimlarning real vaqtda kelishi va ketishini kuzatish. Kechikishlar "
+"avtomatik hisoblanadi."
+msgstr ""
+"Xodimlarning real vaqtda kelishi va ketishini kuzatish. Kechikishlar "
+"avtomatik hisoblanadi."
+
+msgid "Avtomatik"
+msgstr "Avtomatik"
+
+msgid "Oylik hisob-kitob"
+msgstr "Oylik hisob-kitob"
+
+msgid ""
+"Ish grafigi, davomat, qo'shimcha ish va jarima — barchasi avtomatik "
+"hisoblanadi."
+msgstr ""
+"Ish grafigi, davomat, qo'shimcha ish va jarima — barchasi avtomatik "
+"hisoblanadi."
+
+msgid ""
+"Topshiriqlar yaratish, bajaruvchi tayinlash va muddatlarni nazorat qilish."
+msgstr ""
+"Topshiriqlar yaratish, bajaruvchi tayinlash va muddatlarni nazorat qilish."
+
+msgid "Telegram integratsiya"
+msgstr "Telegram integratsiya"
+
+msgid ""
+"Kechikish, ta'til, oylik va boshqa xabarnomalarni Telegram orqali oling."
+msgstr ""
+"Kechikish, ta'til, oylik va boshqa xabarnomalarni Telegram orqali oling."
+
+msgid "To'liq hisobotlar"
+msgstr "To'liq hisobotlar"
+
+msgid "Barcha turdagi hisobotlarni Excel va PDF formatida eksport qiling."
+msgstr "Barcha turdagi hisobotlarni Excel va PDF formatida eksport qiling."
+
+msgid "Aqlli ogohlantirishlar"
+msgstr "Aqlli ogohlantirishlar"
+
+msgid ""
+"Kechikish, ta'til tugashi, tug'ilgan kun va boshqa muhim hodisalar haqida "
+"xabar."
+msgstr ""
+"Kechikish, ta'til tugashi, tug'ilgan kun va boshqa muhim hodisalar haqida "
+"xabar."
+
+msgid "Rollar va ruxsatlar"
+msgstr "Rollar va ruxsatlar"
+
+msgid ""
+"Har bir foydalanuvchiga alohida rol va ruxsatlar belgilang. To'liq nazorat."
+msgstr ""
+"Har bir foydalanuvchiga alohida rol va ruxsatlar belgilang. To'liq nazorat."
+
+msgid "Narxlar"
+msgstr "Narxlar"
+
+msgid "Tez kunda"
+msgstr "Tez kunda"
+
+msgid "e'lon qilinadi"
+msgstr "e'lon qilinadi"
+
+msgid ""
+"Barcha tariflarni ishlab chiqmoqdamiz. Xabar qoldiring va birinchilardan "
+"bo'lib bilib oling!"
+msgstr ""
+"Barcha tariflarni ishlab chiqmoqdamiz. Xabar qoldiring va birinchilardan "
+"bo'lib bilib oling!"
+
+msgid "so'm/oy"
+msgstr "so'm/oy"
+
+msgid "Kichik jamoalar uchun"
+msgstr "Kichik jamoalar uchun"
+
+msgid "50 tagacha xodim"
+msgstr "50 tagacha xodim"
+
+msgid "Asosiy funksiyalar"
+msgstr "Asosiy funksiyalar"
+
+msgid "Email qo'llab-quvvatlash"
+msgstr "Email qo'llab-quvvatlash"
+
+msgid "Kutilmoqda"
+msgstr "Kutilmoqda"
+
+msgid "Mashhur"
+msgstr "Mashhur"
+
+msgid "O'rta va katta jamoalar"
+msgstr "O'rta va katta jamoalar"
+
+msgid "Cheksiz xodimlar"
+msgstr "Cheksiz xodimlar"
+
+msgid "Barcha funksiyalar + API"
+msgstr "Barcha funksiyalar + API"
+
+msgid "Ustuvor qo'llab-quvvatlash"
+msgstr "Ustuvor qo'llab-quvvatlash"
+
+msgid "Tayyorlanmoqda"
+msgstr "Tayyorlanmoqda"
+
+msgid "Maxsus narx"
+msgstr "Maxsus narx"
+
+msgid "Yirik kompaniyalar uchun"
+msgstr "Yirik kompaniyalar uchun"
+
+msgid "Barcha Pro + On-premise"
+msgstr "Barcha Pro + On-premise"
+
+msgid "Shaxsiy menejer"
+msgstr "Shaxsiy menejer"
+
+msgid "SLA kafolat"
+msgstr "SLA kafolat"
+
+msgid "Birinchi bo'lib bilib oling!"
+msgstr "Birinchi bo'lib bilib oling!"
+
+msgid "Narxlar e'lon qilinganda sizga xabar beramiz"
+msgstr "Narxlar e'lon qilinganda sizga xabar beramiz"
+
+msgid "Telegram orqali yozish"
+msgstr "Telegram orqali yozish"
+
+msgid "HR jarayonlarini bugundan avtomatlashtiring"
+msgstr "HR jarayonlarini bugundan avtomatlashtiring"
+
+msgid "Narxlar e'lon qilinganda sizga birinchi bo'lib xabar beramiz."
+msgstr "Narxlar e'lon qilinganda sizga birinchi bo'lib xabar beramiz."
+
+msgid "Telegram orqali boshlash"
+msgstr "Telegram orqali boshlash"
+
+msgid "SSL Himoyalangan"
+msgstr "SSL Himoyalangan"
+
+#, python-format
+msgid "Qonunga 100%% mos"
+msgstr "Qonunga 100%% mos"
+
+msgid "24/7 Qo'llab-quvvatlash"
+msgstr "24/7 Qo'llab-quvvatlash"
+
+msgid "O'zbekistonda ishlab chiqilgan"
+msgstr "O'zbekistonda ishlab chiqilgan"
+
+msgid ""
+"O'zbekiston korxonalari uchun zamonaviy kadrlar va ish haqi boshqaruv "
+"tizimi. Xodimlar boshqaruvi, payroll hisoblash, davomat nazorati — barchasi "
+"bir platformada."
+msgstr ""
+"O'zbekiston korxonalari uchun zamonaviy kadrlar va ish haqi boshqaruv "
+"tizimi. Xodimlar boshqaruvi, payroll hisoblash, davomat nazorati — barchasi "
+"bir platformada."
+
+msgid "Sahifalar"
+msgstr "Sahifalar"
+
+msgid "Bosh sahifa"
+msgstr "Bosh sahifa"
+
+msgid "Biz haqimizda"
+msgstr "Biz haqimizda"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "API Dokumentatsiya"
+msgstr "API Dokumentatsiya"
+
+msgid "Bog'lanish"
+msgstr "Bog'lanish"
+
+msgid "Toshkent, O'zbekiston"
+msgstr "Toshkent, O'zbekiston"
+
+msgid "Barcha huquqlar himoyalangan."
+msgstr "Barcha huquqlar himoyalangan."
+
+msgid "Qonunga mos"
+msgstr "Qonunga mos"
+
+msgid "Xodimlar"
+msgstr "Xodimlar"
+
+msgid "Bo'limlar"
+msgstr "Bo'limlar"
+
+msgid "Ish haqi"
+msgstr "Ish haqi"
+
+msgid "Ta'til"
+msgstr "Ta'til"
+
+msgid "Davomat"
+msgstr "Davomat"
+
+msgid "Buyruqlar"
+msgstr "Buyruqlar"
+
+msgid "Bo'limlar, lavozimlar, profillar"
+msgstr "Bo'limlar, lavozimlar, profillar"
+
+msgid "Avtomatik hisob-kitob"
+msgstr "Avtomatik hisob-kitob"
+
+msgid "Profil"
+msgstr "Profil"
+
+msgid "Admin Panel"
+msgstr "Admin Panel"
+
+msgid "Chiqish"
+msgstr "Chiqish"
+
+msgid "Kirish"
+msgstr "Kirish"
+
+msgid "Bepul sinab ko'ring"
+msgstr "Bepul sinab ko'ring"
+
+msgid "Til"
+msgstr "Til"

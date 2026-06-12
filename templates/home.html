@@ -1,7 +1,8 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}HR-Pro — O'zbekiston uchun Zamonaviy HR Platformasi{% endblock %}
-{% block meta_description %}HR-Pro — xodimlar boshqaruvi, davomat nazorati, oylik hisob-kitob va vazifalar boshqaruvini bir tizimda avtomatlashtiring. 30 kun bepul sinov!{% endblock %}
+{% block title %}{% trans "HR-Pro — O'zbekiston uchun Zamonaviy HR Platformasi" %}{% endblock %}
+{% block meta_description %}{% trans "HR-Pro — xodimlar boshqaruvi, davomat nazorati, oylik hisob-kitob va vazifalar boshqaruvini bir tizimda avtomatlashtiring." %}{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -61,7 +62,7 @@
 {% endblock %}
 
 {% block content %}
-<!-- Hero Section - HRLine Style -->
+<!-- Hero Section -->
 <div class="relative overflow-hidden">
     <!-- Background Elements -->
     <div class="absolute inset-0 -z-10">
@@ -75,19 +76,19 @@
             <!-- New Badge -->
             <div class="inline-flex items-center px-4 py-2 bg-purple-100 rounded-full text-sm text-purple-700 font-medium mb-6 pulse-badge">
                 <span class="w-2 h-2 bg-purple-500 rounded-full mr-2 animate-pulse"></span>
-                Yangi: Telegram bot integratsiyasi
+                {% trans "Yangi: Telegram bot integratsiyasi" %}
             </div>
 
             <!-- Main Headline -->
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                <span class="text-gray-900">HR tizimingizni</span><br>
-                <span class="gradient-text">to'liq avtomatlashtiring</span>
+                <span class="text-gray-900">{% trans "HR tizimingizni" %}</span><br>
+                <span class="gradient-text">{% trans "to'liq avtomatlashtiring" %}</span>
             </h1>
 
             <!-- Subtitle -->
             <p class="mt-6 text-xl text-gray-600 leading-relaxed max-w-lg">
-                Xodimlar boshqaruvi, davomat nazorati, oylik hisob-kitob va vazifalar —
-                <strong>barchasi bitta platformada</strong>. O'zbekiston qonunchiligiga to'liq mos.
+                {% trans "Xodimlar boshqaruvi, davomat nazorati, oylik hisob-kitob va vazifalar" %} —
+                <strong>{% trans "barchasi bitta platformada" %}</strong>. {% trans "O'zbekiston qonunchiligiga to'liq mos." %}
             </p>
 
             <!-- Feature Pills -->
@@ -96,25 +97,25 @@
                     <svg class="w-4 h-4 mr-1.5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                     </svg>
-                    Biometrik integratsiya
+                    {% trans "Biometrik integratsiya" %}
                 </span>
                 <span class="inline-flex items-center px-3 py-1.5 bg-white rounded-full text-sm text-gray-700 shadow-sm border">
                     <svg class="w-4 h-4 mr-1.5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                     </svg>
-                    Avtomatik oylik
+                    {% trans "Avtomatik oylik" %}
                 </span>
                 <span class="inline-flex items-center px-3 py-1.5 bg-white rounded-full text-sm text-gray-700 shadow-sm border">
                     <svg class="w-4 h-4 mr-1.5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                     </svg>
-                    Telegram hisobotlar
+                    {% trans "Telegram hisobotlar" %}
                 </span>
                 <span class="inline-flex items-center px-3 py-1.5 bg-white rounded-full text-sm text-gray-700 shadow-sm border">
                     <svg class="w-4 h-4 mr-1.5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                     </svg>
-                    Vazifalar boshqaruvi
+                    {% trans "Vazifalar boshqaruvi" %}
                 </span>
             </div>
 
@@ -126,12 +127,12 @@
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                     </svg>
-                    Dashboard'ga o'tish
+                    {% trans "Dashboard'ga o'tish" %}
                 </a>
                 {% else %}
                 <a href="#pricing"
                    class="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white hero-gradient rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                    Bepul demo so'rang
+                    {% trans "Bepul demo so'rang" %}
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                     </svg>
@@ -142,7 +143,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    Qanday ishlaydi?
+                    {% trans "Qanday ishlaydi?" %}
                 </a>
                 {% endif %}
             </div>
@@ -157,7 +158,7 @@
                     <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
                     <div class="w-3 h-3 rounded-full bg-green-500"></div>
                     <div class="ml-4 flex-1 bg-gray-700 rounded-lg px-4 py-1.5 text-gray-400 text-sm">
-                        hrmpro.uz — Boshqaruv paneli
+                        hrmpro.uz — {% trans "Boshqaruv paneli" %}
                     </div>
                 </div>
 
@@ -175,7 +176,7 @@
                             </div>
                             <div class="mt-3">
                                 <div class="text-2xl font-bold text-white">248</div>
-                                <div class="text-gray-400 text-sm">Jami xodimlar</div>
+                                <div class="text-gray-400 text-sm">{% trans "Jami xodimlar" %}</div>
                             </div>
                         </div>
                         <div class="bg-gray-800 rounded-lg p-4">
@@ -188,7 +189,7 @@
                             </div>
                             <div class="mt-3">
                                 <div class="text-2xl font-bold text-white">231</div>
-                                <div class="text-gray-400 text-sm">Bugun keldi</div>
+                                <div class="text-gray-400 text-sm">{% trans "Bugun keldi" %}</div>
                             </div>
                         </div>
                         <div class="bg-gray-800 rounded-lg p-4">
@@ -201,14 +202,14 @@
                             </div>
                             <div class="mt-3">
                                 <div class="text-2xl font-bold text-white">93%</div>
-                                <div class="text-gray-400 text-sm">Davomat foizi</div>
+                                <div class="text-gray-400 text-sm">{% trans "Davomat foizi" %}</div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Activity List -->
                     <div class="bg-gray-800 rounded-lg p-4">
-                        <div class="text-gray-400 text-sm mb-3">Bugungi davomat</div>
+                        <div class="text-gray-400 text-sm mb-3">{% trans "Bugungi davomat" %}</div>
                         <div class="space-y-3">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
@@ -251,8 +252,8 @@
                             </svg>
                         </div>
                         <div>
-                            <div class="text-sm font-semibold text-gray-900">Oylik tayyor</div>
-                            <div class="text-xs text-gray-500">Avtomatik hisoblandi</div>
+                            <div class="text-sm font-semibold text-gray-900">{% trans "Oylik tayyor" %}</div>
+                            <div class="text-xs text-gray-500">{% trans "Avtomatik hisoblandi" %}</div>
                         </div>
                     </div>
                 </div>
@@ -265,20 +266,20 @@
 <div class="py-12 border-y border-gray-100 bg-gray-50/50">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
         <div class="text-center">
-            <div class="text-4xl font-bold text-purple-600">30 kun</div>
-            <div class="text-gray-600 mt-1">Bepul sinov</div>
+            <div class="text-4xl font-bold text-purple-600">30 {% trans "kun" %}</div>
+            <div class="text-gray-600 mt-1">{% trans "Bepul sinov" %}</div>
         </div>
         <div class="text-center">
             <div class="text-4xl font-bold text-cyan-600">99.9%</div>
-            <div class="text-gray-600 mt-1">Uptime kafolati</div>
+            <div class="text-gray-600 mt-1">{% trans "Uptime kafolati" %}</div>
         </div>
         <div class="text-center">
-            <div class="text-4xl font-bold text-green-600">3 daq</div>
-            <div class="text-gray-600 mt-1">O'rnatish vaqti</div>
+            <div class="text-4xl font-bold text-green-600">3 {% trans "daq" %}</div>
+            <div class="text-gray-600 mt-1">{% trans "O'rnatish vaqti" %}</div>
         </div>
         <div class="text-center">
             <div class="text-4xl font-bold text-orange-600">24/7</div>
-            <div class="text-gray-600 mt-1">Qo'llab-quvvatlash</div>
+            <div class="text-gray-600 mt-1">{% trans "Qo'llab-quvvatlash" %}</div>
         </div>
     </div>
 </div>
@@ -287,13 +288,13 @@
 <div id="features" class="py-20">
     <div class="text-center mb-16">
         <span class="inline-flex items-center px-4 py-1.5 bg-purple-100 rounded-full text-sm text-purple-700 font-medium mb-4">
-            Imkoniyatlar
+            {% trans "Imkoniyatlar" %}
         </span>
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900">
-            Bir tizimda <span class="gradient-text">barcha yechim</span>
+            {% trans "Bir tizimda" %} <span class="gradient-text">{% trans "barcha yechim" %}</span>
         </h2>
         <p class="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
-            HR bo'limining kundalik vazifalarini avtomatlashtirish uchun zarur bo'lgan barcha vositalar
+            {% trans "HR bo'limining kundalik vazifalarini avtomatlashtirish uchun zarur bo'lgan barcha vositalar" %}
         </p>
     </div>
 
@@ -307,8 +308,8 @@
                 </svg>
             </div>
             <div class="text-xs text-gray-400 uppercase tracking-wider mb-2">Hikvision • ZKTeco</div>
-            <h3 class="text-lg font-bold text-gray-900 mb-2">Biometrik integratsiya</h3>
-            <p class="text-gray-600 text-sm">Barcha mashhur qurilmalar bilan to'liq integratsiya. Avtomatik sinxronizatsiya.</p>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">{% trans "Biometrik integratsiya" %}</h3>
+            <p class="text-gray-600 text-sm">{% trans "Barcha mashhur qurilmalar bilan to'liq integratsiya. Avtomatik sinxronizatsiya." %}</p>
         </div>
 
         <!-- Feature 2 -->
@@ -318,9 +319,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
             </div>
-            <div class="text-xs text-gray-400 uppercase tracking-wider mb-2">Real vaqt</div>
-            <h3 class="text-lg font-bold text-gray-900 mb-2">Kirdi-chiqdi nazorati</h3>
-            <p class="text-gray-600 text-sm">Xodimlarning real vaqtda kelishi va ketishini kuzatish. Kechikishlar avtomatik hisoblanadi.</p>
+            <div class="text-xs text-gray-400 uppercase tracking-wider mb-2">{% trans "Real vaqt" %}</div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">{% trans "Kirdi-chiqdi nazorati" %}</h3>
+            <p class="text-gray-600 text-sm">{% trans "Xodimlarning real vaqtda kelishi va ketishini kuzatish. Kechikishlar avtomatik hisoblanadi." %}</p>
         </div>
 
         <!-- Feature 3 -->
@@ -330,9 +331,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
             </div>
-            <div class="text-xs text-gray-400 uppercase tracking-wider mb-2">Avtomatik</div>
-            <h3 class="text-lg font-bold text-gray-900 mb-2">Oylik hisob-kitob</h3>
-            <p class="text-gray-600 text-sm">Ish grafigi, davomat, qo'shimcha ish va jarima — barchasi avtomatik hisoblanadi.</p>
+            <div class="text-xs text-gray-400 uppercase tracking-wider mb-2">{% trans "Avtomatik" %}</div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">{% trans "Oylik hisob-kitob" %}</h3>
+            <p class="text-gray-600 text-sm">{% trans "Ish grafigi, davomat, qo'shimcha ish va jarima — barchasi avtomatik hisoblanadi." %}</p>
         </div>
 
         <!-- Feature 4 -->
@@ -343,8 +344,8 @@
                 </svg>
             </div>
             <div class="text-xs text-gray-400 uppercase tracking-wider mb-2">Task Management</div>
-            <h3 class="text-lg font-bold text-gray-900 mb-2">Vazifalar boshqaruvi</h3>
-            <p class="text-gray-600 text-sm">Topshiriqlar yaratish, bajaruvchi tayinlash va muddatlarni nazorat qilish.</p>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">{% trans "Vazifalar boshqaruvi" %}</h3>
+            <p class="text-gray-600 text-sm">{% trans "Topshiriqlar yaratish, bajaruvchi tayinlash va muddatlarni nazorat qilish." %}</p>
         </div>
 
         <!-- Feature 5 -->
@@ -355,8 +356,8 @@
                 </svg>
             </div>
             <div class="text-xs text-gray-400 uppercase tracking-wider mb-2">Telegram Bot</div>
-            <h3 class="text-lg font-bold text-gray-900 mb-2">Telegram integratsiya</h3>
-            <p class="text-gray-600 text-sm">Kechikish, ta'til, oylik va boshqa xabarnomalarni Telegram orqali oling.</p>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">{% trans "Telegram integratsiya" %}</h3>
+            <p class="text-gray-600 text-sm">{% trans "Kechikish, ta'til, oylik va boshqa xabarnomalarni Telegram orqali oling." %}</p>
         </div>
 
         <!-- Feature 6 -->
@@ -367,8 +368,8 @@
                 </svg>
             </div>
             <div class="text-xs text-gray-400 uppercase tracking-wider mb-2">Excel • PDF</div>
-            <h3 class="text-lg font-bold text-gray-900 mb-2">To'liq hisobotlar</h3>
-            <p class="text-gray-600 text-sm">Barcha turdagi hisobotlarni Excel va PDF formatida eksport qiling.</p>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">{% trans "To'liq hisobotlar" %}</h3>
+            <p class="text-gray-600 text-sm">{% trans "Barcha turdagi hisobotlarni Excel va PDF formatida eksport qiling." %}</p>
         </div>
 
         <!-- Feature 7 -->
@@ -379,8 +380,8 @@
                 </svg>
             </div>
             <div class="text-xs text-gray-400 uppercase tracking-wider mb-2">Smart Alerts</div>
-            <h3 class="text-lg font-bold text-gray-900 mb-2">Aqlli ogohlantirishlar</h3>
-            <p class="text-gray-600 text-sm">Kechikish, ta'til tugashi, tug'ilgan kun va boshqa muhim hodisalar haqida xabar.</p>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">{% trans "Aqlli ogohlantirishlar" %}</h3>
+            <p class="text-gray-600 text-sm">{% trans "Kechikish, ta'til tugashi, tug'ilgan kun va boshqa muhim hodisalar haqida xabar." %}</p>
         </div>
 
         <!-- Feature 8 -->
@@ -391,8 +392,8 @@
                 </svg>
             </div>
             <div class="text-xs text-gray-400 uppercase tracking-wider mb-2">RBAC</div>
-            <h3 class="text-lg font-bold text-gray-900 mb-2">Rollar va ruxsatlar</h3>
-            <p class="text-gray-600 text-sm">Har bir foydalanuvchiga alohida rol va ruxsatlar belgilang. To'liq nazorat.</p>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">{% trans "Rollar va ruxsatlar" %}</h3>
+            <p class="text-gray-600 text-sm">{% trans "Har bir foydalanuvchiga alohida rol va ruxsatlar belgilang. To'liq nazorat." %}</p>
         </div>
     </div>
 </div>
@@ -402,25 +403,25 @@
     <div class="text-center mb-16">
         <div class="inline-flex items-center px-5 py-2 bg-gradient-to-r from-purple-100 to-cyan-100 rounded-full text-sm font-semibold mb-6">
             <span class="w-2 h-2 bg-purple-500 rounded-full mr-2 animate-pulse"></span>
-            <span class="bg-gradient-to-r from-purple-600 to-cyan-600 bg-clip-text text-transparent">Narxlar</span>
+            <span class="bg-gradient-to-r from-purple-600 to-cyan-600 bg-clip-text text-transparent">{% trans "Narxlar" %}</span>
         </div>
         <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Tez kunda <span class="gradient-text">e'lon qilinadi</span>
+            {% trans "Tez kunda" %} <span class="gradient-text">{% trans "e'lon qilinadi" %}</span>
         </h2>
         <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-            Barcha tariflarni ishlab chiqmoqdamiz. Xabar qoldiring va birinchilardan bo'lib bilib oling!
+            {% trans "Barcha tariflarni ishlab chiqmoqdamiz. Xabar qoldiring va birinchilardan bo'lib bilib oling!" %}
         </p>
     </div>
 
     <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto pt-6">
-        <!-- Starter Card - Coming Soon -->
+        <!-- Starter Card -->
         <div class="relative group">
             <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
                 <span class="bg-gradient-to-r from-purple-500 to-purple-600 text-white text-sm font-bold px-4 py-1.5 rounded-full flex items-center shadow-lg shadow-purple-200">
                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                     </svg>
-                    Tez kunda
+                    {% trans "Tez kunda" %}
                 </span>
             </div>
             <div class="bg-white p-8 rounded-2xl shadow-lg border-2 border-purple-100 hover:border-purple-300 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
@@ -434,48 +435,48 @@
                     <div class="mt-4 h-16 flex items-center justify-center">
                         <div class="flex items-baseline">
                             <span class="text-4xl font-bold text-gray-300">---</span>
-                            <span class="text-gray-400 ml-2">so'm/oy</span>
+                            <span class="text-gray-400 ml-2">{% trans "so'm/oy" %}</span>
                         </div>
                     </div>
-                    <p class="text-gray-500 mt-2">Kichik jamoalar uchun</p>
+                    <p class="text-gray-500 mt-2">{% trans "Kichik jamoalar uchun" %}</p>
                     <ul class="mt-6 space-y-3 text-left">
                         <li class="flex items-center text-gray-600">
                             <svg class="w-5 h-5 mr-3 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            50 tagacha xodim
+                            {% trans "50 tagacha xodim" %}
                         </li>
                         <li class="flex items-center text-gray-600">
                             <svg class="w-5 h-5 mr-3 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            Asosiy funksiyalar
+                            {% trans "Asosiy funksiyalar" %}
                         </li>
                         <li class="flex items-center text-gray-600">
                             <svg class="w-5 h-5 mr-3 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            Email qo'llab-quvvatlash
+                            {% trans "Email qo'llab-quvvatlash" %}
                         </li>
                     </ul>
                     <button disabled class="mt-8 w-full inline-flex items-center justify-center px-6 py-3.5 bg-gray-100 text-gray-400 rounded-xl font-semibold cursor-not-allowed">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        Kutilmoqda
+                        {% trans "Kutilmoqda" %}
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Pro Card - Coming Soon (Featured) -->
+        <!-- Pro Card (Featured) -->
         <div class="relative group">
             <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
                 <span class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-sm font-bold px-4 py-1.5 rounded-full flex items-center shadow-lg shadow-cyan-200">
                     <svg class="w-4 h-4 mr-1.5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
                     </svg>
-                    Mashhur
+                    {% trans "Mashhur" %}
                 </span>
             </div>
             <div class="coming-soon-card p-8 rounded-2xl shadow-2xl text-white transform hover:-translate-y-2 transition-all duration-300">
@@ -489,48 +490,48 @@
                     <div class="mt-4 h-16 flex items-center justify-center">
                         <div class="flex items-baseline">
                             <span class="text-4xl font-bold text-white/50">---</span>
-                            <span class="text-purple-200 ml-2">so'm/oy</span>
+                            <span class="text-purple-200 ml-2">{% trans "so'm/oy" %}</span>
                         </div>
                     </div>
-                    <p class="text-purple-200 mt-2">O'rta va katta jamoalar</p>
+                    <p class="text-purple-200 mt-2">{% trans "O'rta va katta jamoalar" %}</p>
                     <ul class="mt-6 space-y-3 text-left text-white/90">
                         <li class="flex items-center">
                             <svg class="w-5 h-5 mr-3 text-cyan-300" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            Cheksiz xodimlar
+                            {% trans "Cheksiz xodimlar" %}
                         </li>
                         <li class="flex items-center">
                             <svg class="w-5 h-5 mr-3 text-cyan-300" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            Barcha funksiyalar + API
+                            {% trans "Barcha funksiyalar + API" %}
                         </li>
                         <li class="flex items-center">
                             <svg class="w-5 h-5 mr-3 text-cyan-300" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            Ustuvor qo'llab-quvvatlash
+                            {% trans "Ustuvor qo'llab-quvvatlash" %}
                         </li>
                     </ul>
                     <button disabled class="mt-8 w-full inline-flex items-center justify-center px-6 py-3.5 bg-white/20 backdrop-blur-sm text-white rounded-xl font-semibold cursor-not-allowed">
                         <svg class="w-5 h-5 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                         </svg>
-                        Tayyorlanmoqda
+                        {% trans "Tayyorlanmoqda" %}
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Enterprise Card - Coming Soon -->
+        <!-- Enterprise Card -->
         <div class="relative group">
             <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
                 <span class="bg-gradient-to-r from-gray-700 to-gray-900 text-white text-sm font-bold px-4 py-1.5 rounded-full flex items-center shadow-lg">
                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg>
-                    Tez kunda
+                    {% trans "Tez kunda" %}
                 </span>
             </div>
             <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200 hover:border-gray-300 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
@@ -542,34 +543,34 @@
                     </div>
                     <h3 class="text-2xl font-bold text-gray-900">Enterprise</h3>
                     <div class="mt-4 h-16 flex items-center justify-center">
-                        <span class="text-2xl font-bold text-gray-400">Maxsus narx</span>
+                        <span class="text-2xl font-bold text-gray-400">{% trans "Maxsus narx" %}</span>
                     </div>
-                    <p class="text-gray-500 mt-2">Yirik kompaniyalar uchun</p>
+                    <p class="text-gray-500 mt-2">{% trans "Yirik kompaniyalar uchun" %}</p>
                     <ul class="mt-6 space-y-3 text-left text-gray-600">
                         <li class="flex items-center">
                             <svg class="w-5 h-5 mr-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            Barcha Pro + On-premise
+                            {% trans "Barcha Pro + On-premise" %}
                         </li>
                         <li class="flex items-center">
                             <svg class="w-5 h-5 mr-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            Shaxsiy menejer
+                            {% trans "Shaxsiy menejer" %}
                         </li>
                         <li class="flex items-center">
                             <svg class="w-5 h-5 mr-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            SLA kafolat
+                            {% trans "SLA kafolat" %}
                         </li>
                     </ul>
                     <button disabled class="mt-8 w-full inline-flex items-center justify-center px-6 py-3.5 bg-gray-100 text-gray-400 rounded-xl font-semibold cursor-not-allowed">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        Kutilmoqda
+                        {% trans "Kutilmoqda" %}
                     </button>
                 </div>
             </div>
@@ -595,14 +596,14 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
                     </svg>
                 </div>
-                <h3 class="text-2xl font-bold mb-2">Birinchi bo'lib bilib oling!</h3>
-                <p class="text-purple-100 mb-6">Narxlar e'lon qilinganda sizga xabar beramiz</p>
+                <h3 class="text-2xl font-bold mb-2">{% trans "Birinchi bo'lib bilib oling!" %}</h3>
+                <p class="text-purple-100 mb-6">{% trans "Narxlar e'lon qilinganda sizga xabar beramiz" %}</p>
                 <a href="https://t.me/SamadovSherzod" target="_blank"
                    class="inline-flex items-center px-8 py-3.5 bg-white text-purple-700 rounded-xl font-semibold hover:bg-purple-50 transition-all shadow-lg">
                     <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
                     </svg>
-                    Telegram orqali yozish
+                    {% trans "Telegram orqali yozish" %}
                 </a>
             </div>
         </div>
@@ -626,11 +627,10 @@
 
         <div class="relative z-10">
             <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-                HR jarayonlarini bugundan avtomatlashtiring
+                {% trans "HR jarayonlarini bugundan avtomatlashtiring" %}
             </h2>
             <p class="text-purple-100 text-lg mb-8 max-w-2xl mx-auto">
-                30 kunlik bepul sinov davomida barcha funksiyalardan foydalaning.
-                Karta ma'lumotlari talab qilinmaydi.
+                {% trans "Narxlar e'lon qilinganda sizga birinchi bo'lib xabar beramiz." %}
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 <a href="https://t.me/SamadovSherzod" target="_blank"
@@ -638,7 +638,7 @@
                     <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
                     </svg>
-                    Telegram orqali boshlash
+                    {% trans "Telegram orqali boshlash" %}
                 </a>
                 <a href="tel:+998330052230"
                    class="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white border-2 border-white/30 rounded-xl hover:bg-white/10 transition-all duration-300">
@@ -659,25 +659,25 @@
             <svg class="w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
             </svg>
-            <span class="font-medium text-gray-600">SSL Himoyalangan</span>
+            <span class="font-medium text-gray-600">{% trans "SSL Himoyalangan" %}</span>
         </div>
         <div class="flex items-center space-x-2">
             <svg class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
             </svg>
-            <span class="font-medium text-gray-600">Qonunga 100% mos</span>
+            <span class="font-medium text-gray-600">{% trans "Qonunga 100% mos" %}</span>
         </div>
         <div class="flex items-center space-x-2">
             <svg class="w-6 h-6 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
             </svg>
-            <span class="font-medium text-gray-600">24/7 Qo'llab-quvvatlash</span>
+            <span class="font-medium text-gray-600">{% trans "24/7 Qo'llab-quvvatlash" %}</span>
         </div>
         <div class="flex items-center space-x-2">
             <svg class="w-6 h-6 text-cyan-500" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clip-rule="evenodd"/>
             </svg>
-            <span class="font-medium text-gray-600">O'zbekistonda ishlab chiqilgan</span>
+            <span class="font-medium text-gray-600">{% trans "O'zbekistonda ishlab chiqilgan" %}</span>
         </div>
     </div>
 </div>

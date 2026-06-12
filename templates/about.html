@@ -1,7 +1,8 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Biz Haqimizda — HR-Pro{% endblock %}
-{% block meta_description %}HR-Pro — O'zbekiston kompaniyalari uchun ishlab chiqilgan zamonaviy HR platformasi. Kadrlar bo'limining kundalik ishlarini avtomatlashtiring.{% endblock %}
+{% block title %}{% trans "Biz Haqimizda" %} — HR-Pro{% endblock %}
+{% block meta_description %}{% trans "HR-Pro — O'zbekiston kompaniyalari uchun ishlab chiqilgan zamonaviy HR platformasi. Kadrlar bo'limining kundalik ishlarini avtomatlashtiring." %}{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -37,16 +38,14 @@
 
     <div class="text-center py-16 lg:py-20">
         <span class="inline-flex items-center px-4 py-1.5 bg-purple-100 rounded-full text-sm text-purple-700 font-medium mb-6">
-            Kompaniya haqida
+            {% trans "Kompaniya haqida" %}
         </span>
         <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-            <span class="text-gray-900">HR jarayonlarini</span><br>
-            <span class="gradient-text">soddalashtirish missiyasi</span>
+            <span class="text-gray-900">{% trans "HR jarayonlarini" %}</span><br>
+            <span class="gradient-text">{% trans "soddalashtirish missiyasi" %}</span>
         </h1>
         <p class="mt-6 text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            HR-Pro — O'zbekiston kompaniyalari uchun maxsus ishlab chiqilgan zamonaviy
-            kadrlar boshqaruv platformasi. Biz HR bo'limining kundalik vazifalarini
-            avtomatlashtirib, vaqtingizni tejashga yordam beramiz.
+            {% trans "HR-Pro — O'zbekiston kompaniyalari uchun maxsus ishlab chiqilgan zamonaviy kadrlar boshqaruv platformasi. Biz HR bo'limining kundalik vazifalarini avtomatlashtirib, vaqtingizni tejashga yordam beramiz." %}
         </p>
     </div>
 </div>
@@ -61,11 +60,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                 </svg>
             </div>
-            <h2 class="text-2xl font-bold mb-4">Missiyamiz</h2>
+            <h2 class="text-2xl font-bold mb-4">{% trans "Missiyamiz" %}</h2>
             <p class="text-purple-100 leading-relaxed text-lg">
-                O'zbekiston kompaniyalariga HR jarayonlarini avtomatlashtirish orqali
-                samaradorlikni oshirish. Kadrlar bo'limining kundalik ishlarini soddalashtirish
-                va xodimlar bilan ishlashni yangi bosqichga olib chiqish.
+                {% trans "O'zbekiston kompaniyalariga HR jarayonlarini avtomatlashtirish orqali samaradorlikni oshirish. Kadrlar bo'limining kundalik ishlarini soddalashtirish va xodimlar bilan ishlashni yangi bosqichga olib chiqish." %}
             </p>
         </div>
     </div>
@@ -79,11 +76,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                 </svg>
             </div>
-            <h2 class="text-2xl font-bold mb-4">Maqsadimiz</h2>
+            <h2 class="text-2xl font-bold mb-4">{% trans "Maqsadimiz" %}</h2>
             <p class="text-gray-300 leading-relaxed text-lg">
-                O'zbekistonda yetakchi HR platformasiga aylanish. Mahalliy kompaniyalar
-                ehtiyojlarini chuqur tushunadigan va ularga mos yechimlar taqdim etadigan
-                ishonchli texnologik hamkorga aylanish.
+                {% trans "O'zbekistonda yetakchi HR platformasiga aylanish. Mahalliy kompaniyalar ehtiyojlarini chuqur tushunadigan va ularga mos yechimlar taqdim etadigan ishonchli texnologik hamkorga aylanish." %}
             </p>
         </div>
     </div>
@@ -93,13 +88,13 @@
 <div class="py-20">
     <div class="text-center mb-16">
         <span class="inline-flex items-center px-4 py-1.5 bg-purple-100 rounded-full text-sm text-purple-700 font-medium mb-4">
-            Afzalliklar
+            {% trans "Afzalliklar" %}
         </span>
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900">
-            Nima uchun <span class="gradient-text">HR-Pro</span>?
+            {% trans "Nima uchun" %} <span class="gradient-text">HR-Pro</span>?
         </h2>
         <p class="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
-            Bizni tanlashingiz uchun asosiy sabablar
+            {% trans "Bizni tanlashingiz uchun asosiy sabablar" %}
         </p>
     </div>
 
@@ -111,10 +106,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                 </svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">Mahalliy yechim</h3>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">{% trans "Mahalliy yechim" %}</h3>
             <p class="text-gray-600 leading-relaxed">
-                O'zbekiston bozori va qonunchiligini yaxshi bilamiz. Platforma mahalliy
-                ehtiyojlarga to'liq moslashtirilgan va o'zbek tilida ishlaydi.
+                {% trans "O'zbekiston bozori va qonunchiligini yaxshi bilamiz. Platforma mahalliy ehtiyojlarga to'liq moslashtirilgan va o'zbek tilida ishlaydi." %}
             </p>
         </div>
 
@@ -125,10 +119,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                 </svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">Tez va oson</h3>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">{% trans "Tez va oson" %}</h3>
             <p class="text-gray-600 leading-relaxed">
-                3 daqiqada ro'yxatdan o'ting va ishni boshlang. Murakkab o'rnatish yoki
-                texnik bilim talab qilinmaydi. Intuitiv interfeys.
+                {% trans "3 daqiqada ro'yxatdan o'ting va ishni boshlang. Murakkab o'rnatish yoki texnik bilim talab qilinmaydi. Intuitiv interfeys." %}
             </p>
         </div>
 
@@ -139,10 +132,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
                 </svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">Doimo yoningizda</h3>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">{% trans "Doimo yoningizda" %}</h3>
             <p class="text-gray-600 leading-relaxed">
-                24/7 texnik yordam. Har qanday savol yoki muammoda tezkor yordam beramiz.
-                Telegram orqali doimiy aloqadamiz.
+                {% trans "24/7 texnik yordam. Har qanday savol yoki muammoda tezkor yordam beramiz. Telegram orqali doimiy aloqadamiz." %}
             </p>
         </div>
     </div>
@@ -153,19 +145,19 @@
     <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
         <div class="text-center">
             <div class="text-4xl md:text-5xl font-bold text-purple-600">30</div>
-            <div class="text-gray-600 mt-2">Kunlik bepul sinov</div>
+            <div class="text-gray-600 mt-2">{% trans "Kunlik bepul sinov" %}</div>
         </div>
         <div class="text-center">
             <div class="text-4xl md:text-5xl font-bold text-cyan-600">24/7</div>
-            <div class="text-gray-600 mt-2">Texnik yordam</div>
+            <div class="text-gray-600 mt-2">{% trans "Texnik yordam" %}</div>
         </div>
         <div class="text-center">
             <div class="text-4xl md:text-5xl font-bold text-green-600">100%</div>
-            <div class="text-gray-600 mt-2">Mahalliy yechim</div>
+            <div class="text-gray-600 mt-2">{% trans "Mahalliy yechim" %}</div>
         </div>
         <div class="text-center">
-            <div class="text-4xl md:text-5xl font-bold text-orange-600">3 daq</div>
-            <div class="text-gray-600 mt-2">O'rnatish vaqti</div>
+            <div class="text-4xl md:text-5xl font-bold text-orange-600">3 {% trans "daq" %}</div>
+            <div class="text-gray-600 mt-2">{% trans "O'rnatish vaqti" %}</div>
         </div>
     </div>
 </div>
@@ -174,13 +166,13 @@
 <div class="py-20">
     <div class="text-center mb-16">
         <span class="inline-flex items-center px-4 py-1.5 bg-cyan-100 rounded-full text-sm text-cyan-700 font-medium mb-4">
-            Rivojlanish
+            {% trans "Rivojlanish" %}
         </span>
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900">
-            Doimiy <span class="gradient-text">takomillashtirish</span>
+            {% trans "Doimiy" %} <span class="gradient-text">{% trans "takomillashtirish" %}</span>
         </h2>
         <p class="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
-            Biz platformani doimiy ravishda yangilab, yangi imkoniyatlar qo'shib boramiz
+            {% trans "Biz platformani doimiy ravishda yangilab, yangi imkoniyatlar qo'shib boramiz" %}
         </p>
     </div>
 
@@ -192,8 +184,8 @@
                 </svg>
             </div>
             <div>
-                <h3 class="font-bold text-gray-900">Xodimlar boshqaruvi</h3>
-                <p class="text-gray-500 text-sm mt-1">Mavjud va ishlamoqda</p>
+                <h3 class="font-bold text-gray-900">{% trans "Xodimlar boshqaruvi" %}</h3>
+                <p class="text-gray-500 text-sm mt-1">{% trans "Mavjud va ishlamoqda" %}</p>
             </div>
         </div>
 
@@ -204,8 +196,8 @@
                 </svg>
             </div>
             <div>
-                <h3 class="font-bold text-gray-900">Davomat nazorati</h3>
-                <p class="text-gray-500 text-sm mt-1">Mavjud va ishlamoqda</p>
+                <h3 class="font-bold text-gray-900">{% trans "Davomat nazorati" %}</h3>
+                <p class="text-gray-500 text-sm mt-1">{% trans "Mavjud va ishlamoqda" %}</p>
             </div>
         </div>
 
@@ -216,8 +208,8 @@
                 </svg>
             </div>
             <div>
-                <h3 class="font-bold text-gray-900">Oylik hisoblash</h3>
-                <p class="text-gray-500 text-sm mt-1">Mavjud va ishlamoqda</p>
+                <h3 class="font-bold text-gray-900">{% trans "Oylik hisoblash" %}</h3>
+                <p class="text-gray-500 text-sm mt-1">{% trans "Mavjud va ishlamoqda" %}</p>
             </div>
         </div>
 
@@ -228,8 +220,8 @@
                 </svg>
             </div>
             <div>
-                <h3 class="font-bold text-gray-900">Ta'til boshqaruvi</h3>
-                <p class="text-gray-500 text-sm mt-1">Mavjud va ishlamoqda</p>
+                <h3 class="font-bold text-gray-900">{% trans "Ta'til boshqaruvi" %}</h3>
+                <p class="text-gray-500 text-sm mt-1">{% trans "Mavjud va ishlamoqda" %}</p>
             </div>
         </div>
 
@@ -240,8 +232,8 @@
                 </svg>
             </div>
             <div>
-                <h3 class="font-bold text-purple-900">Telegram bot</h3>
-                <p class="text-purple-600 text-sm mt-1">Tez kunda ishga tushadi</p>
+                <h3 class="font-bold text-purple-900">{% trans "Telegram bot" %}</h3>
+                <p class="text-purple-600 text-sm mt-1">{% trans "Tez kunda ishga tushadi" %}</p>
             </div>
         </div>
 
@@ -252,8 +244,8 @@
                 </svg>
             </div>
             <div>
-                <h3 class="font-bold text-purple-900">Biometrik integratsiya</h3>
-                <p class="text-purple-600 text-sm mt-1">Ishlab chiqilmoqda</p>
+                <h3 class="font-bold text-purple-900">{% trans "Biometrik integratsiya" %}</h3>
+                <p class="text-purple-600 text-sm mt-1">{% trans "Ishlab chiqilmoqda" %}</p>
             </div>
         </div>
     </div>
@@ -276,11 +268,10 @@
 
         <div class="relative z-10 text-center">
             <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-                Savollaringiz bormi?
+                {% trans "Savollaringiz bormi?" %}
             </h2>
             <p class="text-purple-100 text-lg mb-8 max-w-2xl mx-auto">
-                Biz bilan bog'laning — barcha savollarga javob beramiz va
-                kompaniyangiz uchun eng yaxshi yechimni topishga yordam beramiz.
+                {% trans "Biz bilan bog'laning — barcha savollarga javob beramiz va kompaniyangiz uchun eng yaxshi yechimni topishga yordam beramiz." %}
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 <a href="https://t.me/SamadovSherzod" target="_blank"
@@ -299,7 +290,7 @@
                 </a>
             </div>
             <p class="text-purple-200 text-sm mt-6">
-                Ish vaqti: Du-Ju 9:00-18:00 | Sh 9:00-15:00
+                {% trans "Ish vaqti: Du-Ju 9:00-18:00 | Sh 9:00-15:00" %}
             </p>
         </div>
     </div>

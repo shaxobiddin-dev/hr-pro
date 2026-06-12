@@ -1,0 +1,556 @@
+# HR-Pro English Translations
+# Copyright (C) 2024 HR-Pro
+# This file is distributed under the same license as the HR-Pro package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: HR-Pro 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-12 19:23+0500\n"
+"PO-Revision-Date: 2026-06-12 19:30+0500\n"
+"Last-Translator: HR-Pro Team\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "O'zbek"
+msgstr "Uzbek"
+
+msgid "Русский"
+msgstr "Russian"
+
+msgid "English"
+msgstr "English"
+
+msgid "Biz Haqimizda"
+msgstr "About Us"
+
+msgid ""
+"HR-Pro — O'zbekiston kompaniyalari uchun ishlab chiqilgan zamonaviy HR "
+"platformasi. Kadrlar bo'limining kundalik ishlarini avtomatlashtiring."
+msgstr ""
+"HR-Pro — A modern HR platform designed for Uzbekistan companies. "
+"Automate your HR department's daily tasks."
+
+msgid "Kompaniya haqida"
+msgstr "About the company"
+
+msgid "HR jarayonlarini"
+msgstr "HR processes"
+
+msgid "soddalashtirish missiyasi"
+msgstr "simplification mission"
+
+msgid ""
+"HR-Pro — O'zbekiston kompaniyalari uchun maxsus ishlab chiqilgan zamonaviy "
+"kadrlar boshqaruv platformasi. Biz HR bo'limining kundalik vazifalarini "
+"avtomatlashtirib, vaqtingizni tejashga yordam beramiz."
+msgstr ""
+"HR-Pro — A modern HR management platform specially developed for Uzbekistan "
+"companies. We help you save time by automating the daily tasks of your HR "
+"department."
+
+msgid "Missiyamiz"
+msgstr "Our Mission"
+
+msgid ""
+"O'zbekiston kompaniyalariga HR jarayonlarini avtomatlashtirish orqali "
+"samaradorlikni oshirish. Kadrlar bo'limining kundalik ishlarini "
+"soddalashtirish va xodimlar bilan ishlashni yangi bosqichga olib chiqish."
+msgstr ""
+"Increase efficiency by automating HR processes for Uzbekistan companies. "
+"Simplify the daily work of the HR department and take employee management "
+"to the next level."
+
+msgid "Maqsadimiz"
+msgstr "Our Goal"
+
+msgid ""
+"O'zbekistonda yetakchi HR platformasiga aylanish. Mahalliy kompaniyalar "
+"ehtiyojlarini chuqur tushunadigan va ularga mos yechimlar taqdim etadigan "
+"ishonchli texnologik hamkorga aylanish."
+msgstr ""
+"To become the leading HR platform in Uzbekistan. To become a trusted "
+"technology partner that deeply understands the needs of local companies "
+"and provides suitable solutions."
+
+msgid "Afzalliklar"
+msgstr "Advantages"
+
+msgid "Nima uchun"
+msgstr "Why"
+
+msgid "Bizni tanlashingiz uchun asosiy sabablar"
+msgstr "Key reasons to choose us"
+
+msgid "Mahalliy yechim"
+msgstr "Local solution"
+
+msgid ""
+"O'zbekiston bozori va qonunchiligini yaxshi bilamiz. Platforma mahalliy "
+"ehtiyojlarga to'liq moslashtirilgan va o'zbek tilida ishlaydi."
+msgstr ""
+"We know the Uzbekistan market and legislation well. The platform is fully "
+"adapted to local needs and works in Uzbek."
+
+msgid "Tez va oson"
+msgstr "Fast and easy"
+
+msgid ""
+"3 daqiqada ro'yxatdan o'ting va ishni boshlang. Murakkab o'rnatish yoki "
+"texnik bilim talab qilinmaydi. Intuitiv interfeys."
+msgstr ""
+"Sign up in 3 minutes and start working. No complex installation or "
+"technical knowledge required. Intuitive interface."
+
+msgid "Doimo yoningizda"
+msgstr "Always with you"
+
+msgid ""
+"24/7 texnik yordam. Har qanday savol yoki muammoda tezkor yordam beramiz. "
+"Telegram orqali doimiy aloqadamiz."
+msgstr ""
+"24/7 technical support. We provide prompt assistance with any question or "
+"problem. Always in touch via Telegram."
+
+msgid "Kunlik bepul sinov"
+msgstr "Days free trial"
+
+msgid "Texnik yordam"
+msgstr "Technical support"
+
+msgid "daq"
+msgstr "min"
+
+msgid "O'rnatish vaqti"
+msgstr "Setup time"
+
+msgid "Rivojlanish"
+msgstr "Development"
+
+msgid "Doimiy"
+msgstr "Continuous"
+
+msgid "takomillashtirish"
+msgstr "improvement"
+
+msgid ""
+"Biz platformani doimiy ravishda yangilab, yangi imkoniyatlar qo'shib boramiz"
+msgstr ""
+"We continuously update the platform and add new features"
+
+msgid "Xodimlar boshqaruvi"
+msgstr "Employee management"
+
+msgid "Mavjud va ishlamoqda"
+msgstr "Available and working"
+
+msgid "Davomat nazorati"
+msgstr "Attendance control"
+
+msgid "Oylik hisoblash"
+msgstr "Payroll calculation"
+
+msgid "Ta'til boshqaruvi"
+msgstr "Leave management"
+
+msgid "Telegram bot"
+msgstr "Telegram bot"
+
+msgid "Tez kunda ishga tushadi"
+msgstr "Coming soon"
+
+msgid "Biometrik integratsiya"
+msgstr "Biometric integration"
+
+msgid "Ishlab chiqilmoqda"
+msgstr "In development"
+
+msgid "Savollaringiz bormi?"
+msgstr "Have questions?"
+
+msgid ""
+"Biz bilan bog'laning — barcha savollarga javob beramiz va kompaniyangiz "
+"uchun eng yaxshi yechimni topishga yordam beramiz."
+msgstr ""
+"Contact us — we will answer all questions and help find the best solution "
+"for your company."
+
+msgid "Ish vaqti: Du-Ju 9:00-18:00 | Sh 9:00-15:00"
+msgstr "Working hours: Mon-Fri 9:00-18:00 | Sat 9:00-15:00"
+
+msgid ""
+"HR-Pro — O'zbekiston korxonalari uchun zamonaviy kadrlar va ish haqi "
+"boshqaruv tizimi."
+msgstr ""
+"HR-Pro — A modern HR and payroll management system for Uzbekistan "
+"enterprises."
+
+msgid ""
+"HR tizimi, kadrlar boshqaruvi, ish haqi hisoblash, payroll, O'zbekiston, "
+"HRM, xodimlar boshqaruvi"
+msgstr ""
+"HR system, HR management, payroll calculation, payroll, Uzbekistan, "
+"HRM, employee management"
+
+msgid "HR-Pro — Kadrlar va Ish Haqi Boshqaruv Tizimi"
+msgstr "HR-Pro — HR and Payroll Management System"
+
+msgid "O'zbekiston korxonalari uchun zamonaviy HR va Payroll tizimi."
+msgstr "Modern HR and Payroll system for Uzbekistan enterprises."
+
+msgid "O'chirishni tasdiqlang"
+msgstr "Confirm deletion"
+
+msgid "O'chirish"
+msgstr "Delete"
+
+msgid "Bekor qilish"
+msgstr "Cancel"
+
+msgid "Telegram orqali yozing"
+msgstr "Contact via Telegram"
+
+msgid "Qo'ng'iroq qiling"
+msgstr "Call us"
+
+msgid "HR-Pro — O'zbekiston uchun Zamonaviy HR Platformasi"
+msgstr "HR-Pro — Modern HR Platform for Uzbekistan"
+
+msgid ""
+"HR-Pro — xodimlar boshqaruvi, davomat nazorati, oylik hisob-kitob va "
+"vazifalar boshqaruvini bir tizimda avtomatlashtiring."
+msgstr ""
+"HR-Pro — Automate employee management, attendance control, payroll "
+"calculation, and task management in one system."
+
+msgid "Yangi: Telegram bot integratsiyasi"
+msgstr "New: Telegram bot integration"
+
+msgid "HR tizimingizni"
+msgstr "Fully automate"
+
+msgid "to'liq avtomatlashtiring"
+msgstr "your HR system"
+
+msgid "Xodimlar boshqaruvi, davomat nazorati, oylik hisob-kitob va vazifalar"
+msgstr "Employee management, attendance control, payroll calculation and tasks"
+
+msgid "barchasi bitta platformada"
+msgstr "all in one platform"
+
+msgid "O'zbekiston qonunchiligiga to'liq mos."
+msgstr "Fully compliant with Uzbekistan legislation."
+
+msgid "Avtomatik oylik"
+msgstr "Auto payroll"
+
+msgid "Telegram hisobotlar"
+msgstr "Telegram reports"
+
+msgid "Vazifalar boshqaruvi"
+msgstr "Task management"
+
+msgid "Dashboard'ga o'tish"
+msgstr "Go to Dashboard"
+
+msgid "Bepul demo so'rang"
+msgstr "Request free demo"
+
+msgid "Qanday ishlaydi?"
+msgstr "How does it work?"
+
+msgid "Boshqaruv paneli"
+msgstr "Control panel"
+
+msgid "Jami xodimlar"
+msgstr "Total employees"
+
+msgid "Bugun keldi"
+msgstr "Present today"
+
+msgid "Davomat foizi"
+msgstr "Attendance rate"
+
+msgid "Bugungi davomat"
+msgstr "Today's attendance"
+
+msgid "Oylik tayyor"
+msgstr "Payroll ready"
+
+msgid "Avtomatik hisoblandi"
+msgstr "Automatically calculated"
+
+msgid "kun"
+msgstr "days"
+
+msgid "Bepul sinov"
+msgstr "Free trial"
+
+msgid "Uptime kafolati"
+msgstr "Uptime guarantee"
+
+msgid "Qo'llab-quvvatlash"
+msgstr "Support"
+
+msgid "Imkoniyatlar"
+msgstr "Features"
+
+msgid "Bir tizimda"
+msgstr "All solutions"
+
+msgid "barcha yechim"
+msgstr "in one system"
+
+msgid ""
+"HR bo'limining kundalik vazifalarini avtomatlashtirish uchun zarur bo'lgan "
+"barcha vositalar"
+msgstr ""
+"All the tools you need to automate the daily tasks of your HR department"
+
+msgid ""
+"Barcha mashhur qurilmalar bilan to'liq integratsiya. Avtomatik "
+"sinxronizatsiya."
+msgstr ""
+"Full integration with all popular devices. Automatic synchronization."
+
+msgid "Real vaqt"
+msgstr "Real time"
+
+msgid "Kirdi-chiqdi nazorati"
+msgstr "Check-in/out control"
+
+msgid ""
+"Xodimlarning real vaqtda kelishi va ketishini kuzatish. Kechikishlar "
+"avtomatik hisoblanadi."
+msgstr ""
+"Track employee arrivals and departures in real time. Delays are "
+"calculated automatically."
+
+msgid "Avtomatik"
+msgstr "Automatic"
+
+msgid "Oylik hisob-kitob"
+msgstr "Payroll calculation"
+
+msgid ""
+"Ish grafigi, davomat, qo'shimcha ish va jarima — barchasi avtomatik "
+"hisoblanadi."
+msgstr ""
+"Work schedule, attendance, overtime and penalties — everything is "
+"calculated automatically."
+
+msgid ""
+"Topshiriqlar yaratish, bajaruvchi tayinlash va muddatlarni nazorat qilish."
+msgstr ""
+"Create tasks, assign performers, and track deadlines."
+
+msgid "Telegram integratsiya"
+msgstr "Telegram integration"
+
+msgid ""
+"Kechikish, ta'til, oylik va boshqa xabarnomalarni Telegram orqali oling."
+msgstr ""
+"Receive notifications about delays, leaves, payroll and more via Telegram."
+
+msgid "To'liq hisobotlar"
+msgstr "Full reports"
+
+msgid "Barcha turdagi hisobotlarni Excel va PDF formatida eksport qiling."
+msgstr "Export all types of reports in Excel and PDF formats."
+
+msgid "Aqlli ogohlantirishlar"
+msgstr "Smart alerts"
+
+msgid ""
+"Kechikish, ta'til tugashi, tug'ilgan kun va boshqa muhim hodisalar haqida "
+"xabar."
+msgstr ""
+"Notifications about delays, leave endings, birthdays, and other important "
+"events."
+
+msgid "Rollar va ruxsatlar"
+msgstr "Roles and permissions"
+
+msgid ""
+"Har bir foydalanuvchiga alohida rol va ruxsatlar belgilang. To'liq nazorat."
+msgstr ""
+"Assign individual roles and permissions to each user. Full control."
+
+msgid "Narxlar"
+msgstr "Pricing"
+
+msgid "Tez kunda"
+msgstr "Coming soon"
+
+msgid "e'lon qilinadi"
+msgstr "to be announced"
+
+msgid ""
+"Barcha tariflarni ishlab chiqmoqdamiz. Xabar qoldiring va birinchilardan "
+"bo'lib bilib oling!"
+msgstr ""
+"We are developing all tariffs. Leave a message and be the first to know!"
+
+msgid "so'm/oy"
+msgstr "UZS/month"
+
+msgid "Kichik jamoalar uchun"
+msgstr "For small teams"
+
+msgid "50 tagacha xodim"
+msgstr "Up to 50 employees"
+
+msgid "Asosiy funksiyalar"
+msgstr "Basic features"
+
+msgid "Email qo'llab-quvvatlash"
+msgstr "Email support"
+
+msgid "Kutilmoqda"
+msgstr "Pending"
+
+msgid "Mashhur"
+msgstr "Popular"
+
+msgid "O'rta va katta jamoalar"
+msgstr "For medium and large teams"
+
+msgid "Cheksiz xodimlar"
+msgstr "Unlimited employees"
+
+msgid "Barcha funksiyalar + API"
+msgstr "All features + API"
+
+msgid "Ustuvor qo'llab-quvvatlash"
+msgstr "Priority support"
+
+msgid "Tayyorlanmoqda"
+msgstr "In preparation"
+
+msgid "Maxsus narx"
+msgstr "Custom pricing"
+
+msgid "Yirik kompaniyalar uchun"
+msgstr "For large enterprises"
+
+msgid "Barcha Pro + On-premise"
+msgstr "All Pro + On-premise"
+
+msgid "Shaxsiy menejer"
+msgstr "Personal manager"
+
+msgid "SLA kafolat"
+msgstr "SLA guarantee"
+
+msgid "Birinchi bo'lib bilib oling!"
+msgstr "Be the first to know!"
+
+msgid "Narxlar e'lon qilinganda sizga xabar beramiz"
+msgstr "We will notify you when prices are announced"
+
+msgid "Telegram orqali yozish"
+msgstr "Contact via Telegram"
+
+msgid "HR jarayonlarini bugundan avtomatlashtiring"
+msgstr "Automate HR processes starting today"
+
+msgid "Narxlar e'lon qilinganda sizga birinchi bo'lib xabar beramiz."
+msgstr "We will notify you first when prices are announced."
+
+msgid "Telegram orqali boshlash"
+msgstr "Start via Telegram"
+
+msgid "SSL Himoyalangan"
+msgstr "SSL Protected"
+
+#, python-format
+msgid "Qonunga 100%% mos"
+msgstr "100%% legal compliant"
+
+msgid "24/7 Qo'llab-quvvatlash"
+msgstr "24/7 Support"
+
+msgid "O'zbekistonda ishlab chiqilgan"
+msgstr "Made in Uzbekistan"
+
+msgid ""
+"O'zbekiston korxonalari uchun zamonaviy kadrlar va ish haqi boshqaruv "
+"tizimi. Xodimlar boshqaruvi, payroll hisoblash, davomat nazorati — barchasi "
+"bir platformada."
+msgstr ""
+"Modern HR and payroll management system for Uzbekistan enterprises. "
+"Employee management, payroll calculation, attendance control — all in one "
+"platform."
+
+msgid "Sahifalar"
+msgstr "Pages"
+
+msgid "Bosh sahifa"
+msgstr "Home"
+
+msgid "Biz haqimizda"
+msgstr "About us"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "API Dokumentatsiya"
+msgstr "API Documentation"
+
+msgid "Bog'lanish"
+msgstr "Contact"
+
+msgid "Toshkent, O'zbekiston"
+msgstr "Tashkent, Uzbekistan"
+
+msgid "Barcha huquqlar himoyalangan."
+msgstr "All rights reserved."
+
+msgid "Qonunga mos"
+msgstr "Legal compliant"
+
+msgid "Xodimlar"
+msgstr "Employees"
+
+msgid "Bo'limlar"
+msgstr "Departments"
+
+msgid "Ish haqi"
+msgstr "Payroll"
+
+msgid "Ta'til"
+msgstr "Leave"
+
+msgid "Davomat"
+msgstr "Attendance"
+
+msgid "Buyruqlar"
+msgstr "Orders"
+
+msgid "Bo'limlar, lavozimlar, profillar"
+msgstr "Departments, positions, profiles"
+
+msgid "Avtomatik hisob-kitob"
+msgstr "Automatic calculation"
+
+msgid "Profil"
+msgstr "Profile"
+
+msgid "Admin Panel"
+msgstr "Admin Panel"
+
+msgid "Chiqish"
+msgstr "Logout"
+
+msgid "Kirish"
+msgstr "Login"
+
+msgid "Bepul sinab ko'ring"
+msgstr "Try for free"
+
+msgid "Til"
+msgstr "Language"

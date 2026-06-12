@@ -61,6 +61,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',  # i18n - SessionMiddleware dan keyin
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -119,10 +120,29 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
+from django.utils.translation import gettext_lazy as _
+
 LANGUAGE_CODE = 'uz'
 TIME_ZONE = 'Asia/Tashkent'
 USE_I18N = True
+USE_L10N = True
 USE_TZ = True
+
+# Qo'llab-quvvatlanadigan tillar
+LANGUAGES = [
+    ('uz', _("O'zbek")),
+    ('ru', _('Русский')),
+    ('en', _('English')),
+]
+
+# Tarjima fayllari joylashuvi
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+
+# Cookie orqali tilni saqlash
+LANGUAGE_COOKIE_NAME = 'hr_pro_language'
+LANGUAGE_COOKIE_AGE = 365 * 24 * 60 * 60  # 1 yil
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
