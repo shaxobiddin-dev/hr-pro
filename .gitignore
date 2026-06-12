@@ -47,8 +47,8 @@ coverage.xml
 .pytest_cache/
 
 # Translations
-*.mo
 *.pot
+# locale/ ichidagi .mo fayllar KERAK (tarjima uchun)
 
 # Django stuff:
 *.log
